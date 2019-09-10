@@ -7,39 +7,25 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * 科研工作
+ * 论文
  */
 @Table(name = "thesis")
 @Entity
 @Data
-public class Thesis implements Serializable {
+public class Thesis extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -5717645323223914836L;
-    @Id
-    @Column(columnDefinition = "INT")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Long scientificResearchId;
+
+    private Long startersCategoryId;
 
 
-    private String thesisTitle;
     private String periodicalName;
     private String author;
     private Long publishYear;
 
-    private Long publishDate;
-    @Column(columnDefinition = "TEXT")
-    private String context;
 
 
-    /**
-     * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
-     */
-    @Column(columnDefinition = "INT default 0")
-    private Integer publishStatus;
 
-    @Column(columnDefinition = "TEXT")
-    private String unpublishedJson;
 
 
 }

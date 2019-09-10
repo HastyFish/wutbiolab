@@ -18,7 +18,13 @@ public class Lab {
     private String title;
     private Long publishDate;
 
+    /**
+     * 导师类型
+     */
     private String mentorType;
+    /**
+     * 导师名称
+     */
     private String mentorName;
 
     @Column(columnDefinition = "TEXT")

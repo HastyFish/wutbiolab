@@ -21,4 +21,10 @@ public interface CommonConstants {
      */
     Integer UNPUBLISHED=0;
 
+    /**
+    * 模块分类
+     */
+    Integer LAB=1;
+    Integer SCIENTIFIC=2;
+
 }
