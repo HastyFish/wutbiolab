@@ -1,45 +1,36 @@
 package com.gooalgene.wutbiolab.entity;
 
-import com.gooalgene.wutbiolab.constant.CommonConstants;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
-/**
- * 科研工作
- */
-@Table(name = "thesis")
+@Table(name = "lab")
 @Entity
 @Data
-public class Thesis implements Serializable {
-
-    private static final long serialVersionUID = -5717645323223914836L;
+public class Lab {
     @Id
     @Column(columnDefinition = "INT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long scientificResearchId;
 
+    private String category;
 
-    private String thesisTitle;
-    private String periodicalName;
-    private String author;
-    private Long publishYear;
-
+    private String title;
     private Long publishDate;
+
+    private String mentorType;
+    private String mentorName;
+
     @Column(columnDefinition = "TEXT")
     private String context;
 
+
+    @Column(columnDefinition = "TEXT")
+    private String unpublishedJson;
 
     /**
      * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
      */
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus;
-
-    @Column(columnDefinition = "TEXT")
-    private String unpublishedJson;
-
-
 }

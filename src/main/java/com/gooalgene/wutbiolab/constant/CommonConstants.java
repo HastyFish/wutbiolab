@@ -11,4 +11,14 @@ public interface CommonConstants {
     Integer TONGZHI=4;
     //学术活动
     Integer XUESHU=5;
+
+    /**
+     * 发布
+     */
+    Integer PUBLISHED=1;
+    /**
+     * 草稿（未发布）
+     */
+    Integer UNPUBLISHED=0;
+
 }

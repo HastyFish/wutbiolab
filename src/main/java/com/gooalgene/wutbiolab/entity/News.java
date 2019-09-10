@@ -33,6 +33,7 @@ public class News implements Serializable {
     /**
      * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
      */
+    @Column(columnDefinition = "INT default 0")
     private Integer publishStatus;
 
 

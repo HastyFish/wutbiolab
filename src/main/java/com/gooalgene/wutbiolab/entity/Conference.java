@@ -1,6 +1,5 @@
 package com.gooalgene.wutbiolab.entity;
 
-import com.gooalgene.wutbiolab.constant.CommonConstants;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,12 +8,12 @@ import java.io.Serializable;
 /**
  * 科研工作
  */
-@Table(name = "thesis")
+@Table(name = "conference")
 @Entity
 @Data
-public class Thesis implements Serializable {
+public class Conference implements Serializable {
 
-    private static final long serialVersionUID = -5717645323223914836L;
+    private static final long serialVersionUID = 7283628150365860390L;
     @Id
     @Column(columnDefinition = "INT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +21,8 @@ public class Thesis implements Serializable {
     private Long scientificResearchId;
 
 
-    private String thesisTitle;
-    private String periodicalName;
-    private String author;
-    private Long publishYear;
+    private String category;
+    private String title;
 
     private Long publishDate;
     @Column(columnDefinition = "TEXT")
@@ -33,7 +30,7 @@ public class Thesis implements Serializable {
 
 
     /**
-     * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
+     * 发布状态，一旦发布即为已发布，一旦保存即为草稿
      */
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus;
