@@ -14,4 +14,5 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class Category implements Serializable {
+    private static final long serialVersionUID = -2679203832293778590L;
 }
