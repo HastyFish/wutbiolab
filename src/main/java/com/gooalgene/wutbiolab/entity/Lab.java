@@ -3,25 +3,29 @@ package com.gooalgene.wutbiolab.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
-@Table(name = "news")
+@Table(name = "lab")
 @Entity
 @Data
-public class News implements Serializable {
-    private static final long serialVersionUID = -3215337937375965993L;
-
+public class Lab {
     @Id
     @Column(columnDefinition = "INT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer category;
+    private String category;
+
     private String title;
     private Long publishDate;
 
-    private String cover;
-    private Boolean needCover;
+    /**
+     * 导师类型
+     */
+    private String mentorType;
+    /**
+     * 导师名称
+     */
+    private String mentorName;
 
     @Column(columnDefinition = "TEXT")
     private String context;
@@ -35,7 +39,4 @@ public class News implements Serializable {
      */
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus;
-
-
-
 }
