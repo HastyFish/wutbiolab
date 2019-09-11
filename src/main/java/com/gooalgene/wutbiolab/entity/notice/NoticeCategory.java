@@ -17,7 +17,7 @@ public class NoticeCategory implements Serializable {
     private Long id;
 
     @Column
-    private String typeName;
+    private String categoryName;
 
 
 }

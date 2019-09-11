@@ -16,6 +16,6 @@ public class ResourceCategory {
     private Long id;
 
     @Column
-    private String typeName;
+    private String categoryName;
 
 }
