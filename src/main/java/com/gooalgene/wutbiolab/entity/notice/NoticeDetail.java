@@ -1,16 +1,33 @@
 package com.gooalgene.wutbiolab.entity.notice;
 
-import com.gooalgene.wutbiolab.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "notice_detail")
-public class NoticeDetail extends BaseEntity {
+public class NoticeDetail implements Serializable {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
+    protected String title;
+
+    @Column
+    protected Long publishDate;
+
+    /**
+     * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
+     */
+    @Column(columnDefinition = "INT default 0")
+    protected Integer publishStatus = 0;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String context;

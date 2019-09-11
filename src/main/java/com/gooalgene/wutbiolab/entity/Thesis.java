@@ -12,13 +12,27 @@ import java.io.Serializable;
 @Table(name = "thesis")
 @Entity
 @Data
-public class Thesis extends BaseEntity implements Serializable {
+public class Thesis implements Serializable {
 
     private static final long serialVersionUID = -5717645323223914836L;
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    private Long id;
+
+    @Column
+    protected String title;
+
+    @Column
+    protected Long publishDate;
+
+    /**
+     * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
+     */
+    @Column(columnDefinition = "INT default 0")
+    protected Integer publishStatus = 0;
+
     private Long startersCategoryId;
 
 
