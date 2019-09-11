@@ -7,6 +7,8 @@ import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.request.MentorRequest;
 import com.gooalgene.wutbiolab.service.LabService;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,6 +35,28 @@ public class LabServiceImpl implements LabService {
         }
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         return labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
+    }
+
+    public void getResearchTeam(){
+        List<Object[]> researchTeam = labDetailDAO.getResearchTeam();
+        Table<String,Integer,List<LabDetail>> table= HashBasedTable.create();
+        researchTeam.forEach(objects -> {
+            Object idObject = objects[0];
+            Long labDetailId=null;
+            String mentorName=null;
+            Integer mentorOder=null;
+            if(idObject!=null){
+                labDetailId=(Long)idObject;
+                mentorName=(String)objects[2];
+                mentorOder=(Integer)objects[3];
+            }
+            Long mentorCategoryId=(Long)objects[1];
+            String mentorCategoryName=(String)objects[4];
+
+
+
+
+        });
     }
 
     public void saveLabDetail(LabDetail labDetail){
