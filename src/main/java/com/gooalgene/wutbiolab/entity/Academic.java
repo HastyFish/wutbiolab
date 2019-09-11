@@ -6,9 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 
-@Table(name = "academic")
-@Entity
-@Data
+//@Table(name = "academic")
+//@Entity
+//@Data
 public class Academic extends BaseEntity implements Serializable {
 
     @Id

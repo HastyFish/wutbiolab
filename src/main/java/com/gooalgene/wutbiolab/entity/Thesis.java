@@ -9,9 +9,9 @@ import java.io.Serializable;
 /**
  * 论文
  */
-@Table(name = "thesis")
-@Entity
-@Data
+//@Table(name = "thesis")
+//@Entity
+//@Data
 public class Thesis extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -5717645323223914836L;

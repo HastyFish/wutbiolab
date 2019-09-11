@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Table(name = "mentor_type")
 @Entity
 @Data
-public class MentorType implements Serializable {
+public class MentorCategory implements Serializable {
     private static final long serialVersionUID = 2483636965097465390L;
 
     @Id
