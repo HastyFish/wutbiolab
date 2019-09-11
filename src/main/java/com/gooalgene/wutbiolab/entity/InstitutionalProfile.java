@@ -8,9 +8,9 @@ import java.io.Serializable;
 /**
  * 机构概况
  */
-@Table(name = "institutional_profile")
-@Entity
-@Data
+//@Table(name = "institutional_profile")
+//@Entity
+//@Data
 public class InstitutionalProfile implements Serializable {
 
     private static final long serialVersionUID = -6873685462844692336L;
