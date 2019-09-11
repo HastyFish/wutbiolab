@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 导师类型
  */
-@Table(name = "mentor_type")
+@Table(name = "mentor_category")
 @Entity
 @Data
 public class MentorCategory implements Serializable {

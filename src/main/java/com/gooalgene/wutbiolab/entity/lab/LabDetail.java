@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 实验室四个模块通用详情表
  */
-@Table(name = "lab_summarize")
+@Table(name = "lab_detail")
 @Entity
 @Data
 public class LabDetail implements Serializable {
