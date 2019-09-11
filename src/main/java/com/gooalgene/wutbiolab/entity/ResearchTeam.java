@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Table(name = "researchTeam")
+@Table(name = "research_team")
 @Entity
 @Data
 public class ResearchTeam extends BaseEntity implements Serializable {

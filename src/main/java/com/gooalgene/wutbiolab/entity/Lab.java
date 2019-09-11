@@ -4,9 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Table(name = "lab")
-@Entity
-@Data
+//@Table(name = "lab")
+//@Entity
+//@Data
 public class Lab {
     @Id
     @Column(columnDefinition = "INT")

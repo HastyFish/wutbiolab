@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 一级分类，针对实验室模块和科研工作模块
  */
-@Table(name = "labCategory")
+@Table(name = "starters_category")
 @Entity
 @Data
 public class StartersCategory implements Serializable {

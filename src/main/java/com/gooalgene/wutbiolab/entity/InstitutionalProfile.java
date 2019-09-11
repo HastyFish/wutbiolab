@@ -6,10 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Table(name = "organization")
+/**
+ * 机构概况
+ */
+@Table(name = "institutional_profile")
 @Entity
 @Data
-public class Organization extends BaseEntity implements Serializable {
+public class InstitutionalProfile extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -6873685462844692336L;
 }
