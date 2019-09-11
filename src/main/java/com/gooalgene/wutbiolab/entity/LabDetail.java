@@ -47,4 +47,9 @@ public class LabDetail implements Serializable {
      */
     private Integer graduateCategoryId;
 
+    /**
+     * 导师排序
+     */
+    private Integer mentorOrder;
+
 }
