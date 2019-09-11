@@ -1,17 +1,15 @@
-package com.gooalgene.wutbiolab.entity.notice;
+package com.gooalgene.wutbiolab.entity.resource;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "notice_detail")
-public class NoticeDetail implements Serializable {
-
+@Table(name = "resource_detail")
+public class ResourceDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +31,5 @@ public class NoticeDetail implements Serializable {
     private String category;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String context;
-
+    private String image;
 }
