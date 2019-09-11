@@ -13,9 +13,8 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
     List<LabDetail> getByLabCategoryId(Long labCategoryId);
     Page<LabDetail> getByLabCategoryId(Long labCategoryId, Pageable pageable);
 
-    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder" +
-            ",mc.categoryName FROM lab_detail ld " +
-            " RIGHT JOIN mentor_category mc ON ld.mentorCategoryId=mc.id ",
-            nativeQuery = true)
+    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.categoryName FROM lab_detail ld " +
+            " RIGHT JOIN mentor_category mc ON ld.mentorCategoryId=mc.id " +
+            " order by mentorCategoryId, ld.mentorOrder",nativeQuery = true)
     List<Object[]> getResearchTeam();
 }
