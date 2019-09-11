@@ -31,4 +31,9 @@ public class LabDetail extends BaseEntity implements Serializable {
      */
     private Integer graduateCategoryId;
 
+    /**
+     * 导师排序
+     */
+    private Integer mentorOrder;
+
 }
