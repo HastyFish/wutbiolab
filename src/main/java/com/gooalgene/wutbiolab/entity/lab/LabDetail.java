@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.entity;
+package com.gooalgene.wutbiolab.entity.lab;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * 机构概况和研究方向的共用表
+ * 实验室四个模块通用详情表
  */
 @Table(name = "lab_summarize")
 @Entity
@@ -32,7 +32,7 @@ public class LabDetail implements Serializable {
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus = 0;
 
-    private Integer LabCategoryId;
+    private Long labCategoryId;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String context;
@@ -40,13 +40,14 @@ public class LabDetail implements Serializable {
     /**
      * 导师类型id
      */
-    private Integer mentorCategoryId;
+    private Long mentorCategoryId;
 
     /**
      * 毕业生类型id
      */
-    private Integer graduateCategoryId;
+    private Long graduateCategoryId;
 
+    private String mentorName;
     /**
      * 导师排序
      */

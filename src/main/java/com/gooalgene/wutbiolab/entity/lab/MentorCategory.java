@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.entity;
+package com.gooalgene.wutbiolab.entity.lab;
 
 import lombok.Data;
 
@@ -18,6 +18,6 @@ public class MentorCategory implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String typeName;
+    private String categoryName;
 
 }

@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.entity;
+package com.gooalgene.wutbiolab.entity.lab;
 
 import lombok.Data;
 
