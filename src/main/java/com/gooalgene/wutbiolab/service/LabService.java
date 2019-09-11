@@ -21,6 +21,14 @@ public interface LabService {
     Page<LabDetail> getLabDetailByLabCategoryId(Long category, Integer pageNum, Integer pageSize);
 
     /**
+     * 通过id获取一条数据
+     * @param id
+     * @return
+     */
+    LabDetail getById(Long id);
+
+
+    /**
      * 针对研究团队模块获取其数据
      * @return
      */
@@ -58,4 +66,19 @@ public interface LabService {
      */
     List<GraduateCategory> getGraduateCategorys();
 
+
+
+    /*********************************************** 前端使用 ***************************************************/
+
+    /**
+     * 获取所有已发布的数据
+     * @return
+     */
+    Page<LabDetail> getPublished(Integer pageNum,Integer pageSize);
+
+    /**
+     * 获取已发布的研究团队的数据
+     * @return
+     */
+    List<MentorResponse> getPublishedResearchTeam();
 }

@@ -20,7 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class LabServiceImpl implements LabService {
@@ -43,8 +45,77 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
+    public LabDetail getById(Long id){
+        LabDetail one = labDetailDAO.getOne(id);
+        return one;
+    }
+
+
+    @Override
     public List<MentorResponse> getResearchTeam(){
         List<Object[]> researchTeam = labDetailDAO.getResearchTeam();
+        return formatMentorResponse(researchTeam);
+    }
+    @Override
+    public void saveOrPublishLabDetail(LabDetail labDetail,Integer publishStatus){
+        labDetail.setPublishStatus(publishStatus);
+        labDetailDAO.save(labDetail);
+    }
+
+
+    @Override
+    public void publishResearchTeam(List<MentorRequest> mentorRequests){
+        List<LabDetail> labDetails=new ArrayList<>();
+        mentorRequests.forEach(mentorRequest -> {
+            List<LabDetail> mentors = mentorRequest.getMentors();
+            Long mentorCategoryId = mentorRequest.getMentorCategoryId();
+            mentors.forEach(mentor->{
+                mentor.setPublishStatus(CommonConstants.PUBLISHED);
+                mentor.setMentorCategoryId(mentorCategoryId);
+                labDetails.add(mentor);
+            });
+        });
+        labDetailDAO.saveAll(labDetails);
+    }
+
+
+    @Override
+    public void saveMentorCategory(MentorCategory mentorCategory){
+        mentorCategoryDAO.save(mentorCategory);
+    }
+    @Override
+    public List<MentorCategory> getMentorCategorys(){
+        return mentorCategoryDAO.findAll();
+    }
+
+    @Override
+    public List<GraduateCategory> getGraduateCategorys(){
+        List<GraduateCategory> all = graduateCategoryDAO.findAll();
+        return all;
+    }
+
+
+
+    /*********************************************** 前端使用 ***************************************************/
+
+    @Override
+    public Page<LabDetail> getPublished(Integer pageNum,Integer pageSize){
+        if(pageNum==null&&pageSize==null){
+            List<LabDetail> labDetails = labDetailDAO.getByPublishStatus(CommonConstants.PUBLISHED);
+            return new PageImpl<>(labDetails);
+        }
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Page<LabDetail> page = labDetailDAO.getByPublishStatus(CommonConstants.PUBLISHED, pageable);
+        return page;
+    }
+
+    @Override
+    public List<MentorResponse> getPublishedResearchTeam(){
+        List<Object[]> researchTeam = labDetailDAO.getResearchTeam(CommonConstants.PUBLISHED);
+        return formatMentorResponse(researchTeam);
+    }
+
+    private List<MentorResponse>  formatMentorResponse(List<Object[]> researchTeam){
         Table<Long,String,List<LabDetail>> table= HashBasedTable.create();
         researchTeam.forEach(objects -> {
             Long mentorCategoryId=((BigInteger)objects[1]).longValue();
@@ -89,43 +160,5 @@ public class LabServiceImpl implements LabService {
         }
         return mentorResponses;
     }
-    @Override
-    public void saveOrPublishLabDetail(LabDetail labDetail,Integer publishStatus){
-        labDetail.setPublishStatus(publishStatus);
-        labDetailDAO.save(labDetail);
-    }
-
-
-    @Override
-    public void publishResearchTeam(List<MentorRequest> mentorRequests){
-        List<LabDetail> labDetails=new ArrayList<>();
-        mentorRequests.forEach(mentorRequest -> {
-            List<LabDetail> mentors = mentorRequest.getMentors();
-            Long mentorCategoryId = mentorRequest.getMentorCategoryId();
-            mentors.forEach(mentor->{
-                mentor.setPublishStatus(CommonConstants.PUBLISHED);
-                mentor.setMentorCategoryId(mentorCategoryId);
-                labDetails.add(mentor);
-            });
-        });
-        labDetailDAO.saveAll(labDetails);
-    }
-
-
-    @Override
-    public void saveMentorCategory(MentorCategory mentorCategory){
-        mentorCategoryDAO.save(mentorCategory);
-    }
-    @Override
-    public List<MentorCategory> getMentorCategorys(){
-        return mentorCategoryDAO.findAll();
-    }
-
-    @Override
-    public List<GraduateCategory> getGraduateCategorys(){
-        List<GraduateCategory> all = graduateCategoryDAO.findAll();
-        return all;
-    }
-
 
 }

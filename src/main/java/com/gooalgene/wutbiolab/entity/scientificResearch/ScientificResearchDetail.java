@@ -1,20 +1,23 @@
-package com.gooalgene.wutbiolab.entity;
+package com.gooalgene.wutbiolab.entity.scientificResearch;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-//@Table(name = "research_team")
-//@Entity
-//@Data
-public class ResearchTeam implements Serializable {
-    private static final long serialVersionUID = -6519103474643544011L;
-
-
+/**
+ * 科研工作子模块详情
+ */
+@Table(name = "scientific_research_detail")
+@Entity
+@Data
+public class ScientificResearchDetail implements Serializable {
+    private static final long serialVersionUID = -8184839871153993897L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long scientificResearchCategoryId;
 
     @Column
     private String title;
@@ -28,17 +31,13 @@ public class ResearchTeam implements Serializable {
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus = 0;
 
-    /**
-     * 导师类型id
-     */
-    private String mentorTypeId;
-    /**
-     * 导师名称
-     */
-    private String mentorName;
 
-    private Integer researchTeamOrder;
+    private String periodicalName;
+    private String author;
+    private Long publishYear;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String context;
+
+    private Long academicCategoryId;
 }
