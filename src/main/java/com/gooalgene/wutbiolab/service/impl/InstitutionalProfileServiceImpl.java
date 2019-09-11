@@ -24,11 +24,9 @@ public class InstitutionalProfileServiceImpl implements InstitutionalProfileServ
         String s = JSON.toJSONString(institutionalProfile);
         if (id == null) {
             //新增
-            institutionalProfile.setUnpublishedJson(s);
             institutionalProfileDAO.save(institutionalProfile);
         }else {
             //修改
-            institutionalProfile.setUnpublishedJson(s);
             institutionalProfileDAO.save(institutionalProfile);
         }
     }
