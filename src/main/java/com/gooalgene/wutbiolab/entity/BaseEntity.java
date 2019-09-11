@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -14,20 +15,20 @@ public class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
-    private String title;
+    protected String title;
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String context;
+    protected String context;
 
-    private Long publishDate;
+    protected Long publishDate;
 
     /**
      * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
      */
     @Column(columnDefinition = "INT default 0")
-    private Integer publishStatus;
+    protected Integer publishStatus;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String unpublishedJson;
+    protected String unpublishedJson;
 }
