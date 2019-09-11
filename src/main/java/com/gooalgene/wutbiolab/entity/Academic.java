@@ -6,12 +6,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 
-//@Table(name = "academic")
-//@Entity
-//@Data
+@Table(name = "academic")
+@Entity
+@Data
 public class Academic extends BaseEntity implements Serializable {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
     private static final long serialVersionUID = 5430378745336437789L;
     private Long startersCategoryId;
 

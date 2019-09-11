@@ -2,8 +2,7 @@ package com.gooalgene.wutbiolab.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Table(name = "research_team")
@@ -12,6 +11,9 @@ import java.io.Serializable;
 public class ResearchTeam extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -6519103474643544011L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
     /**
      * 导师类型id
      */
@@ -21,5 +23,8 @@ public class ResearchTeam extends BaseEntity implements Serializable {
      */
     private String mentorName;
 
-    private Integer order;
+    private Integer researchTeamOrder;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    protected String context;
 }

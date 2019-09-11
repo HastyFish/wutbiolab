@@ -10,16 +10,12 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 @Data
-public class BaseEntity implements Serializable {
-    private static final long serialVersionUID = -5961450421975493551L;
+public class BaseEntity  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+
 
     protected String title;
-    @Column(columnDefinition = "MEDIUMTEXT")
-    protected String context;
+
 
     protected Long publishDate;
 
@@ -27,8 +23,6 @@ public class BaseEntity implements Serializable {
      * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
      */
     @Column(columnDefinition = "INT default 0")
-    protected Integer publishStatus;
+    protected Integer publishStatus=0;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    protected String unpublishedJson;
 }

@@ -2,8 +2,7 @@ package com.gooalgene.wutbiolab.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -15,4 +14,11 @@ import java.io.Serializable;
 public class InstitutionalProfile extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -6873685462844692336L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    protected String context;
 }

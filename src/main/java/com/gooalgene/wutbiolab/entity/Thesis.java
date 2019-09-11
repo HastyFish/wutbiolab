@@ -16,6 +16,9 @@ public class Thesis extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -5717645323223914836L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
     private Long startersCategoryId;
 
 
@@ -23,6 +26,8 @@ public class Thesis extends BaseEntity implements Serializable {
     private String author;
     private Long publishYear;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
+    protected String context;
 
 
 
