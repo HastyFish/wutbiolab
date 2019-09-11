@@ -1,14 +1,14 @@
-package com.gooalgene.wutbiolab.entity;
+package com.gooalgene.wutbiolab.entity.news;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-//@Table(name = "news")
-//@Entity
-//@Data
-public class News implements Serializable {
+@Table(name = "news_detail")
+@Entity
+@Data
+public class NewsDetail implements Serializable {
     private static final long serialVersionUID = -3215337937375965993L;
 
     @Id
@@ -35,7 +35,5 @@ public class News implements Serializable {
      */
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus;
-
-
 
 }

@@ -1,23 +1,20 @@
-package com.gooalgene.wutbiolab.entity.notice;
+package com.gooalgene.wutbiolab.entity.news;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.lang.reflect.GenericArrayType;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "notice_category")
-public class NoticeCategory implements Serializable {
+@Table(name = "news_category")
+public class NewsCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String typeName;
-
-
 }
