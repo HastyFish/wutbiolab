@@ -5,11 +5,15 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Table(name = "research_team")
+/**
+ * 机构概况和研究方向的共用表
+ */
+@Table(name = "lab_summarize")
 @Entity
 @Data
-public class ResearchTeam implements Serializable {
-    private static final long serialVersionUID = -6519103474643544011L;
+public class LabDetail implements Serializable {
+
+    private static final long serialVersionUID = -6873685462844692336L;
 
 
     @Id
@@ -28,17 +32,19 @@ public class ResearchTeam implements Serializable {
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus = 0;
 
-    /**
-     * 导师类型id
-     */
-    private String mentorTypeId;
-    /**
-     * 导师名称
-     */
-    private String mentorName;
-
-    private Integer researchTeamOrder;
+    private Integer LabCategoryId;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String context;
+
+    /**
+     * 导师类型id
+     */
+    private Integer mentorCategoryId;
+
+    /**
+     * 毕业生类型id
+     */
+    private Integer graduateCategoryId;
+
 }
