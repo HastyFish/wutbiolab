@@ -31,7 +31,7 @@ public interface CommonConstants {
      * 实验室下相关
      */
     //机构概况
-    Integer INSTITUTIONALPROFILE=1;
+    Integer ORGANIZATION_PROFILE=1;
     //研究方向
     Integer RESEARCHDIRECTION=2;
 

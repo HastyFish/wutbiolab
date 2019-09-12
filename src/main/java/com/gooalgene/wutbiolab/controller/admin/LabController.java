@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.controller.admin;
 
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
+import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.request.MentorRequest;
 import com.gooalgene.wutbiolab.service.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,13 @@ public class LabController {
         });
 
     }
+
+    //添加一个MentorCategory（导师类别）
+    @PostMapping("/mentorCategory")
+    public void saveMentorCategory(@RequestBody MentorCategory mentorCategory){
+        labService.saveMentorCategory(mentorCategory);
+
+    }
+
+
 }

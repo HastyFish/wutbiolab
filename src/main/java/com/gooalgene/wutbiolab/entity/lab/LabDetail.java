@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.entity.lab;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 /**
  * 实验室四个模块通用详情表
  */
+@NoArgsConstructor
 @Table(name = "lab_detail")
 @Entity
 @Data
@@ -53,4 +55,9 @@ public class LabDetail implements Serializable {
      */
     private Integer mentorOrder;
 
+    public LabDetail(Long id,String title, Long publishDate) {
+        this.id=id;
+        this.title = title;
+        this.publishDate = publishDate;
+    }
 }

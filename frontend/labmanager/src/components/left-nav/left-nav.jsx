@@ -7,9 +7,9 @@ import {
   Button 
 } from 'antd';
 
-import {logout} from "@api/index"
-import menuList from '../../config/menuConfig';
-import storageUtils from '../../utils/storageUtils.js';
+//import {logout} from "@api/index"
+import menuList from '@/config/menuConfig';
+import storageUtils from '@/utils/storageUtils.js';
 
 const SubMenu = Menu.SubMenu;
 
@@ -22,14 +22,19 @@ class LeftNav extends Component{
     this.setState({
       visible: false,
     });
+
+    //模拟退出登录
+    storageUtils.removeUser();
+    this.props.history.replace('/login');
+
     //删除localStorage中保存的用户
-    let data = await logout();
-    if(data.code === 0){
-     storageUtils.removeUser();
-     storageUtils.removeToken();
-     //跳转到login页面
-     this.props.history.replace('/login');
-    }
+    // let data = await logout();
+    // if(data.code === 0){
+    //  storageUtils.removeUser();
+    //  storageUtils.removeToken();
+    //  //跳转到login页面
+    //  this.props.history.replace('/login');
+    // }
   };
 
   handleCancel = e => {
@@ -43,15 +48,8 @@ class LeftNav extends Component{
   getMenuNodes = (menuList) => {
     //得到当前请求的路由路径
     const path = this.props.location.pathname;
-    let {authorities} = storageUtils.getUser()
     let menuListOld = JSON.parse(JSON.stringify(menuList));
-    if(authorities !== "ROLE_ADMIN" ){
-      menuListOld.forEach((item,index)=>{
-        if( item.key === "/user"){
-          menuListOld.splice(index,1)
-        }
-      })
-    }
+
     return menuListOld.map(item => {
       if(!item.children){
         //判断是否为退出登录
@@ -78,10 +76,6 @@ class LeftNav extends Component{
         }
         
       }else{
-        if(item.key === "/products"){
-          let addRouter = storageUtils.getRouter();
-          item.children = [...addRouter];
-        }
         //查找一个与当前请求路径匹配的子Item
         const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0);
         //如果存在，说明当前item的子列表需要打开
@@ -158,41 +152,26 @@ class LeftNav extends Component{
   render(){
     //得到当前请求的路由路径
     let path = this.props.location.pathname;
-    if(path.indexOf('/user')===0 || path === '/'){
-      //当前请求的是用户管理或其子路由界面,侧边显示的还是user
-      path = '/user';
-    }else if(path.indexOf('/home')===0){
-      //当前请求的是首页管理或其子路由界面,侧边显示的还是home
+    if(path.indexOf('/home')===0 || path === '/'){
+      //当前请求的是home,侧边显示的还是user
       path = '/home';
+    }else if(path.indexOf('/laboratory')===0){
+      //当前请求的是实验室简介或其子路由界面,侧边显示的还是laboratory
+      path = '/laboratory';
     }else if(path.indexOf('/news')===0){
-      //当前请求的是新闻管理或其子路由界面,侧边显示的还是news
+      //当前请求的是新闻编辑或其子路由界面,侧边显示的还是news
       path = '/news';
-    }else if(path.indexOf('/recruit')===0){
-      //当前请求的是招聘管理或其子路由界面,侧边显示的还是recruit
-      path = '/recruit';
-    }else if(path.indexOf('/introduce')===0){
-      //当前请求的是公司简介或其子路由界面,侧边显示的还是introduct
-      path = '/introduce';
-    }else if(path.indexOf('/uset')===0){
-      //当前请求的是产品管理或其子路由界面,侧边显示的还是uset
-      path = '/uset';
-    }else if(path.indexOf('/server')===0){
-      //当前请求的是产品管理或其子路由界面,侧边显示的还是server
-      path = '/server';
-    }else if(path.indexOf('/product')===0){
-      //当前请求的是产品管理或其子路由界面,侧边显示的还是product
-      path = '/product';
-    }else if(path.indexOf('/mobreed')===0){
-      //当前请求的是产品管理或其子路由界面,侧边显示的还是mobreed
-      path = '/mobreed';
-    }else if(path.indexOf('/knograph')===0){
-      //当前请求的是产品管理或其子路由界面,侧边显示的还是knograph
-      path = '/knograph';
+    }else if(path.indexOf('/notice')===0){
+      //当前请求的是通知总览或其子路由界面,侧边显示的还是notice
+      path = '/notice';
+    }else if(path.indexOf('/source')===0){
+      //当前请求的是资源发布总览或其子路由界面,侧边显示的还是source
+      path = '/source';
+    }else if(path.indexOf('/science')===0){
+      //当前请求的是科研工作或其子路由界面,侧边显示的还是source
+      path = '/science';
     }
-    //得到需要打开菜单项的key
-    if( storageUtils.getUser().authorities !=="ROLE_ADMIN"){
-      this.openKey = "/products"
-    }
+
     const openKey = this.openKey;
 
     const {visible} = this.state;

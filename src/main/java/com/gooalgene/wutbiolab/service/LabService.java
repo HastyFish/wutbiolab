@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.service;
 
 import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
+import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.request.MentorRequest;
@@ -66,19 +67,34 @@ public interface LabService {
      */
     List<GraduateCategory> getGraduateCategorys();
 
-
+    /**
+     * 获取模块下所有分类
+     * @return
+     */
+    List<LabCategory> getAllCategory();
 
     /*********************************************** 前端使用 ***************************************************/
 
     /**
-     * 获取所有已发布的数据
+     * 通过id和发布状态查询一行数据
      * @return
      */
-    Page<LabDetail> getPublished(Integer pageNum,Integer pageSize);
+    LabDetail getPublishedById(Long id);
 
     /**
      * 获取已发布的研究团队的数据
      * @return
      */
     List<MentorResponse> getPublishedResearchTeam();
+
+    /**
+     * 通过模块分类id及发布状态查询数据
+     * @param labCategoryId
+     * @param pageNum
+     * @param pageSize
+     * @param publishStatus
+     * @return
+     */
+    Page<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer pageNum,
+                                                                Integer pageSize,Integer publishStatus,Boolean isList);
 }
