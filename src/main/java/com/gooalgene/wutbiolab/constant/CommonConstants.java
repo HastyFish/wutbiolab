@@ -27,4 +27,12 @@ public interface CommonConstants {
     Integer LAB=1;
     Integer SCIENTIFIC=2;
 
+    /**
+     * 实验室下相关
+     */
+    //机构概况
+    Integer ORGANIZATION_PROFILE=1;
+    //研究方向
+    Integer RESEARCHDIRECTION=2;
+
 }
