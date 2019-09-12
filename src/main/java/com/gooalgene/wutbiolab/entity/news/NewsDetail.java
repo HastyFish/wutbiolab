@@ -15,12 +15,13 @@ public class NewsDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer category;
+    private String category;
 
     private String title;
 
     private Long publishDate;
 
+    @Column(columnDefinition = "text")
     private String image;
 
     @Column(columnDefinition = "MEDIUMTEXT")

@@ -7,6 +7,7 @@ import com.gooalgene.wutbiolab.entity.Picture;
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.NewsService;
 import com.gooalgene.wutbiolab.service.PictureService;
@@ -38,8 +39,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<Page<NewsDetail>> newsDetailPage(Integer pageNum, Integer pageSize) {
-        return ResponseUtil.success(newsDetailDAO.findAll(PageRequest.of(pageNum, pageSize)));
+    public CommonResponse<PageResponse<NewsDetail>> newsDetailPage(Integer pageNum, Integer pageSize) {
+        Page<NewsDetail> page = newsDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
+        return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 
     @Override
@@ -64,9 +66,9 @@ public class NewsServiceImpl implements NewsService {
             if (newsDetailDAO.findById(newsDetail.getId()).isPresent()) {
                 NewsDetail oldNewsDetail = newsDetailDAO.findById(newsDetail.getId()).get();
                 try {
-                    String newImageUrl = pictureService.saveBase64(oldNewsDetail.getImage(), newsDetail.getImage());
-                    if (null != newImageUrl) {
-                        newsDetail.setImage(newImageUrl);
+                    String newImage = pictureService.saveBase64(oldNewsDetail.getImage(), newsDetail.getImage());
+                    if (null != newImage) {
+                        newsDetail.setImage(newImage);
                     } else {
                         logger.error("fail to storge image");
                         newsDetail.setImage(objectMapper.writeValueAsString(new Picture()));
@@ -83,9 +85,13 @@ public class NewsServiceImpl implements NewsService {
             }
         } else {
             try {
-                Picture newImage = objectMapper.readValue(newsDetail.getImage(), Picture.class);
-                newImage.setUrl(pictureService.saveBase64(null, newImage.getUrl()));
-                newsDetail.setImage(objectMapper.writeValueAsString(newImage));
+                String newImage = pictureService.saveBase64(null, newsDetail.getImage());
+                if (null != newImage) {
+                    newsDetail.setImage(newImage);
+                } else {
+                    logger.error("fail to storge image");
+                    newsDetail.setImage(objectMapper.writeValueAsString(new Picture()));
+                }
                 newsDetailDAO.save(newsDetail);
                 return ResponseUtil.success(true);
             } catch (IOException e) {

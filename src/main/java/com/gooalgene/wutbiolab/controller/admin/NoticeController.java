@@ -1,27 +1,43 @@
 package com.gooalgene.wutbiolab.controller.admin;
 
+import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
 import com.gooalgene.wutbiolab.entity.notice.NoticeDetail;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.service.NoticeService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/notice")
 public class NoticeController {
+
+    private NoticeService noticeService;
+
+    private NoticeController(NoticeService noticeService) {
+        this.noticeService = noticeService;
+    }
+
+    @GetMapping("/category")
+    public CommonResponse<List<NoticeCategory>> getNewsCategory() {
+        return noticeService.allNewsCategory();
+    }
+
     @GetMapping
-    public CommonResponse<PageResponse<NoticeDetail>> getNoticeDetailList(Integer pageNum, Integer pageSize) {
-        return ResponseUtil.success(new PageResponse<>());
+    public CommonResponse<PageResponse<NoticeDetail>> getNoticeDetailPage(Integer pageNum, Integer pageSize) {
+        return noticeService.noticeDetailPage(pageNum, pageSize);
     }
 
     @GetMapping("/{id}")
     public CommonResponse<NoticeDetail> getNoticeDetail(@PathVariable Integer id) {
-        return ResponseUtil.success(new NoticeDetail());
+        return noticeService.noticeDetailById(id);
     }
 
     @PostMapping
     public CommonResponse<Boolean> renewNoticeDetail(NoticeDetail noticeDetail) {
-        return ResponseUtil.success(true);
+        return noticeService.renewNoticeDetail(noticeDetail);
     }
 
     @DeleteMapping("/{id}")
