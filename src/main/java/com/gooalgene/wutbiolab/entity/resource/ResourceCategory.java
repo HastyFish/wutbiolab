@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.resource;
 
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,13 +10,11 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "resource_categroy")
-public class ResourceCategory {
+@DiscriminatorValue("resource")
+public class ResourceCategory extends AllCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    private String categoryName;
 
 }

@@ -1,35 +1,46 @@
 package com.gooalgene.wutbiolab.controller.admin;
 
+import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
-import com.gooalgene.wutbiolab.response.common.PageResponse;
-import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.service.NewsService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/news")
 public class NewsController {
 
+    private NewsService newsService;
+
+    public NewsController(NewsService newsService) {
+        this.newsService = newsService;
+    }
+
+    @GetMapping("/category")
+    public CommonResponse<List<NewsCategory>> getNewsCategory() {
+        return newsService.allNewsCategory();
+    }
+
     @GetMapping
-    public CommonResponse<PageResponse<NewsDetail>> getNewsDetailList(Integer pageNum, Integer pageSize) {
-        return ResponseUtil.success(new PageResponse<>());
+    public CommonResponse<Page<NewsDetail>> getNewsDetailList(Integer pageNum, Integer pageSize) {
+        return newsService.newsDetailPage(pageNum, pageSize);
     }
 
     @GetMapping("/{id}")
     public CommonResponse<NewsDetail> getNewsDetail(@PathVariable Integer id) {
-        return ResponseUtil.success(new NewsDetail());
+        return newsService.newsDetailById(id);
     }
 
     @PostMapping
     public CommonResponse<Boolean> renewNewsDetail(NewsDetail newsDetail) {
-        return ResponseUtil.success(true);
+        return newsService.renewNews(newsDetail);
     }
 
     @DeleteMapping("/{id}")
-    public CommonResponse<Boolean> deleteNewsDetail(@PathVariable Integer id) {
-        return ResponseUtil.success(true);
+    public CommonResponse<Boolean> deleteNewsDetail(@PathVariable int id) {
+        return newsService.deleteById(id);
     }
 }
