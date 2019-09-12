@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.entity.scientificResearch;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 /**
  * 科研工作子模块详情
  */
+@NoArgsConstructor
 @Table(name = "scientific_research_detail")
 @Entity
 @Data
@@ -40,4 +42,15 @@ public class ScientificResearchDetail implements Serializable {
     private String context;
 
     private Long academicCategoryId;
+
+
+    public ScientificResearchDetail(Long id,String title, Long publishDate, Integer publishStatus, String periodicalName, String author, Long publishYear) {
+        this.id=id;
+        this.title = title;
+        this.publishDate = publishDate;
+        this.publishStatus = publishStatus;
+        this.periodicalName = periodicalName;
+        this.author = author;
+        this.publishYear = publishYear;
+    }
 }

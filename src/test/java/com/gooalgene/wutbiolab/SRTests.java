@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab;
 
+import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.ScientificResearchDetailDAO;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
@@ -7,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -21,9 +23,16 @@ public class SRTests {
     @Test
     public void testService(){
         ScientificResearchDetail scientificResearchDetail=new ScientificResearchDetail();
-        scientificResearchDetail.setAuthor("huyao");
-        scientificResearchDetail.setContext("胡尧牛逼");
-        scientificResearchDetail.setPeriodicalName("干大事的");
-        scientificResearchService.save(scientificResearchDetail);
+        scientificResearchDetail.setAuthor("huyao4");
+        scientificResearchDetail.setContext("胡尧牛逼4");
+        scientificResearchDetail.setPeriodicalName("干大事的4");
+//        scientificResearchDetail.setId(3l);
+        scientificResearchService.saveOrPublish(scientificResearchDetail, CommonConstants.PUBLISHED);
+    }
+
+    @Test
+    public void testService2(){
+        Page<ScientificResearchDetail> srDetialByCategoryId = scientificResearchService.getSRDetialByCategoryId(1l, 0, 2);
+        System.out.println(1);
     }
 }

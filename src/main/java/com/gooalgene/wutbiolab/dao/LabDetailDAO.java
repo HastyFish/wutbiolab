@@ -11,8 +11,16 @@ import java.util.List;
 
 public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
 
-    List<LabDetail> getByLabCategoryId(Long labCategoryId);
-    Page<LabDetail> getByLabCategoryId(Long labCategoryId, Pageable pageable);
+//    List<LabDetail> getByLabCategoryId(Long labCategoryId);
+//    Page<LabDetail> getByLabCategoryId(Long labCategoryId, Pageable pageable);
+
+    @Query(value = "SELECT ld.id,gc.categoryName,ld.title,ld.publishDate,ld.publishStatus " +
+            " FROM lab_detail ld JOIN graduate_category gc ON ld.graduateCategoryId=gc.id LIMIT :pageNum,:pageSize",
+            nativeQuery = true)
+    List<Object[]> getGraduates(@Param("pageNum")Integer pageNum,@Param("pageSize")Integer pageSize);
+
+    @Query(value = "SELECT count(1) FROM lab_detail ld JOIN graduate_category gc ON ld.graduateCategoryId=gc.id",nativeQuery = true)
+    Long getGraduatesCount();
 
     List<LabDetail> getByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer publishStatus);
     Page<LabDetail> getByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer publishStatus, Pageable pageable);

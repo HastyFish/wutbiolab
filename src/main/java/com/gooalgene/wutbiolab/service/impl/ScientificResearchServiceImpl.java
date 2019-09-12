@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
 
     @Override
     public Page<ScientificResearchDetail> getSRDetialByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
         return scientificResearchDetailDAO.getByScientificResearchCategoryId(scientificResearchCategoryId, pageable);
     }
 
@@ -49,14 +50,26 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     }
 
     @Override
-    public void save(ScientificResearchDetail scientificResearchDetail){
-        scientificResearchDetail.setPublishStatus(CommonConstants.UNPUBLISHED);
+    @Transactional
+    public void saveOrPublish(ScientificResearchDetail scientificResearchDetail,Integer publishStatus){
+        scientificResearchDetail.setPublishStatus(publishStatus);
         scientificResearchDetailDAO.save(scientificResearchDetail);
     }
 
 
-
     /*********************************************** 前端使用 ***************************************************/
 
+    @Override
+    public Page<ScientificResearchDetail> getPublishedByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize){
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        return scientificResearchDetailDAO.getByScientificResearchCategoryIdAndPublishStatus(scientificResearchCategoryId,
+                CommonConstants.PUBLISHED, pageable);
+    }
+
+    @Override
+    public ScientificResearchDetail getPublishedById(Long id){
+        ScientificResearchDetail one = scientificResearchDetailDAO.getByIdAndPublishStatus(id,CommonConstants.PUBLISHED);
+        return one;
+    }
 
 }
