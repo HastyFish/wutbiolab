@@ -25,17 +25,6 @@ export default class EditorDemo extends React.PureComponent {
         return htmlContent;
       }
 
-    // componentWillReceiveProps(nextProps){
-    //   const oldcontext = nextProps.context;
-    //   let context = BraftEditor.createEditorState(oldcontext);
-    //   //判断是否有changeRichText且状态有变化
-    //   if(this.props.changeRichText && context.toHTML() !== this.state.context.toHTML()){
-    //     this.setState({
-    //       context
-    //     })
-    //   }
-    // }
-
     render () {
         const { context } = this.state
         return (

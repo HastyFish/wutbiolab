@@ -6,14 +6,15 @@ import {
   Button,
   Modal,
   Row,
-  Col
+  Col,
+  Message
 } from 'antd';
-import logo from '../../assets/images/logo.png';
+import logo from '@/assets/images/logo.png';
 import bgCom from './images/bgCom.png'
 import './login.less';
-import storageUtils from '../../utils/storageUtils.js'
+import storageUtils from '@/utils/storageUtils.js'
 // import Register from '../../components/register/register'
-import {reqLogin} from '@api/index'
+//import {reqLogin} from '@api/index'
 
 
 class Login extends PureComponent {
@@ -30,19 +31,28 @@ class Login extends PureComponent {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         //console.log('提交登陆的ajax请求', values)
+        //模拟登录
+        const {username,password} = values;
+        if(username === 'admin' && password === '123456'){
+          storageUtils.saveUser({username})
+          this.props.history.replace('/');
+        }else{
+          Message.error('账号密码错误');
+        }
+
         // 请求登陆
-        const result = await reqLogin(values);
-        this.setState({msg:result.msg})
-        if(result.code === -1){
-          return 
-        }
-        //console.log('请求成功', result.data);
-        if (result.code === 0) {
-          const { username, token,authorities } = result.result;
-          //提示登录成功
-          storageUtils.saveUser({username,authorities}); //保存到localStorage中
-          storageUtils.saveToken(token); //保存到localStorage中
-        }
+        // const result = await reqLogin(values);
+        // this.setState({msg:result.msg})
+        // if(result.code === -1){
+        //   return 
+        // }
+        // //console.log('请求成功', result.data);
+        // if (result.code === 0) {
+        //   const { username, token,authorities } = result.result;
+        //   //提示登录成功
+        //   storageUtils.saveUser({username,authorities}); //保存到localStorage中
+        //   storageUtils.saveToken(token); //保存到localStorage中
+        // }
 
       } else {
         console.log('检验失败');
@@ -75,8 +85,7 @@ class Login extends PureComponent {
     //如果用户已经登录，自动跳转到管理页面
     const user = storageUtils.getUser();
     if (user && user.username) {
-      // return <Redirect to="/user" />
-      this.props.history.replace('/user');
+      this.props.history.replace('/');
     }
   }
 

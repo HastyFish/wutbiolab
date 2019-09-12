@@ -2,8 +2,8 @@ import React,{Component} from 'react';
 import { Modal, Button, Menu, Dropdown, } from 'antd';
 import {Link,withRouter} from 'react-router-dom';
 
-import storageUtils from '../../utils/storageUtils.js';
-import Logo from '../../assets/images/logo.png';
+import storageUtils from '@/utils/storageUtils.js';
+import Logo from '@/assets/images/logo.png';
 import './index.less';
 import {logout} from "@api/index"
 class MyHeader extends Component{
@@ -25,7 +25,7 @@ class MyHeader extends Component{
    let data = await logout();
    if(data.code === 0){
     storageUtils.removeUser();
-    storageUtils.removeToken();
+    //storageUtils.removeToken();
     //跳转到login页面
     this.props.history.replace('/login');
    }
