@@ -1,8 +1,9 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import Login from './views/login/login';
-import Admin from './views/admin/admin';
-import Error from './views/error/error';
+import Login from '@/views/login/login';
+import Admin from '@/views/admin/admin';
+import Error from '@/views/error/error';
+import '@/assets/style/common.less';
 
 function App() {
   return (

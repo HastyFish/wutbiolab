@@ -5,6 +5,7 @@ import com.gooalgene.wutbiolab.entity.Picture;
 import com.gooalgene.wutbiolab.property.GooalApplicationProperty;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -51,13 +52,12 @@ public class PictureServiceImpl implements PictureService {
             }
         }
 
-        BASE64Decoder decoder = new BASE64Decoder();
         try {
             List<Picture> newImageList = objectMapper.readValue(newPictureListString,
                     objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
             newImageList.forEach(one -> {
                 try {
-                    byte[] bytes = decoder.decodeBuffer(one.getUrl());
+                    byte[] bytes = Base64.decodeBase64(one.getUrl());
                     String newImageName = UUID.randomUUID() + ".png";
                     String newImagePath = gooalApplicationProperty.getImagePath() + newImageName;
                     for (int i = 0; i < bytes.length; i++) {

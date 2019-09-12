@@ -5,28 +5,28 @@ const menuList = [
     icon: 'home', // 图标名称
   },
   {
-    title: '产品管理',
-    key: '/products',
+    title: '实验室简介',
+    key: '/laboratory',
     icon: 'appstore',
   },
   {
-    title: '新闻管理',
+    title: '新闻动态',
     key: '/news',
     icon: 'profile',
   },
   {
-    title: '招聘管理',
-    key: '/recruit',
+    title: '通知公告',
+    key: '/notice',
     icon: 'windows',
   },
   {
-    title: '公司简介',
-    key: '/introduce',
+    title: '科研工作',
+    key: '/science',
     icon: 'bank',
   },
   {
-    title: '页脚设置',
-    key: '/footer',
+    title: '资源发布',
+    key: '/source',
     icon: 'down-square',
   },
   {

@@ -7,7 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Deprecated
 public class PageResponse<T> {
 
     public PageResponse() {
