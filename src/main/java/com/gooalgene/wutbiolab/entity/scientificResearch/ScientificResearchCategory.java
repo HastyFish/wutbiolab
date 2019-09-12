@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.entity;
+package com.gooalgene.wutbiolab.entity.scientificResearch;
 
 import lombok.Data;
 
@@ -6,12 +6,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * 一级分类，针对实验室模块和科研工作模块
+ * 科研工作大分类
  */
-@Table(name = "starters_category")
+@Table(name = "scientific_research_category")
 @Entity
 @Data
-public class StartersCategory implements Serializable {
+public class ScientificResearchCategory implements Serializable {
 
     private static final long serialVersionUID = 3631378440172366790L;
     @Id
@@ -23,10 +23,6 @@ public class StartersCategory implements Serializable {
      */
     private String categoryName;
 
-    /**
-     * 模块分类，实验室模块，科研工作模块
-     */
-    private Integer type;
 
 
 }
