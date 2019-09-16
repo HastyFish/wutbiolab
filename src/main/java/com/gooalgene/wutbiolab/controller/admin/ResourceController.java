@@ -2,6 +2,7 @@ package com.gooalgene.wutbiolab.controller.admin;
 
 import com.gooalgene.wutbiolab.entity.resource.ResourceCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
+import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/resoucre")
+@RequestMapping("/resource")
 public class ResourceController {
 
     private ResourceService resourceService;
@@ -21,12 +22,12 @@ public class ResourceController {
     }
 
     @GetMapping("/category")
-    public CommonResponse<List<ResourceCategory>> getNewsCategory() {
+    public CommonResponse<List<ResourceCategory>> getResouceCategory() {
         return resourceService.allResourceCategory();
     }
 
     @GetMapping
-    public CommonResponse<PageResponse<ResourceDetail>> getResourceDetailPage(Integer pageNum, Integer pageSize) {
+    public CommonResponse<PageResponse<ResourceOverview>> getResourceDetailPage(Integer pageNum, Integer pageSize) {
         return resourceService.resourceDetailPage(pageNum, pageSize);
     }
 
@@ -36,12 +37,12 @@ public class ResourceController {
     }
 
     @PostMapping
-    public CommonResponse<Boolean> renewResourceDetail(ResourceDetail resourceDetail) {
-        return ResponseUtil.success(true);
+    public CommonResponse<Boolean> renewResourceDetail(@RequestBody ResourceDetail resourceDetail) {
+        return resourceService.renewResourceDetail(resourceDetail);
     }
 
     @DeleteMapping("/{id}")
     public CommonResponse<Boolean> deleteResourceDetail(@PathVariable Integer id) {
-        return ResponseUtil.success(true);
+        return resourceService.deleteResourceDetail(id);
     }
 }

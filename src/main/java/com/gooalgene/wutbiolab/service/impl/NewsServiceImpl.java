@@ -6,6 +6,7 @@ import com.gooalgene.wutbiolab.dao.news.NewsDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsDetail;
+import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
@@ -39,8 +40,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NewsDetail>> newsDetailPage(Integer pageNum, Integer pageSize) {
-        Page<NewsDetail> page = newsDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPage(Integer pageNum, Integer pageSize) {
+//        Page<NewsDetail> page = newsDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
+        Page<NewsOverview> page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize));
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 

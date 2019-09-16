@@ -2,6 +2,7 @@ package com.gooalgene.wutbiolab.controller.admin;
 
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsDetail;
+import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
@@ -25,7 +26,7 @@ public class NewsController {
     }
 
     @GetMapping
-    public CommonResponse<PageResponse<NewsDetail>> getNewsDetailPage(Integer pageNum, Integer pageSize) {
+    public CommonResponse<PageResponse<NewsOverview>> getNewsDetailPage(Integer pageNum, Integer pageSize) {
         return newsService.newsDetailPage(pageNum, pageSize);
     }
 
