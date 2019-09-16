@@ -6,21 +6,21 @@ import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.request.MentorRequest;
 import com.gooalgene.wutbiolab.response.MentorResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface LabService {
 
-    /**
-     * 通过模块类型的id获取对应模块的相关数据
-     * @param category
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    Page<LabDetail> getLabDetailByLabCategoryId(Long category, Integer pageNum, Integer pageSize);
 
+//    Page<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize);
+
+    /**
+     * 获取毕业生分页列表
+     *
+     */
+    PageResponse<LabDetail> getGraduates(Integer pageNum, Integer pageSize);
     /**
      * 通过id获取一条数据
      * @param id

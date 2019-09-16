@@ -20,42 +20,45 @@ public class ApiLabController {
 
 
     //查询列表（分页）
-    @GetMapping("/labDetail/list/{labCategoryId}")
-    public void getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
+    @GetMapping("/list/{labCategoryId}")
+    public CommonResponse<Page<LabDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
                                 @RequestParam("pageNum")Integer pageNum,@RequestParam("pageSize")Integer pageSize){
         Page<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryIdAndPublishStatus(labCategoryId, pageNum, pageSize,
                         CommonConstants.PUBLISHED,true);
+        return ResponseUtil.success(labDetails);
     }
 
     //通过分类id查询子模块（只包含一条数据的子模块）
-    @GetMapping("/labDetail/one/{labCategoryId}")
-    public void getOneLabDetail(@PathVariable("labCategoryId")Long labCategoryId){
+    @GetMapping("/one/{labCategoryId}")
+    public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("labCategoryId")Long labCategoryId){
         Page<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryIdAndPublishStatus(labCategoryId,
                         null, null, CommonConstants.PUBLISHED,false);
+        LabDetail labDetail=null;
         if(labDetails!=null){
             List<LabDetail> content = labDetails.getContent();
             if(content!=null&&!content.isEmpty()){
-                LabDetail labDetail = content.get(0);
+                labDetail = content.get(0);
             }
         }
+        return ResponseUtil.success(labDetail);
     }
 
+    //通过id查询一条数据(已发布)
+    @GetMapping("/{id}")
+    public CommonResponse<LabDetail> getPublishedById(@PathVariable("id")Long id){
+        LabDetail publishedById = labService.getPublishedById(id);
+        return ResponseUtil.success(publishedById);
+    }
 
-    //查询研究团队所有已发布数据
     @GetMapping("/researchTeam")
-    public CommonResponse<List<MentorResponse>> getResearchTeam(){
+    public CommonResponse<List<MentorResponse>> getPublishedResearchTeam(){
         List<MentorResponse> researchTeam = labService.getPublishedResearchTeam();
         return ResponseUtil.success(researchTeam);
     }
 
 
-    //通过id查询一条数据(已发布)
-    @GetMapping("/labDetail/{id}")
-    public void getPublishedById(@PathVariable("id")Long id){
-        LabDetail publishedById = labService.getPublishedById(id);
 
-    }
 
 }

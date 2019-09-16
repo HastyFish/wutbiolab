@@ -3,8 +3,8 @@ package com.gooalgene.wutbiolab.controller.admin;
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class NewsController {
     }
 
     @GetMapping
-    public CommonResponse<Page<NewsDetail>> getNewsDetailList(Integer pageNum, Integer pageSize) {
+    public CommonResponse<PageResponse<NewsDetail>> getNewsDetailPage(Integer pageNum, Integer pageSize) {
         return newsService.newsDetailPage(pageNum, pageSize);
     }
 
@@ -35,7 +35,7 @@ public class NewsController {
     }
 
     @PostMapping
-    public CommonResponse<Boolean> renewNewsDetail(NewsDetail newsDetail) {
+    public CommonResponse<Boolean> renewNewsDetail(@RequestBody NewsDetail newsDetail) {
         return newsService.renewNews(newsDetail);
     }
 

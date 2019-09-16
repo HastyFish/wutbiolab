@@ -1,19 +1,14 @@
 package com.gooalgene.wutbiolab;
 
-import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.LabDetailDAO;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
-import com.gooalgene.wutbiolab.response.MentorResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -29,8 +24,10 @@ public class LabTests {
 //		List<Object[]> researchTeam = labDetailDAO.getResearchTeamByPublishStatus(1);
 //		List<LabDetail> byLabCategoryId = labDetailDAO.getByLabCategoryId(3l);
 //		List<LabDetail> byIdAndPublishStatus2 = labDetailDAO.getByIdAndPublishStatus(2l, CommonConstants.PUBLISHED);
-		LabDetail byIdAndPublishStatus = labDetailDAO.getByIdAndPublishStatus(1l, CommonConstants.PUBLISHED);
+//		LabDetail byIdAndPublishStatus = labDetailDAO.getByIdAndPublishStatus(1l, CommonConstants.PUBLISHED);
 
+//		List<Object[]> graduates = labDetailDAO.getGraduates(0, 3);
+		Long graduatesCount = labDetailDAO.getGraduatesCount();
 		System.out.println(1);
 
 	}
@@ -40,8 +37,9 @@ public class LabTests {
 //		List<MentorResponse> researchTeam = labService.getPublishedResearchTeam();
 //		Page<LabDetail> published = labService.getPublished(0, 2);
 
-		Page<LabDetail> labDetails = labService.getLabDetailByLabCategoryIdAndPublishStatus(
-				3l, 0, 2, CommonConstants.PUBLISHED,true);
+//		Page<LabDetail> labDetails = labService.getLabDetailByLabCategoryIdAndPublishStatus(
+//				3l, 0, 2, CommonConstants.PUBLISHED,true);
+		PageResponse<LabDetail> graduates = labService.getGraduates(1, 3);
 		System.out.println(1);
 
 	}
