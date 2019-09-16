@@ -22,7 +22,7 @@ public class NoticeController {
 
     @GetMapping("/category")
     public CommonResponse<List<NoticeCategory>> getNewsCategory() {
-        return noticeService.allNewsCategory();
+        return noticeService.allNoticeCategory();
     }
 
     @GetMapping

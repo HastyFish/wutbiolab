@@ -28,7 +28,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public CommonResponse<List<ResourceCategory>> allNewsCategory() {
+    public CommonResponse<List<ResourceCategory>> allResourceCategory() {
         return ResponseUtil.success(resourceCategoryDAO.findAll());
     }
 

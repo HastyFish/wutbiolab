@@ -34,7 +34,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public CommonResponse<List<NoticeCategory>> allNewsCategory() {
+    public CommonResponse<List<NoticeCategory>> allNoticeCategory() {
         return ResponseUtil.success(noticeCategoryDAO.findAll());
     }
 

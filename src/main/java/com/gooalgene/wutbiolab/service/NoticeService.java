@@ -10,7 +10,7 @@ import java.util.List;
 public interface NoticeService {
     CommonResponse<PageResponse<NoticeDetail>> noticeDetailPage(Integer pageNum, Integer pageSize);
 
-    CommonResponse<List<NoticeCategory>> allNewsCategory();
+    CommonResponse<List<NoticeCategory>> allNoticeCategory();
 
     CommonResponse<NoticeDetail> noticeDetailById(Integer id);
 
