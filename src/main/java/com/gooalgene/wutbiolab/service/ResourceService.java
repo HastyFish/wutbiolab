@@ -13,4 +13,8 @@ public interface ResourceService {
     CommonResponse<PageResponse<ResourceDetail>> resourceDetailPage(Integer pageNum, Integer pageSize);
 
     CommonResponse<ResourceDetail> resourceDetailById(Integer id);
+
+    CommonResponse<Boolean> renewResourceDetail(ResourceDetail resourceDetail);
+
+    CommonResponse<Boolean> deleteResourceDetail(Integer id);
 }

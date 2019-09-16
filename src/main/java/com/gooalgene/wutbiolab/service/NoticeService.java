@@ -15,4 +15,6 @@ public interface NoticeService {
     CommonResponse<NoticeDetail> noticeDetailById(Integer id);
 
     CommonResponse<Boolean> renewNoticeDetail(NoticeDetail noticeDetail);
+
+    CommonResponse<Boolean> deleteById(Integer id);
 }

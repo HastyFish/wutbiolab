@@ -53,4 +53,15 @@ public class NoticeServiceImpl implements NoticeService {
         noticeDetailDAO.save(noticeDetail);
         return ResponseUtil.success(true);
     }
+
+    @Override
+    @Transactional
+    public CommonResponse<Boolean> deleteById(Integer id) {
+        try {
+            noticeDetailDAO.deleteById(id.longValue());
+            return ResponseUtil.success(true);
+        } catch (IllegalArgumentException e) {
+            return ResponseUtil.error("id is null");
+        }
+    }
 }

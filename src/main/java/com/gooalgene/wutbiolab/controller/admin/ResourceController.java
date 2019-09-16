@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/resoucre")
+@RequestMapping("/resource")
 public class ResourceController {
 
     private ResourceService resourceService;
@@ -21,7 +21,7 @@ public class ResourceController {
     }
 
     @GetMapping("/category")
-    public CommonResponse<List<ResourceCategory>> getNewsCategory() {
+    public CommonResponse<List<ResourceCategory>> getResouceCategory() {
         return resourceService.allResourceCategory();
     }
 
@@ -36,12 +36,12 @@ public class ResourceController {
     }
 
     @PostMapping
-    public CommonResponse<Boolean> renewResourceDetail(ResourceDetail resourceDetail) {
-        return ResponseUtil.success(true);
+    public CommonResponse<Boolean> renewResourceDetail(@RequestBody ResourceDetail resourceDetail) {
+        return resourceService.renewResourceDetail(resourceDetail);
     }
 
     @DeleteMapping("/{id}")
     public CommonResponse<Boolean> deleteResourceDetail(@PathVariable Integer id) {
-        return ResponseUtil.success(true);
+        return resourceService.deleteResourceDetail(id);
     }
 }
