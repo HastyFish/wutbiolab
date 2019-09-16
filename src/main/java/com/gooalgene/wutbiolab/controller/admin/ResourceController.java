@@ -1,6 +1,5 @@
 package com.gooalgene.wutbiolab.controller.admin;
 
-import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
@@ -23,7 +22,7 @@ public class ResourceController {
 
     @GetMapping("/category")
     public CommonResponse<List<ResourceCategory>> getNewsCategory() {
-        return resourceService.allNewsCategory();
+        return resourceService.allResourceCategory();
     }
 
     @GetMapping

@@ -8,7 +8,7 @@ import com.gooalgene.wutbiolab.response.common.PageResponse;
 import java.util.List;
 
 public interface ResourceService {
-    CommonResponse<List<ResourceCategory>> allNewsCategory();
+    CommonResponse<List<ResourceCategory>> allResourceCategory();
 
     CommonResponse<PageResponse<ResourceDetail>> resourceDetailPage(Integer pageNum, Integer pageSize);
 

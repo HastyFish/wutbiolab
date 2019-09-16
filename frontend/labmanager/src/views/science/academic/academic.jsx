@@ -116,9 +116,9 @@ export default class Academic extends Component{
         key: 'publishStatus',
         render:(publishStatus) => {
           if(publishStatus){
-            return "已发布"
+            return (<span style={{color:'red',textAlign:'center'}}>已发布</span>)
           }else{
-            return '草稿'
+            return (<span style={{color:'green',textAlign:'center'}}>草稿</span>)
           }
         }
       },
