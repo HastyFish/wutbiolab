@@ -59,7 +59,7 @@ class MyHeader extends Component{
       <div className='headerBox'>
         <img src={Logo} alt='logo' />
         <div className='headerTitle'>
-          后台管理中心
+          实验室后台管理中心
         </div>
         <span className='usermes'>
         <Dropdown overlay={menu}>
