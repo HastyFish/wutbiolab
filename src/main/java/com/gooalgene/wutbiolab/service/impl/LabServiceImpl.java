@@ -10,7 +10,9 @@ import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.request.MentorRequest;
+import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -38,14 +41,36 @@ public class LabServiceImpl implements LabService {
     @Autowired
     private LabCategoryDAO labCategoryDAO;
 
-    @Override
-    public Page<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize) {
-        if (pageNum == null && pageSize == null) {
-            List<LabDetail> labDetails = labDetailDAO.getByLabCategoryId(labCategoryId);
-            return new PageImpl<>(labDetails);
-        }
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
-        return labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
+//    @Override
+//    public Page<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize) {
+//        if (pageNum == null && pageSize == null) {
+//            List<LabDetail> labDetails = labDetailDAO.getByLabCategoryId(labCategoryId);
+//            return new PageImpl<>(labDetails);
+//        }
+//        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+//        return labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
+//    }
+
+    public PageResponse<LabDetail> getGraduates(Integer pageNum, Integer pageSize){
+        List<GraduateResponse> graduateResponses=new ArrayList<>();
+        List<Object[]> objectsList = labDetailDAO.getGraduates(pageNum - 1, pageSize);
+        objectsList.forEach(objects -> {
+            Long id = ((BigInteger) objects[0]).longValue();
+            String graduateCategoryName=(String)objects[1];
+            String title=(String)objects[2];
+            Long publishDate = objects[3]==null?null:((BigInteger) objects[3]).longValue();
+            Integer publishStatus=(Integer) objects[4];
+            GraduateResponse graduateResponse=GraduateResponse.builder().labDetailId(id).graduateCategoryName(graduateCategoryName)
+                    .publishDate(publishDate).title(title).publishStatus(publishStatus).build();
+            graduateResponses.add(graduateResponse);
+        });
+        Long graduatesCount = labDetailDAO.getGraduatesCount();
+        PageResponse pageResponse=new PageResponse();
+        pageResponse.setList(graduateResponses);
+        pageResponse.setPageNum(pageNum);
+        pageResponse.setPageSize(pageSize);
+        pageResponse.setTotal(graduatesCount);
+        return pageResponse;
     }
 
     @Override
@@ -62,6 +87,7 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
+    @Transactional
     public void saveOrPublishLabDetail(LabDetail labDetail, Integer publishStatus) {
         labDetail.setPublishStatus(publishStatus);
         labDetailDAO.save(labDetail);
@@ -69,6 +95,7 @@ public class LabServiceImpl implements LabService {
 
 
     @Override
+    @Transactional
     public void publishResearchTeam(List<MentorRequest> mentorRequests) {
         List<LabDetail> labDetails = new ArrayList<>();
         mentorRequests.forEach(mentorRequest -> {
@@ -85,6 +112,7 @@ public class LabServiceImpl implements LabService {
 
 
     @Override
+    @Transactional
     public void saveMentorCategory(MentorCategory mentorCategory) {
         mentorCategoryDAO.save(mentorCategory);
     }
@@ -129,15 +157,16 @@ public class LabServiceImpl implements LabService {
             if (pageNum == null && pageSize == null) {
                 //暂时没有是列表还不分页的情况！
             } else {
-                Pageable pageable = PageRequest.of(pageNum, pageSize);
+                Pageable pageable = PageRequest.of(pageNum-1, pageSize);
                 labDetailPage = labDetailDAO.getListByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
             }
         } else {
+            //非list情况，针对机构概况和研究方向
             if (pageNum == null && pageSize == null) {
                 List<LabDetail> labDetails = labDetailDAO.getByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus);
                 labDetailPage = new PageImpl<>(labDetails);
             }
-            Pageable pageable = PageRequest.of(pageNum, pageSize);
+            Pageable pageable = PageRequest.of(pageNum-1, pageSize);
             labDetailPage = labDetailDAO.getByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
         }
         return labDetailPage;

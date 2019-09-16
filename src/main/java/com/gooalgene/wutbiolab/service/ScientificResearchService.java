@@ -39,12 +39,27 @@ public interface ScientificResearchService {
 
 
     /**
-     * 新增或编辑一条数据
+     * 新增、编辑或发布一条数据
      * @param scientificResearchDetail
      */
-    void save(ScientificResearchDetail scientificResearchDetail);
+    void saveOrPublish(ScientificResearchDetail scientificResearchDetail,Integer publishStatus);
 
 
     /*********************************************** 前端使用 ***************************************************/
 
+
+    /**
+     * 通过子模块类型获取对应已发布的分页数据
+     * @param scientificResearchCategoryId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    Page<ScientificResearchDetail> getPublishedByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize);
+    /**
+     * 通过id查询一条已发布的数据
+     * @param id
+     * @return
+     */
+    ScientificResearchDetail getPublishedById(Long id);
 }
