@@ -11,13 +11,16 @@ import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.LabService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "后端实验室模块", tags = {"后端实验室模块接口"})
 @RestController
 @RequestMapping("/lab")
 public class LabController {
@@ -36,25 +39,27 @@ public class LabController {
 
     @ApiOperation(value="查询毕业生分页列表", notes="查询毕业生分页列表，参数为pageNum和pageSize")
     @GetMapping("/graduate")
-    public CommonResponse<PageResponse<LabDetail>> getListByCategoryId(@PathVariable("categoryId")Long categoryId,
-                                                               @RequestParam("pageNum") Integer pageNum,
+    public CommonResponse<PageResponse<LabDetail>> getListByCategoryId(@RequestParam("pageNum") Integer pageNum,
                                                                @RequestParam("pageSize") Integer pageSize) {
         PageResponse<LabDetail> graduates = labService.getGraduates(pageNum, pageSize);
         return ResponseUtil.success(graduates);
     }
 
+    @ApiOperation(value="通过id查询单条数据", notes="通过id查询单条数据")
     @GetMapping("/{id}")
     public CommonResponse<LabDetail> getById(@PathVariable("id")Long id){
         LabDetail byId = labService.getById(id);
         return ResponseUtil.success(byId);
     }
 
+    @ApiOperation(value="获取研究团队所有数据", notes="获取研究团队所有数据")
     @GetMapping("/researchTeam")
     public CommonResponse<List<MentorResponse>> getResearchTeam(){
         List<MentorResponse> researchTeam = labService.getResearchTeam();
         return ResponseUtil.success(researchTeam);
     }
 
+    @ApiOperation(value="保存一条数据", notes="保存一条数据")
     @PostMapping("/")
     public CommonResponse saveLabDetail(@RequestBody LabDetail labDetail){
         labService.saveOrPublishLabDetail(labDetail, CommonConstants.UNPUBLISHED);
@@ -67,38 +72,62 @@ public class LabController {
         return ResponseUtil.success();
     }
 
-    @PostMapping("/researchTeam/publish")
-    public CommonResponse publishResearchTeam(@RequestBody List<MentorRequest> mentorRequests){
-        labService.publishResearchTeam(mentorRequests);
+//    @ApiOperation(value="发布研究团队所有数据", notes="发布研究团队所有数据(并且排好序)")
+//    @PostMapping("/researchTeam/publish")
+//    public CommonResponse publishResearchTeam(@RequestBody List<MentorRequest> mentorRequests){
+//        labService.publishResearchTeam(mentorRequests);
+//        return ResponseUtil.success();
+//    }
+    @ApiOperation(value="发布多条数据", notes="发布多条数据")
+    @PostMapping("/publish/list")
+    public CommonResponse publishList(@RequestBody List<Long> ids){
+        labService.publishList(ids);
         return ResponseUtil.success();
     }
 
+    @ApiOperation(value="保存一条导师类型的数据", notes="保存一条导师类型的数据")
     @PostMapping("/mentorCategory")
     public CommonResponse saveMentorCategory(@RequestBody MentorCategory mentorCategory){
         labService.saveMentorCategory(mentorCategory);
         return ResponseUtil.success();
     }
 
+    @ApiOperation(value="获取所有导师类型", notes="获取所有导师类型")
     @GetMapping("/mentorCategorys")
     public CommonResponse<List<MentorCategory>> getMentorCategorys(){
         List<MentorCategory> mentorCategorys = labService.getMentorCategorys();
         return ResponseUtil.success(mentorCategorys);
     }
 
+    @ApiOperation(value="获取所有毕业生类型", notes="获取所有毕业生类型")
     @GetMapping("/graduateCategorys")
     public CommonResponse<List<GraduateCategory>> getGraduateCategorys(){
         List<GraduateCategory> graduateCategorys = labService.getGraduateCategorys();
         return ResponseUtil.success(graduateCategorys);
     }
 
+    @ApiOperation(value="获取所有一级分类", notes="获取所有一级分类")
     @GetMapping("/all/category")
     public CommonResponse<List<LabCategory>> getAllCategory(){
         List<LabCategory> allCategory = labService.getAllCategory();
         return ResponseUtil.success(allCategory);
     }
 
+    @ApiOperation(value="通过id删除一条记录", notes="通过id删除一条记录")
+    @DeleteMapping("/{id}")
+    public CommonResponse deleteById(@PathVariable("id")Long id){
+        labService.deleteById(id);
+        return ResponseUtil.success();
+    }
 
+    @ApiOperation(value="通过id删除一条导师类型数据", notes="通过id删除一条导师类型数据")
+    @DeleteMapping("/mentorCategory/{id}")
+    public CommonResponse deleteMentorCategoryById(@PathVariable("id")Long id){
+        labService.deleteMentorCategoryById(id);
+        return ResponseUtil.success();
+    }
 
+    //todo 研究团队排序接口
 
 
 

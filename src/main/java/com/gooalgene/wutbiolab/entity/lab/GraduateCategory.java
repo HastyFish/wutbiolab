@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.lab;
 
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,11 +12,10 @@ import java.io.Serializable;
 @Table(name = "graduate_category")
 @Entity
 @Data
-public class GraduateCategory implements Serializable {
-    private static final long serialVersionUID = 7694145115741909007L;
+@DiscriminatorValue("graduate")
+public class GraduateCategory extends AllCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String categoryName;
 }

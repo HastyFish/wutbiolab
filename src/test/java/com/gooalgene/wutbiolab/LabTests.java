@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class LabTests {
@@ -27,7 +30,8 @@ public class LabTests {
 //		LabDetail byIdAndPublishStatus = labDetailDAO.getByIdAndPublishStatus(1l, CommonConstants.PUBLISHED);
 
 //		List<Object[]> graduates = labDetailDAO.getGraduates(0, 3);
-		Long graduatesCount = labDetailDAO.getGraduatesCount();
+//		Long graduatesCount = labDetailDAO.getGraduatesCount();
+		List<LabDetail> byIdIn = labDetailDAO.getByIdIn(Arrays.asList(1l, 2l, 3l));
 		System.out.println(1);
 
 	}

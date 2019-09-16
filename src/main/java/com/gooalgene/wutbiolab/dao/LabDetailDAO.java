@@ -45,4 +45,5 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
     LabDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
 
 
+    List<LabDetail> getByIdIn(List<Long> ids);
 }

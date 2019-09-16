@@ -43,11 +43,15 @@ public interface LabService {
     void saveOrPublishLabDetail(LabDetail labDetail,Integer publishStatus);
 
 
+
+//    void publishResearchTeam(List<MentorRequest> mentorRequests);
+
     /**
-     * 针对研究团队模块发布所有数据
-     * @param mentorRequests
+     * 发布多条数据
+     * @param ids
      */
-    void publishResearchTeam(List<MentorRequest> mentorRequests);
+    void publishList(List<Long> ids);
+
 
 
     /**
@@ -72,6 +76,18 @@ public interface LabService {
      * @return
      */
     List<LabCategory> getAllCategory();
+
+    /**
+     * 通过id删除一条记录
+     * @param id
+     */
+    void deleteById(Long id);
+
+    /**
+     * 通过id删除一条导师类型数据
+     * @param id
+     */
+    void deleteMentorCategoryById(Long id);
 
     /*********************************************** 前端使用 ***************************************************/
 

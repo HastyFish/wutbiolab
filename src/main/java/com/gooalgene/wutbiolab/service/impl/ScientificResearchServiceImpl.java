@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ScientificResearchServiceImpl implements ScientificResearchService {
@@ -34,8 +35,8 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
 
     @Override
     public ScientificResearchDetail getById(Long id){
-        ScientificResearchDetail one = scientificResearchDetailDAO.getOne(id);
-        return one;
+        Optional<ScientificResearchDetail> optional = scientificResearchDetailDAO.findById(id);
+        return optional.orElse(null);
     }
 
     @Override
