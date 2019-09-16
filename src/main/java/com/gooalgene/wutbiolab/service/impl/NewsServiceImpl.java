@@ -41,9 +41,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public CommonResponse<PageResponse<NewsOverview>> newsDetailPage(Integer pageNum, Integer pageSize) {
-        Page<NewsDetail> page = newsDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
-        Page<NewsOverview> pageNew = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize));
-        return ResponseUtil.success(new PageResponse<>(pageNew.getContent(), pageNum, pageSize, pageNew.getTotalElements()));
+//        Page<NewsDetail> page = newsDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
+        Page<NewsOverview> page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize));
+        return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 
     @Override

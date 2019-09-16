@@ -6,6 +6,7 @@ import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
 import com.gooalgene.wutbiolab.entity.resource.ResourceCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
+import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
@@ -45,8 +46,9 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public CommonResponse<PageResponse<ResourceDetail>> resourceDetailPage(Integer pageNum, Integer pageSize) {
-        Page<ResourceDetail> page = resourceDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
+    public CommonResponse<PageResponse<ResourceOverview>> resourceDetailPage(Integer pageNum, Integer pageSize) {
+//        Page<ResourceDetail> page = resourceDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
+        Page<ResourceOverview> page = resourceDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize));
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 

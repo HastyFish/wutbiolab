@@ -2,6 +2,7 @@ package com.gooalgene.wutbiolab.controller.admin;
 
 import com.gooalgene.wutbiolab.entity.resource.ResourceCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
+import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
@@ -26,7 +27,7 @@ public class ResourceController {
     }
 
     @GetMapping
-    public CommonResponse<PageResponse<ResourceDetail>> getResourceDetailPage(Integer pageNum, Integer pageSize) {
+    public CommonResponse<PageResponse<ResourceOverview>> getResourceDetailPage(Integer pageNum, Integer pageSize) {
         return resourceService.resourceDetailPage(pageNum, pageSize);
     }
 

@@ -4,6 +4,7 @@ import com.gooalgene.wutbiolab.dao.notice.NoticeCategoryDAO;
 import com.gooalgene.wutbiolab.dao.notice.NoticeDetailDAO;
 import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
 import com.gooalgene.wutbiolab.entity.notice.NoticeDetail;
+import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
@@ -28,8 +29,9 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NoticeDetail>> noticeDetailPage(Integer pageNum, Integer pageSize) {
-        Page<NoticeDetail> page = noticeDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
+    public CommonResponse<PageResponse<NoticeOverview>> noticeDetailPage(Integer pageNum, Integer pageSize) {
+//        Page<NoticeDetail> page = noticeDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
+        Page<NoticeOverview> page = noticeDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize));
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 
