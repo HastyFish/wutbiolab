@@ -28,6 +28,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class LabServiceImpl implements LabService {
@@ -75,8 +76,8 @@ public class LabServiceImpl implements LabService {
 
     @Override
     public LabDetail getById(Long id) {
-        LabDetail one = labDetailDAO.getOne(id);
-        return one;
+        Optional<LabDetail> optional = labDetailDAO.findById(id);
+        return optional.orElse(null);
     }
 
 
@@ -94,18 +95,28 @@ public class LabServiceImpl implements LabService {
     }
 
 
+//    @Override
+//    @Transactional
+//    public void publishResearchTeam(List<MentorRequest> mentorRequests) {
+//        List<LabDetail> labDetails = new ArrayList<>();
+//        mentorRequests.forEach(mentorRequest -> {
+//            List<LabDetail> mentors = mentorRequest.getMentors();
+//            Long mentorCategoryId = mentorRequest.getMentorCategoryId();
+//            mentors.forEach(mentor -> {
+//                mentor.setPublishStatus(CommonConstants.PUBLISHED);
+//                mentor.setMentorCategoryId(mentorCategoryId);
+//                labDetails.add(mentor);
+//            });
+//        });
+//        labDetailDAO.saveAll(labDetails);
+//    }
+
     @Override
     @Transactional
-    public void publishResearchTeam(List<MentorRequest> mentorRequests) {
-        List<LabDetail> labDetails = new ArrayList<>();
-        mentorRequests.forEach(mentorRequest -> {
-            List<LabDetail> mentors = mentorRequest.getMentors();
-            Long mentorCategoryId = mentorRequest.getMentorCategoryId();
-            mentors.forEach(mentor -> {
-                mentor.setPublishStatus(CommonConstants.PUBLISHED);
-                mentor.setMentorCategoryId(mentorCategoryId);
-                labDetails.add(mentor);
-            });
+    public void publishList(List<Long> ids) {
+        List<LabDetail> labDetails = labDetailDAO.getByIdIn(ids);
+        labDetails.forEach(labDetail -> {
+            labDetail.setPublishStatus(CommonConstants.PUBLISHED);
         });
         labDetailDAO.saveAll(labDetails);
     }
@@ -131,6 +142,18 @@ public class LabServiceImpl implements LabService {
     @Override
     public List<LabCategory> getAllCategory(){
         return labCategoryDAO.findAll();
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id){
+        labDetailDAO.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMentorCategoryById(Long id){
+        mentorCategoryDAO.deleteById(id);
     }
 
     /*********************************************** 前端使用 ***************************************************/
@@ -165,9 +188,10 @@ public class LabServiceImpl implements LabService {
             if (pageNum == null && pageSize == null) {
                 List<LabDetail> labDetails = labDetailDAO.getByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus);
                 labDetailPage = new PageImpl<>(labDetails);
+            }else {
+                Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+                labDetailPage = labDetailDAO.getByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
             }
-            Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-            labDetailPage = labDetailDAO.getByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
         }
         return labDetailPage;
     }

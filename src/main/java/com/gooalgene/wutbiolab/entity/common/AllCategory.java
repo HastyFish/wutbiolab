@@ -14,6 +14,7 @@ import java.io.Serializable;
 @DiscriminatorColumn(name = "discriminator")
 public class AllCategory implements Serializable {
 
+    private static final long serialVersionUID = -7330942254729890746L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
