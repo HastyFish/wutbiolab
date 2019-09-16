@@ -14,7 +14,15 @@ import java.util.List;
 public interface LabService {
 
 
-//    Page<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize);
+    /**
+     * 目前针对机构概况和研究方向，所以查了所有字段（日后加了说不定要改）
+     * @param categoryId
+     * @param pageNum
+     * @param pageSize
+     * @param isList
+     * @return
+     */
+    Page<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize, Boolean isList);
 
     /**
      * 获取毕业生分页列表

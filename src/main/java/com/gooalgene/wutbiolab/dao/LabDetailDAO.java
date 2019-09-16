@@ -11,15 +11,17 @@ import java.util.List;
 
 public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
 
-//    List<LabDetail> getByLabCategoryId(Long labCategoryId);
-//    Page<LabDetail> getByLabCategoryId(Long labCategoryId, Pageable pageable);
+    List<LabDetail> getByLabCategoryId(Long labCategoryId);
+    Page<LabDetail> getByLabCategoryId(Long labCategoryId, Pageable pageable);
 
-    @Query(value = "SELECT ld.id,gc.categoryName,ld.title,ld.publishDate,ld.publishStatus " +
-            " FROM lab_detail ld JOIN graduate_category gc ON ld.graduateCategoryId=gc.id LIMIT :pageNum,:pageSize",
+    @Query(value = "SELECT ld.id,gc.category,ld.title,ld.publishDate,ld.publishStatus " +
+            " FROM lab_detail ld JOIN all_category gc ON ld.graduateCategoryId=gc.id " +
+            " where gc.discriminator='graduate' LIMIT :pageNum,:pageSize",
             nativeQuery = true)
     List<Object[]> getGraduates(@Param("pageNum")Integer pageNum,@Param("pageSize")Integer pageSize);
 
-    @Query(value = "SELECT count(1) FROM lab_detail ld JOIN graduate_category gc ON ld.graduateCategoryId=gc.id",nativeQuery = true)
+    @Query(value = "SELECT count(1) FROM lab_detail ld JOIN all_category gc ON ld.graduateCategoryId=gc.id " +
+            " where gc.discriminator='graduate'",nativeQuery = true)
     Long getGraduatesCount();
 
     List<LabDetail> getByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer publishStatus);
@@ -30,13 +32,14 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
     Page<LabDetail> getListByLabCategoryIdAndPublishStatus(@Param("labCategoryId") Long labCategoryId,
                                                            @Param("publishStatus") Integer publishStatus, Pageable pageable);
 
-    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.categoryName FROM lab_detail ld " +
-            " RIGHT JOIN mentor_category mc ON ld.mentorCategoryId=mc.id " +
+    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category FROM lab_detail ld " +
+            " RIGHT JOIN all_category mc ON ld.mentorCategoryId=mc.id where mc.discriminator='mentor' " +
             " order by mentorCategoryId, ld.mentorOrder",nativeQuery = true)
     List<Object[]> getResearchTeam();
 
-    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.categoryName FROM lab_detail ld " +
-            " RIGHT JOIN mentor_category mc ON ld.mentorCategoryId=mc.id where ld.publishStatus=:publishStatus" +
+    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category FROM lab_detail ld " +
+            " RIGHT JOIN all_category mc ON ld.mentorCategoryId=mc.id where mc.discriminator='mentor'and " +
+            " ld.publishStatus=:publishStatus" +
             " order by mentorCategoryId, ld.mentorOrder",nativeQuery = true)
     List<Object[]> getResearchTeamByPublishStatus(@Param("publishStatus") Integer publishStatus);
 

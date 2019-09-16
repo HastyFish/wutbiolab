@@ -9,7 +9,6 @@ import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
-import com.gooalgene.wutbiolab.request.MentorRequest;
 import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
@@ -42,15 +41,15 @@ public class LabServiceImpl implements LabService {
     @Autowired
     private LabCategoryDAO labCategoryDAO;
 
-//    @Override
-//    public Page<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize) {
-//        if (pageNum == null && pageSize == null) {
-//            List<LabDetail> labDetails = labDetailDAO.getByLabCategoryId(labCategoryId);
-//            return new PageImpl<>(labDetails);
-//        }
-//        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-//        return labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
-//    }
+    @Override
+    public Page<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize, Boolean isList) {
+        if (pageNum == null && pageSize == null) {
+            List<LabDetail> labDetails = labDetailDAO.getByLabCategoryId(labCategoryId);
+            return new PageImpl<>(labDetails);
+        }
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        return labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
+    }
 
     public PageResponse<LabDetail> getGraduates(Integer pageNum, Integer pageSize){
         List<GraduateResponse> graduateResponses=new ArrayList<>();

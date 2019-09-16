@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.scientificResearch;
 
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,17 +12,14 @@ import java.io.Serializable;
 @Table(name = "scientific_research_category")
 @Entity
 @Data
-public class ScientificResearchCategory implements Serializable {
+@DiscriminatorValue("scientific")
+public class ScientificResearchCategory extends AllCategory {
 
-    private static final long serialVersionUID = 3631378440172366790L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * 大分类名称
-     */
-    private String categoryName;
+
 
 
 
