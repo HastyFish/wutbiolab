@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.lab;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 /**
  * 实验室四个模块通用详情表
  */
+@ApiModel(value = "实验室子模块详情", description = "实验室子模块详情")
 @NoArgsConstructor
 @Table(name = "lab_detail")
 @Entity
@@ -27,7 +29,7 @@ public class LabDetail implements Serializable {
     @Column
     private String title;
 
-    @ApiModelProperty(value = "发布时间（时间戳）", example = "1568615594830", required = true)
+    @ApiModelProperty(value = "发布时间（时间戳）", example = "1568615594830")
     @Column
     private Long publishDate;
 

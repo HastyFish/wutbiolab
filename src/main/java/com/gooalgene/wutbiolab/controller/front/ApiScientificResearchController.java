@@ -8,12 +8,14 @@ import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "前端科研工作模块", tags = {"前端科研工作模块接口"})
 @RestController
 @RequestMapping("/api/scientificResearch")
 public class ApiScientificResearchController {
@@ -21,7 +23,7 @@ public class ApiScientificResearchController {
     private ScientificResearchService scientificResearchService;
 
 
-    @GetMapping("/list/{categoryId}")
+    @GetMapping("/list/{labCategoryId}")
     public CommonResponse<Page<ScientificResearchDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
                                 @RequestParam("pageNum")Integer pageNum,@RequestParam("pageSize")Integer pageSize){
         Page<ScientificResearchDetail> scientificResearchDetails = scientificResearchService.getPublishedByCategoryId(labCategoryId, pageNum, pageSize);

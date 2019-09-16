@@ -7,6 +7,7 @@ import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetai
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "后端科研工作模块", tags = {"后端科研工作模块接口"})
 @RestController
 @RequestMapping("/scientificResearch")
 public class ScientificResearchController {
