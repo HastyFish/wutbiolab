@@ -7,6 +7,7 @@ import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,9 +29,17 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     private AcademicCategoryDAO academicCategoryDAO;
 
     @Override
-    public Page<ScientificResearchDetail> getSRDetialByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize) {
+    public PageResponse<ScientificResearchDetail> getSRDetialByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-        return scientificResearchDetailDAO.getByScientificResearchCategoryId(scientificResearchCategoryId, pageable);
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByScientificResearchCategoryId(scientificResearchCategoryId, pageable);
+        long total = scientificResearchDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse=new PageResponse();
+        pageResponse.setList(content);
+        pageResponse.setTotal(total);
+        pageResponse.setPageSize(pageSize);
+        pageResponse.setPageNum(pageNum);
+        return pageResponse;
     }
 
     @Override
@@ -61,10 +70,14 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     /*********************************************** 前端使用 ***************************************************/
 
     @Override
-    public Page<ScientificResearchDetail> getPublishedByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize){
+    public PageResponse<ScientificResearchDetail> getPublishedByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize){
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-        return scientificResearchDetailDAO.getByScientificResearchCategoryIdAndPublishStatus(scientificResearchCategoryId,
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByScientificResearchCategoryIdAndPublishStatus(scientificResearchCategoryId,
                 CommonConstants.PUBLISHED, pageable);
+        long totalElements = scientificResearchDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);
+        return pageResponse;
     }
 
     @Override

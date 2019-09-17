@@ -23,7 +23,7 @@ public interface LabService {
      * @param isList
      * @return
      */
-    Page<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize, Boolean isList);
+    PageResponse<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize, Boolean isList);
 
     /**
      * 获取毕业生分页列表
@@ -125,6 +125,6 @@ public interface LabService {
      * @param publishStatus
      * @return
      */
-    Page<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer pageNum,
+    PageResponse<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer pageNum,
                                                                 Integer pageSize,Integer publishStatus,Boolean isList);
 }

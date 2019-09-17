@@ -5,6 +5,7 @@ import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import io.swagger.annotations.Api;
@@ -24,10 +25,10 @@ public class ScientificResearchController {
 
     @ApiOperation(value="通过分类id查询对应子模块列表", notes="通过分类id查询对应子模块列表")
     @GetMapping("/list/{categoryId}")
-    public CommonResponse<Page<ScientificResearchDetail>> getSRDetialByCategoryId(@PathVariable("categoryId") Long categoryId,
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getSRDetialByCategoryId(@PathVariable("categoryId") Long categoryId,
                                                   @RequestParam("pageNum") Integer pageNum,
                                                   @RequestParam("pageSize") Integer pageSize){
-        Page<ScientificResearchDetail> scientificResearchDetails =
+        PageResponse<ScientificResearchDetail> scientificResearchDetails =
                 scientificResearchService.getSRDetialByCategoryId(categoryId, pageNum, pageSize);
         return ResponseUtil.success(scientificResearchDetails);
     }

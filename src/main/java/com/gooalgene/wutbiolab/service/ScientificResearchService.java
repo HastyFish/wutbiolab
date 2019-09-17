@@ -3,6 +3,7 @@ package com.gooalgene.wutbiolab.service;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface ScientificResearchService {
      * @param pageSize
      * @return
      */
-    Page<ScientificResearchDetail> getSRDetialByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize);
+    PageResponse<ScientificResearchDetail> getSRDetialByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize);
 
     /**
      * 通过id获取一条数据
@@ -55,7 +56,7 @@ public interface ScientificResearchService {
      * @param pageSize
      * @return
      */
-    Page<ScientificResearchDetail> getPublishedByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize);
+    PageResponse<ScientificResearchDetail> getPublishedByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize);
     /**
      * 通过id查询一条已发布的数据
      * @param id
