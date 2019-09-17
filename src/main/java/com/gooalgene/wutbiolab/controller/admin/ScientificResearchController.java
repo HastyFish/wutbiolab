@@ -34,6 +34,7 @@ public class ScientificResearchController {
         return ResponseUtil.success(scientificResearchDetails);
     }
 
+    @ApiOperation(value="获取学术会议子模块分页列表", notes="获取学术会议子模块分页列表")
     @GetMapping("/list/academic")
     public CommonResponse<PageResponse<AcademicResponse>> getAcademicPage(@RequestParam("pageNum") Integer pageNum,
                                                                           @RequestParam("pageSize") Integer pageSize){

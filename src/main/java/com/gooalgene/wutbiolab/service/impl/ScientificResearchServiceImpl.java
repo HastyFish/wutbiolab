@@ -62,7 +62,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
                 publishDate=publishDateObj.longValue();
             }
             String title= (String) objects[1];
-            Integer publishStatus= (Integer) objects[1];
+            Integer publishStatus= (Integer) objects[3];
             String academicCategoryName = (String) objects[4];
             AcademicResponse academicResponse = AcademicResponse.builder().id(id).publishDate(publishDate).publishStatus(publishStatus)
                     .title(title).academicCategoryName(academicCategoryName).build();

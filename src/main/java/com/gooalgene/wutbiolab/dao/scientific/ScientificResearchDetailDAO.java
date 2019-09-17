@@ -1,6 +1,5 @@
 package com.gooalgene.wutbiolab.dao.scientific;
 
-import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicOverview;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
