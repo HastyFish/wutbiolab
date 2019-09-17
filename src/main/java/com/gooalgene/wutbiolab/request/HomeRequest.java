@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.entity;
+package com.gooalgene.wutbiolab.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "home")
-public class Home implements Serializable {
+public class HomeRequest implements Serializable {
 
     private static final long serialVersionUID = -5248568620857022978L;
 
@@ -17,17 +17,17 @@ public class Home implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String newsImage;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String academicImage;
 
     @Column(columnDefinition = "text")
-    private String blogroll;
+    private String cooperationLink;
 
     @Column(columnDefinition = "text")
-    private String footers;
+    private String footer;
 
     @ApiModelProperty(value = "发布状态(0:未发布，1:已发布)", example = "0")
     @Column(columnDefinition = "INT default 0")

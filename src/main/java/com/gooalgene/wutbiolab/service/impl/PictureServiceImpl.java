@@ -22,15 +22,17 @@ public class PictureServiceImpl implements PictureService {
 
     private GooalApplicationProperty gooalApplicationProperty;
 
+    private ObjectMapper objectMapper;
+
     private Logger logger = LoggerFactory.getLogger(PictureServiceImpl.class);
 
-    public PictureServiceImpl(GooalApplicationProperty gooalApplicationProperty) {
+    public PictureServiceImpl(GooalApplicationProperty gooalApplicationProperty, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         this.gooalApplicationProperty = gooalApplicationProperty;
     }
 
     @Override
     public String saveBase64(String oldPictureListString, String newPictureListString) {
-        ObjectMapper objectMapper = new ObjectMapper();
         if (null != oldPictureListString) {
             try {
                 List<Picture> oldImageList = objectMapper.readValue(oldPictureListString,
