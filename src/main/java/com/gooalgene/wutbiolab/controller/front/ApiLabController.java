@@ -4,6 +4,7 @@ import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.LabService;
 import io.swagger.annotations.Api;
@@ -25,9 +26,9 @@ public class ApiLabController {
     @ApiOperation(value="通过一级分类的id查询列表", notes="通过一级分类的id查询列表")
     //查询列表（分页）
     @GetMapping("/list/{labCategoryId}")
-    public CommonResponse<Page<LabDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
-                                @RequestParam("pageNum")Integer pageNum,@RequestParam("pageSize")Integer pageSize){
-        Page<LabDetail> labDetails =
+    public CommonResponse<PageResponse<LabDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
+                                                                                               @RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize){
+        PageResponse<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryIdAndPublishStatus(labCategoryId, pageNum, pageSize,
                         CommonConstants.PUBLISHED,true);
         return ResponseUtil.success(labDetails);
@@ -37,12 +38,12 @@ public class ApiLabController {
     //通过分类id查询子模块（只包含一条数据的子模块）
     @GetMapping("/one/{labCategoryId}")
     public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("labCategoryId")Long labCategoryId){
-        Page<LabDetail> labDetails =
+        PageResponse<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryIdAndPublishStatus(labCategoryId,
                         null, null, CommonConstants.PUBLISHED,false);
         LabDetail labDetail=null;
         if(labDetails!=null){
-            List<LabDetail> content = labDetails.getContent();
+            List<LabDetail> content = labDetails.getList();
             if(content!=null&&!content.isEmpty()){
                 labDetail = content.get(0);
             }

@@ -5,6 +5,7 @@ import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.request.MentorRequest;
+import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import org.springframework.data.domain.Page;
@@ -22,13 +23,13 @@ public interface LabService {
      * @param isList
      * @return
      */
-    Page<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize, Boolean isList);
+    PageResponse<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize, Boolean isList);
 
     /**
      * 获取毕业生分页列表
      *
      */
-    PageResponse<LabDetail> getGraduates(Integer pageNum, Integer pageSize);
+    PageResponse<GraduateResponse> getGraduates(Integer pageNum, Integer pageSize);
     /**
      * 通过id获取一条数据
      * @param id
@@ -124,6 +125,6 @@ public interface LabService {
      * @param publishStatus
      * @return
      */
-    Page<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer pageNum,
+    PageResponse<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer pageNum,
                                                                 Integer pageSize,Integer publishStatus,Boolean isList);
 }

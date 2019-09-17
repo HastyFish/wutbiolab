@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -29,13 +31,20 @@ public class SRTests {
         scientificResearchDetail.setContext("胡尧牛逼4");
         scientificResearchDetail.setPeriodicalName("干大事的4");
 //        scientificResearchDetail.setId(3l);
-        scientificResearchService.saveOrPublish(scientificResearchDetail, CommonConstants.PUBLISHED);
+//        scientificResearchService.saveOrPublish(scientificResearchDetail, CommonConstants.PUBLISHED);
     }
 
     @Test
     public void testService2(){
 //        Page<ScientificResearchDetail> srDetialByCategoryId = scientificResearchService.getSRDetialByCategoryId(1l, 0, 2);
         List<ScientificResearchCategory> allCategory = scientificResearchService.getAllCategory();
+        System.out.println(1);
+    }
+
+    @Test
+    public void testDao(){
+        List<Object[]> srAcademicList = scientificResearchDetailDAO.getSRAcademicList(0,19);
+        Long srAcademicListCount = scientificResearchDetailDAO.getSRAcademicListCount();
         System.out.println(1);
     }
 }

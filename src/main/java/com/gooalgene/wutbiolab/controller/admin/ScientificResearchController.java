@@ -4,7 +4,9 @@ import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
+import com.gooalgene.wutbiolab.response.AcademicResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import io.swagger.annotations.Api;
@@ -24,12 +26,20 @@ public class ScientificResearchController {
 
     @ApiOperation(value="通过分类id查询对应子模块列表", notes="通过分类id查询对应子模块列表")
     @GetMapping("/list/{categoryId}")
-    public CommonResponse<Page<ScientificResearchDetail>> getSRDetialByCategoryId(@PathVariable("categoryId") Long categoryId,
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getSRDetialByCategoryId(@PathVariable("categoryId") Long categoryId,
                                                   @RequestParam("pageNum") Integer pageNum,
                                                   @RequestParam("pageSize") Integer pageSize){
-        Page<ScientificResearchDetail> scientificResearchDetails =
+        PageResponse<ScientificResearchDetail> scientificResearchDetails =
                 scientificResearchService.getSRDetialByCategoryId(categoryId, pageNum, pageSize);
         return ResponseUtil.success(scientificResearchDetails);
+    }
+
+    @ApiOperation(value="获取学术会议子模块分页列表", notes="获取学术会议子模块分页列表")
+    @GetMapping("/list/academic")
+    public CommonResponse<PageResponse<AcademicResponse>> getAcademicPage(@RequestParam("pageNum") Integer pageNum,
+                                                                          @RequestParam("pageSize") Integer pageSize){
+        PageResponse<AcademicResponse> academicList = scientificResearchService.getAcademicList(pageNum, pageSize);
+        return ResponseUtil.success(academicList);
     }
 
     @ApiOperation(value="通过id获取一条详情", notes="通过id获取一条详情")
@@ -65,6 +75,12 @@ public class ScientificResearchController {
     @PostMapping("/publish")
     public CommonResponse publish(@RequestBody ScientificResearchDetail scientificResearchDetail){
         scientificResearchService.saveOrPublish(scientificResearchDetail,CommonConstants.PUBLISHED);
+        return ResponseUtil.success();
+    }
+
+    @DeleteMapping("/{id}")
+    public CommonResponse deleteById(@PathVariable("id") Long id){
+        scientificResearchService.deleteById(id);
         return ResponseUtil.success();
     }
 

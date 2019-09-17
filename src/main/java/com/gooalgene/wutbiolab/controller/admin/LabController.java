@@ -5,6 +5,7 @@ import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
+import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
@@ -38,12 +39,12 @@ public class LabController {
     @ApiOperation(value="通过一级分类的id查询一条数据（只包含一条数据的子模块）", notes="通过一级分类的id查询一条数据（目前针对机构概况和研究方向）")
     @GetMapping("/one/{labCategoryId}")
     public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("labCategoryId")Long labCategoryId){
-        Page<LabDetail> labDetails =
+        PageResponse<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryId(labCategoryId,
                         null, null,false);
         LabDetail labDetail=null;
         if(labDetails!=null){
-            List<LabDetail> content = labDetails.getContent();
+            List<LabDetail> content = labDetails.getList();
             if(content!=null&&!content.isEmpty()){
                 labDetail = content.get(0);
             }
@@ -54,9 +55,9 @@ public class LabController {
 
     @ApiOperation(value="查询毕业生分页列表", notes="查询毕业生分页列表，参数为pageNum和pageSize")
     @GetMapping("/graduate")
-    public CommonResponse<PageResponse<LabDetail>> getListByCategoryId(@RequestParam("pageNum") Integer pageNum,
+    public CommonResponse<PageResponse<GraduateResponse>> getListByCategoryId(@RequestParam("pageNum") Integer pageNum,
                                                                @RequestParam("pageSize") Integer pageSize) {
-        PageResponse<LabDetail> graduates = labService.getGraduates(pageNum, pageSize);
+        PageResponse<GraduateResponse> graduates = labService.getGraduates(pageNum, pageSize);
         return ResponseUtil.success(graduates);
     }
 

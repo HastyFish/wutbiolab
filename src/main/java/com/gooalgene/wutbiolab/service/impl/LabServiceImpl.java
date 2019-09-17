@@ -42,16 +42,21 @@ public class LabServiceImpl implements LabService {
     private LabCategoryDAO labCategoryDAO;
 
     @Override
-    public Page<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize, Boolean isList) {
+    public PageResponse<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize, Boolean isList) {
         if (pageNum == null && pageSize == null) {
             List<LabDetail> labDetails = labDetailDAO.getByLabCategoryId(labCategoryId);
-            return new PageImpl<>(labDetails);
+            return new PageResponse<LabDetail>(labDetails);
         }
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-        return labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
+        Page<LabDetail> labDetailPage = labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
+        long totalElements = labDetailPage.getTotalElements();
+        List<LabDetail> content = labDetailPage.getContent();
+        PageResponse<LabDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);
+        return pageResponse;
     }
 
-    public PageResponse<LabDetail> getGraduates(Integer pageNum, Integer pageSize){
+    @Override
+    public PageResponse<GraduateResponse> getGraduates(Integer pageNum, Integer pageSize){
         List<GraduateResponse> graduateResponses=new ArrayList<>();
         List<Object[]> objectsList = labDetailDAO.getGraduates(pageNum - 1, pageSize);
         objectsList.forEach(objects -> {
@@ -173,7 +178,7 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
-    public Page<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,
+    public PageResponse<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,
                                                                        Integer pageNum, Integer pageSize,
                                                                        Integer publishStatus, Boolean isList) {
         //如果isList为true，只查几个字段（主要是不查context这样的大字段），
@@ -196,7 +201,13 @@ public class LabServiceImpl implements LabService {
                 labDetailPage = labDetailDAO.getByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
             }
         }
-        return labDetailPage;
+        if(labDetailPage!=null){
+            List<LabDetail> content = labDetailPage.getContent();
+            long totalElements = labDetailPage.getTotalElements();
+            PageResponse<LabDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);
+            return pageResponse;
+        }
+        return null;
     }
 
     private List<MentorResponse> formatObj2MentorResponse(List<Object[]> researchTeam) {
