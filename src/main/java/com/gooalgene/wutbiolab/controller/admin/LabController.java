@@ -5,7 +5,6 @@ import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
-import com.gooalgene.wutbiolab.request.MentorRequest;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
@@ -15,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,9 +75,16 @@ public class LabController {
     }
 
     @ApiOperation(value="保存一条数据", notes="保存一条数据")
-    @PostMapping("/")
+    @PostMapping
     public CommonResponse saveLabDetail(@RequestBody LabDetail labDetail){
         labService.saveOrPublishLabDetail(labDetail, CommonConstants.UNPUBLISHED);
+        return ResponseUtil.success();
+    }
+
+    @ApiOperation(value="研究团队排序", notes="研究团队排序")
+    @PostMapping("/researchTeam/sort")
+    public CommonResponse saveLabDetails(@RequestBody List<LabDetail> labDetails){
+        labService.saveList(labDetails);
         return ResponseUtil.success();
     }
 
@@ -95,17 +100,17 @@ public class LabController {
 //        labService.publishResearchTeam(mentorRequests);
 //        return ResponseUtil.success();
 //    }
-    @ApiOperation(value="发布多条数据", notes="发布多条数据")
-    @PostMapping("/publish/list")
-    public CommonResponse publishList(@RequestBody List<Long> ids){
-        labService.publishList(ids);
+    @ApiOperation(value="通过一级分类id发布多条数据", notes="通过一级分类id发布多条数据")
+    @PostMapping("/publish/{labCategoryId}")
+    public CommonResponse publishList(@PathVariable("labCategoryId") Long labCategoryId){
+        labService.publishByLabCategoryId(labCategoryId);
         return ResponseUtil.success();
     }
 
-    @ApiOperation(value="保存一条导师类型的数据", notes="保存一条导师类型的数据")
-    @PostMapping("/mentorCategory")
-    public CommonResponse saveMentorCategory(@RequestBody MentorCategory mentorCategory){
-        labService.saveMentorCategory(mentorCategory);
+    @ApiOperation(value="保存多条导师类型的数据", notes="保存多条导师类型的数据")
+    @PostMapping("/mentorCategorys")
+    public CommonResponse saveMentorCategory(@RequestBody List<MentorCategory> mentorCategorys){
+        labService.saveMentorCategory(mentorCategorys);
         return ResponseUtil.success();
     }
 
@@ -144,7 +149,6 @@ public class LabController {
         return ResponseUtil.success();
     }
 
-    //todo 研究团队排序接口
 
 
 

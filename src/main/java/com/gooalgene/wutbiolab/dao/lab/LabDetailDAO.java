@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.dao;
+package com.gooalgene.wutbiolab.dao.lab;
 
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import org.springframework.data.domain.Page;
@@ -32,14 +32,14 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
     Page<LabDetail> getListByLabCategoryIdAndPublishStatus(@Param("labCategoryId") Long labCategoryId,
                                                            @Param("publishStatus") Integer publishStatus, Pageable pageable);
 
-    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category FROM lab_detail ld " +
+    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category,ld.publishStatus FROM lab_detail ld " +
             " RIGHT JOIN all_category mc ON ld.mentorCategoryId=mc.id where mc.discriminator='mentor' " +
             " order by mentorCategoryId, ld.mentorOrder",nativeQuery = true)
     List<Object[]> getResearchTeam();
 
-    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category FROM lab_detail ld " +
+    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category,ld.publishStatus FROM lab_detail ld " +
             " RIGHT JOIN all_category mc ON ld.mentorCategoryId=mc.id where mc.discriminator='mentor'and " +
-            " ld.publishStatus=:publishStatus" +
+            " ld.publishStatus=:publishStatus " +
             " order by mentorCategoryId, ld.mentorOrder",nativeQuery = true)
     List<Object[]> getResearchTeamByPublishStatus(@Param("publishStatus") Integer publishStatus);
 
@@ -48,5 +48,5 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
     LabDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
 
 
-    List<LabDetail> getByIdIn(List<Long> ids);
+//    List<LabDetail> getByIdIn(List<Long> ids);
 }

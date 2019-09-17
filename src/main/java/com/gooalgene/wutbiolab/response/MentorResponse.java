@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MentorResponse extends LabDetail {
+public class MentorResponse {
     private Long mentorCategoryId;
     private String mentorCategoryName;
     private List<LabDetail> labDetails;

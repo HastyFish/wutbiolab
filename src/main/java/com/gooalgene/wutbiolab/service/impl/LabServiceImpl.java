@@ -1,10 +1,10 @@
 package com.gooalgene.wutbiolab.service.impl;
 
 import com.gooalgene.wutbiolab.constant.CommonConstants;
-import com.gooalgene.wutbiolab.dao.GraduateCategoryDAO;
-import com.gooalgene.wutbiolab.dao.LabCategoryDAO;
-import com.gooalgene.wutbiolab.dao.LabDetailDAO;
-import com.gooalgene.wutbiolab.dao.MentorCategoryDAO;
+import com.gooalgene.wutbiolab.dao.lab.GraduateCategoryDAO;
+import com.gooalgene.wutbiolab.dao.lab.LabCategoryDAO;
+import com.gooalgene.wutbiolab.dao.lab.LabDetailDAO;
+import com.gooalgene.wutbiolab.dao.lab.MentorCategoryDAO;
 import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
@@ -87,6 +87,10 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
+    public void saveList(List<LabDetail> labDetails){
+        labDetailDAO.saveAll(labDetails);
+    }
+    @Override
     @Transactional
     public void saveOrPublishLabDetail(LabDetail labDetail, Integer publishStatus) {
         labDetail.setPublishStatus(publishStatus);
@@ -112,8 +116,8 @@ public class LabServiceImpl implements LabService {
 
     @Override
     @Transactional
-    public void publishList(List<Long> ids) {
-        List<LabDetail> labDetails = labDetailDAO.getByIdIn(ids);
+    public void publishByLabCategoryId(Long labCategoryId) {
+        List<LabDetail> labDetails = labDetailDAO.getByLabCategoryId(labCategoryId);
         labDetails.forEach(labDetail -> {
             labDetail.setPublishStatus(CommonConstants.PUBLISHED);
         });
@@ -123,8 +127,8 @@ public class LabServiceImpl implements LabService {
 
     @Override
     @Transactional
-    public void saveMentorCategory(MentorCategory mentorCategory) {
-        mentorCategoryDAO.save(mentorCategory);
+    public void saveMentorCategory(List<MentorCategory> mentorCategorys) {
+        mentorCategoryDAO.saveAll(mentorCategorys);
     }
 
     @Override
@@ -200,6 +204,7 @@ public class LabServiceImpl implements LabService {
         researchTeam.forEach(objects -> {
             Long mentorCategoryId = ((BigInteger) objects[1]).longValue();
             String mentorCategoryName = (String) objects[4];
+            Integer publishStatus = (Integer) objects[5];
             Object idObject = objects[0];
             if (idObject != null) {
                 Long labDetailId = ((BigInteger) idObject).longValue();
@@ -209,6 +214,8 @@ public class LabServiceImpl implements LabService {
                 labDetail.setId(labDetailId);
                 labDetail.setMentorName(mentorName);
                 labDetail.setMentorOrder(mentorOder);
+                labDetail.setMentorCategoryId(mentorCategoryId);
+                labDetail.setPublishStatus(publishStatus);
                 List<LabDetail> labDetails = table.get(mentorCategoryId, mentorCategoryName);
                 if (labDetails == null) {
                     labDetails = new ArrayList<>();

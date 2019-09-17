@@ -43,6 +43,11 @@ public interface LabService {
      */
     List<MentorResponse> getResearchTeam();
 
+    /**
+     * 保存多条数据
+     * @param labDetails
+     */
+    void saveList(List<LabDetail> labDetails);
 
     /**
      * 保存或发布模块的一条数据
@@ -55,18 +60,18 @@ public interface LabService {
 //    void publishResearchTeam(List<MentorRequest> mentorRequests);
 
     /**
-     * 发布多条数据
-     * @param ids
+     * 通过一级分类id进行发布
+     * @param labCategoryId
      */
-    void publishList(List<Long> ids);
+    void publishByLabCategoryId(Long labCategoryId);
 
 
 
     /**
      * 保存导师类型
-     * @param mentorCategory
+     * @param mentorCategorys
      */
-    void saveMentorCategory(MentorCategory mentorCategory);
+    void saveMentorCategory(List<MentorCategory> mentorCategorys);
 
     /**
      * 获取所有导师分类

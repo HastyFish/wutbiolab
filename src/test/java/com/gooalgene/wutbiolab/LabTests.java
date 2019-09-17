@@ -1,10 +1,7 @@
 package com.gooalgene.wutbiolab;
 
-import com.gooalgene.wutbiolab.dao.LabDetailDAO;
+import com.gooalgene.wutbiolab.dao.lab.LabDetailDAO;
 import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
-import com.gooalgene.wutbiolab.entity.lab.LabCategory;
-import com.gooalgene.wutbiolab.entity.lab.LabDetail;
-import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringRunner.class)

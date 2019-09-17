@@ -55,7 +55,7 @@ public class ScientificResearchController {
 
 
     @ApiOperation(value="保存一条数据", notes="保存一条数据")
-    @PostMapping("/")
+    @PostMapping
     public CommonResponse save(@RequestBody ScientificResearchDetail scientificResearchDetail){
         scientificResearchService.saveOrPublish(scientificResearchDetail, CommonConstants.UNPUBLISHED);
         return ResponseUtil.success();

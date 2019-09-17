@@ -1,9 +1,9 @@
 package com.gooalgene.wutbiolab.service.impl;
 
 import com.gooalgene.wutbiolab.constant.CommonConstants;
-import com.gooalgene.wutbiolab.dao.AcademicCategoryDAO;
-import com.gooalgene.wutbiolab.dao.ScientificResearchCategoryDAO;
-import com.gooalgene.wutbiolab.dao.ScientificResearchDetailDAO;
+import com.gooalgene.wutbiolab.dao.scientific.AcademicCategoryDAO;
+import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchCategoryDAO;
+import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
