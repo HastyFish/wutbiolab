@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import propTypes from 'prop-types';
+//import propTypes from 'prop-types';
 import {
   Tabs,
   Select,
@@ -16,7 +16,7 @@ import BraftEditor from '@/components/rich-text-editor/rich-text-editor';
 //import PicturesWall from './pictures-wall';
 import PicturesWall from '@/components/picture-wall/pictures-wall';
 
-//import {reqsavePublishNews, reqNewItem} from '../../api';
+import {reqNewTypeList, reqNewItem, reqsavePublishNews} from '@/api';
 import {formateDate} from '@/utils/dateUtils'
 
 import './news.less';
@@ -29,9 +29,6 @@ const {Option} = Select;
 
 
 class EditNews extends Component{
-  static propTypes = {
-    newItem: propTypes.object
-  }
 
   constructor(props){
     super(props)
@@ -48,14 +45,16 @@ class EditNews extends Component{
           id,
           newItem:{
           },
-          categoryType:'热点新闻'
+          categoryList:[],  //新闻类型下拉列表
+          categoryType:'头条新闻'  //默认选中新闻类型
         }
     }else{
       //说明是新增
       this.state = {
         newItem:{
         },
-        categoryType:'热点新闻'
+        categoryList:[],  //新闻类型下拉列表
+        categoryType:'头条新闻'
       }
     }
   }
@@ -70,64 +69,66 @@ class EditNews extends Component{
         const {title, category,publishDate} = values;
 
         //获取封面图片及富文本
-        const imageList = JSON.stringify(this.pw.current.getImgs());
+        //判断是否有图片,获取封面图片
+        let image;
+        const {categoryType} = this.state;
+        if(categoryType === '头条新闻'){
+          image = JSON.stringify(this.pw.current.getImgs());
+        }else{
+          image = JSON.stringify([]);
+        }
         const context = this.editor.current.getContext();
 
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {"news":{title, category, imageList, context,publishDate:Date.parse( new Date(publishDate._d))}};
+        let param = {title, category, image, context,publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
-          const {id} = this.state.newItem;
+          const {id} = this.state;
           //构建新对象的值
-          param.news.id = id;
+          param.id = id;
           //判断是保存还是发布
           if(type==='save'){
             //编辑状态下的保存
-            param.save = true;
-            param.publish = false;
+            param.publishStatus = 0;
           }else{
             //编辑状态下的发布
-            param.save = false;
-            param.publish = true;
+            param.publishStatus = 1;
           }
         }else{
           //新增操作不携带id
           //判断是保存还是发布
           if(type==='save'){
             //新增状态下的保存
-            param.save = true;
-            param.publish = false;
+            param.publishStatus = 0;
           }else{
             //新增状态下的发布
-            param.save = true;
-            param.publish = true;
+            param.publishStatus = 1;
           }
         }
         //发送请求
-        // const result = await reqsavePublishNews(param);
-        // if(result.code === 0){
-        //   //发送请求成功
-        //   message.success(`${type === 'save'?'保存':'发布'}成功`);
-        //   //路由跳转
-        //   setTimeout(() => {
-        //     this.props.history.replace('/news');
-        //   },100)
-        // }else{
-        //   message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
-        // }
+        const result = await reqsavePublishNews(param);
+        if(result.code === 0){
+          //发送请求成功
+          message.success(`${type === 'save'?'保存':'发布'}成功`);
+          //路由跳转
+          setTimeout(() => {
+            this.props.history.replace('/news');
+          },100)
+        }else{
+          message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
+        }
       }else{
         //提示错误
         message.error('表单验证不通过，请检查!');
         //如果富文本及照片墙已经填写则保留
          //获取封面图片及富文本
-         const {imageUrl,imageName} = this.pw.current.getImgs();
+         const image = this.pw.current.getImgs();
          const context = this.editor.current.getContext();
          const newItem = this.state.newItem
          newItem.context = context;
-         newItem.imageName = imageName;
-         newItem.imageUrl = imageUrl;
+         newItem.image = image;
          this.setState({
           newItem
          })
@@ -143,31 +144,44 @@ class EditNews extends Component{
   }
 
   async componentDidMount(){
+    //获取新闻类型下拉列表
+    const list = await reqNewTypeList();
+    if(list.code === 0){
+        //携带新闻的参数跳入新闻编辑页面
+        const categoryList = list.result;
+        this.setState({
+          categoryList
+        })
+      }else{
+        message.error('获取新闻类型失败，请稍后再试!');
+      }
+
     const {id} = this.state;
     if(id){
-      // const result = await reqNewItem(id);
-      // if(result.code === 0){
-      //   //携带新闻的参数跳入新闻编辑页面
-      //   const newItem = result.result;
-      //   this.setState({
-      //     newItem
-      //   })
-      // }else{
-      //   message.error('获取新闻失败，请稍后再试!');
-      // }
+      const result = await reqNewItem(id);
+      if(result.code === 0){
+        //携带新闻的参数跳入新闻编辑页面
+        const newItem = result.result;
+        const {category} = newItem;
+        this.setState({
+          newItem,
+          categoryType:category
+        })
+      }else{
+        message.error('获取新闻失败，请稍后再试!');
+      }
     }
   }
 
   render(){
-    const {newItem,categoryType} = this.state;
-    const {title, category, imageList, context,publishDate} = newItem;
+    const {newItem,categoryList,categoryType} = this.state;
+    const {title, category, image, context,publishDate} = newItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
       labelAlign:'left',
       wrapperCol: { span: 5 }, // 右侧包裹的宽度
     }
-  
     const {getFieldDecorator} = this.props.form
 
 
@@ -184,14 +198,19 @@ class EditNews extends Component{
             <Item label="编辑类型" {...formItemLayout}>
               {
                 getFieldDecorator('category', {
-                  initialValue: category || "热点新闻",
+                  initialValue: category || '头条新闻',
                   rules: [
                     {required: true, message: '必须指定分类'},
                   ]
                 })(
                   <Select onChange={this.handleChange}>
-                    <Option value="热点新闻">热点新闻</Option>
-                    <Option value="其他新闻">其他新闻</Option>
+                    {
+                      categoryList.map(item => {
+                        return (
+                          <Option value={item.category} key={item.id}>{item.category}</Option>
+                        )
+                      })
+                    }
                   </Select>
                 )
               }
@@ -221,10 +240,10 @@ class EditNews extends Component{
               }
             </Item>
             {
-              categoryType === '热点新闻' ? (
+              categoryType === '头条新闻' ? (
               <Item label="封面上传">
-                {imageList ? <PicturesWall ref={this.pw} imageList = {JSON.parse(imageList)} /> : null}
-                {!imageList ? <PicturesWall ref={this.pw} imageList = {[]} /> : null}
+                {image ? <PicturesWall ref={this.pw} image = {JSON.parse(image)} /> : null}
+                {!image ? <PicturesWall ref={this.pw} image = {[]} /> : null}
               </Item>
               ):null
             }

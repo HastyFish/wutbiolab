@@ -5,10 +5,11 @@ import {
   Table,
   Icon,
   Pagination,
-  LocaleProvider
+  LocaleProvider,
+  message
 } from 'antd';
 
-//import {reqNewsList, reqDeleteNew} from '../../api';
+import {reqNoticeList, reqDeleteNotice} from '@/api';
 import {formateDate} from '@/utils/dateUtils';
 import storageUtils from '@/utils/storageUtils';
 import './notice.less';
@@ -17,32 +18,13 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';    //antd组件国际化
 
 const {TabPane} = Tabs;
 
-export default class News extends Component{
+export default class Notice extends Component{
 
   state = {
     total:0,   //总数目
     pageNum: 1,  //当前页码
     pageSize:10,  //每页条数
     dataSource:[
-      {
-        id:'0',
-        publishDate:'2018-3-4',
-        publishStatus:0,
-        title:'测序周报: 17条共识！美权威机构发布NGS生物信息流程标准和指南',
-        category:'毕业生',
-      },{
-        id:'1',
-        publishDate:'2018-2-14',
-        publishStatus:1,
-        title:'英国科学家利用SNP统计模型识别27个新抑癌基因',
-        category:'毕业生',
-      },{
-        id:'2',
-        publishDate:'2017-12-14',
-        publishStatus:1,
-        title:'国内首个线上赌场上线了',
-        category:'毕业生',
-      }
     ],  //新闻数据数组
     loading: false,  //表格数据加载时显示loading效果
   }
@@ -55,15 +37,12 @@ export default class News extends Component{
     this.setState({
       loading:true
     })
-    // const result =  await reqNewsList({pageNum:page,pageSize:this.state.pageSize});
-    // //将页码重置为page，每页条数不变
-    // this.setState({
-    //   pageNum: page,
-    //   total:result.result.total,
-    //   dataSource:result.result.list
-    // })
+    const result =  await reqNoticeList({pageNum:page,pageSize:this.state.pageSize});
+    //将页码重置为page，每页条数不变
     this.setState({
       pageNum: page,
+      total:result.result.total,
+      dataSource:result.result.list
     })
     //隐藏loading
     this.setState({
@@ -79,19 +58,14 @@ export default class News extends Component{
     })
 
     //重新获取数据
-    //const result = await reqNews(1,pageSize);
-    // const result = await reqNewsList({pageNum:1,pageSize:size});
+    const result = await reqNoticeList({pageNum:1,pageSize:size});
 
-    // //将页码重置为1，每页条数为传进来的参数
-    // this.setState({
-    //   pageNum: 1,
-    //   pageSize:size,
-    //   total:result.result.total,
-    //   dataSource:result.result.list
-    // })
+    //将页码重置为1，每页条数为传进来的参数
     this.setState({
       pageNum: 1,
       pageSize:size,
+      total:result.result.total,
+      dataSource:result.result.list
     })
 
     //隐藏loading
@@ -105,7 +79,7 @@ export default class News extends Component{
   initColumns = () => {
     this.columns = [
       {
-        title: '发表时间',
+        title: '发布时间',
         dataIndex: 'publishDate',
         key: 'publishDate',
         render:(publishDate) => formateDate(publishDate)
@@ -134,15 +108,15 @@ export default class News extends Component{
       },
       {
         title: '操作',
-        render: (newItem) => {
+        render: (noticeItem) => {
           return (
             <span className='icotr'>
-              <span className='edit' onClick={() => this.editNew(newItem.id)}>
+              <span className='edit' onClick={() => this.editNotice(noticeItem.id)}>
                 <Icon type='edit' style={{color:'#386CCA'}} />
                 <span style={{color:'#386CCA'}}>编辑</span>
               </span>
               <span className='linepsan'></span>
-              <span className='delete' onClick={() => this.deleteNew(newItem.id)}>
+              <span className='delete' onClick={() => this.deleteNotice(noticeItem.id)}>
                 <Icon type='delete' />
                 <span>删除</span>
               </span>
@@ -154,42 +128,42 @@ export default class News extends Component{
   }
 
   //新增新闻
-  addNews = () => {
+  addNotice = () => {
     //不携带参数跳入新闻编辑页面
     this.props.history.push('/notice/edit');
   }
 
   //编辑新闻
-  editNew = async (id) => {
+  editNotice = async (id) => {
     //根据id获取新闻信息
     this.props.history.push('/notice/edit', id);
-    // const result = await reqNewItem(id);
+    // const result = await reqNoticeItem(id);
     // if(result.code === 0){
     //   //携带新闻的参数跳入新闻编辑页面
-    //   const {imageList,context} = result.result;
-    //   this.props.history.push('/news/edit', {id});
+    //   const {image,context} = result.result;
+    //   this.props.history.push('/notice/edit', {id});
     // }else{
     //   message.error('获取新闻失败，请稍后再试!');
     // }
   }
 
   //删除一条新闻
-  deleteNew = async (id) => {
-    //const result = await reqDeleteNew(id);
-    //if(result.code === 0){
-     // //this.props.history.push('/news');  //刷新页面
+  deleteNotice = async (id) => {
+    const result = await reqDeleteNotice(id);
+    if(result.code === 0){
+     //this.props.history.push('/notice');  //刷新页面
       //重新获取新闻列表数据
-      // const result = await reqNewsList({pageNum:1,pageSize:10});
-      // if(result.code === 0){
-      //   //更新state
-      //   this.setState({
-      //     total:result.total,
-      //     dataSource:result.result.list
-      //   })
-      // }else{
-      //   message.error('获取新闻列表失败，请稍后再试!');
-      // }
-    //}
+      const result = await reqNoticeList({pageNum:1,pageSize:10});
+      if(result.code === 0){
+        //更新state
+        this.setState({
+          total:result.result.total,
+          dataSource:result.result.list
+        })
+      }else{
+        message.error('获取新闻列表失败，请稍后再试!');
+      }
+    }
   }
 
   //初始化表格显示的列的格式
@@ -205,31 +179,31 @@ export default class News extends Component{
 
   async componentDidMount(){
     //初始化
-    // const result = await reqNewsList({pageNum:1,pageSize:10});
-    // if(result.code === 0){
-    //   //更新state
-    //   this.setState({
-    //     total:result.result.total,
-    //     dataSource:result.result.list
-    //   })
-    // }else{
-    //   message.error('获取新闻列表失败，请稍后再试!');
-    // }
+    const result = await reqNoticeList({pageNum:1,pageSize:10});
+    if(result.code === 0){
+      //更新state
+      this.setState({
+        total:result.result.total,
+        dataSource:result.result.list
+      })
+    }else{
+      message.error('获取新闻列表失败，请稍后再试!');
+    }
   }
 
   render(){
     const {pageNum, pageSize, total, dataSource, loading} = this.state;
     const columns = this.columns;
     return (
-      <div className="news">
-        <div className="new-title">
+      <div className="notice">
+        <div className="notice-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
             <TabPane tab="通知总览" key="/notice">
             </TabPane>
           </Tabs>
         </div>
-        <div className="new-body">
-          <Button type="primary" style={{width:180,height:40,margin:'0 0 20px 0'}} onClick={this.addNews}>新增</Button>
+        <div className="notice-body">
+          <Button type="primary" style={{width:180,height:40,margin:'0 0 20px 0'}} onClick={this.addNotice}>新增</Button>
           <Table
             bordered
             rowKey='id'

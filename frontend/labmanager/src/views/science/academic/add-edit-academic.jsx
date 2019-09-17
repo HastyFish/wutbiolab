@@ -70,13 +70,13 @@ class EditAcademic extends Component{
         const {title, category,publishDate} = values;
 
         //获取封面图片及富文本
-        const imageList = JSON.stringify(this.pw.current.getImgs());
+        const image = JSON.stringify(this.pw.current.getImgs());
         const context = this.editor.current.getContext();
 
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {"news":{title, category, imageList, context,publishDate:Date.parse( new Date(publishDate._d))}};
+        let param = {"news":{title, category, image, context,publishDate:Date.parse( new Date(publishDate._d))}};
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state.newItem;
@@ -122,12 +122,11 @@ class EditAcademic extends Component{
         message.error('表单验证不通过，请检查!');
         //如果富文本及照片墙已经填写则保留
          //获取封面图片及富文本
-         const {imageUrl,imageName} = this.pw.current.getImgs();
+         const image = this.pw.current.getImgs();
          const context = this.editor.current.getContext();
          const newItem = this.state.newItem
          newItem.context = context;
-         newItem.imageName = imageName;
-         newItem.imageUrl = imageUrl;
+         newItem.image = image;
          this.setState({
           newItem
          })
@@ -160,7 +159,7 @@ class EditAcademic extends Component{
 
   render(){
     const {newItem,categoryType} = this.state;
-    const {title, category, imageList, context,publishDate} = newItem;
+    const {title, category, image, context,publishDate} = newItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
@@ -223,8 +222,8 @@ class EditAcademic extends Component{
             {
               categoryType === '热点新闻' ? (
               <Item label="封面上传">
-                {imageList ? <PicturesWall ref={this.pw} imageList = {JSON.parse(imageList)} /> : null}
-                {!imageList ? <PicturesWall ref={this.pw} imageList = {[]} /> : null}
+                {image ? <PicturesWall ref={this.pw} image = {JSON.parse(image)} /> : null}
+                {!image ? <PicturesWall ref={this.pw} image = {[]} /> : null}
               </Item>
               ):null
             }

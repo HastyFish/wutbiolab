@@ -4,12 +4,14 @@ import {
   Collapse,
   Icon,
   Modal,
-  Tabs, 
+  Tabs,
+  message
 } from 'antd';
 
 
-import MentorClassifi from './teamadd/mentor-classifi';
-import AddPerson from './teamadd/add-person';
+import MentorClasifi from './teamadd/mentor-classifi';
+import AddlabDetails from './teamadd/add-person';
+import {reqResearchTeam, reqSortTeam} from '@/api';
 
 import './team.less';
 
@@ -22,38 +24,48 @@ export default class Team extends Component {
   constructor(props){
     super(props);
     // 创建用来保存ref标识的标签对象的容器
-    this.addperson = React.createRef()
-    this.mentorClassifi = React.createRef()
+    this.addlabDetails = React.createRef()
+    this.mentorCategoryName = React.createRef()
 
     this.state = {
       modalVisible:false,  //编辑的模态框
       activeKey:'1',       //Tab活动页，1表示编辑岗位分类， 2表示新增岗位
       teamList:[
         {
-          id:'boshi',
-          mentorClassifi:'博士生导师',
-          person:[
+          mentorCategoryId:'boshi',
+          mentorCategoryName:'博士生导师',
+          labDetails:[
             {
-              id:'1',
-              name:'张三',
+              id:1,
+              mentorCategoryId:'boshi',
+              mentorName:'张三',
+              publishStatus:0,
+              mentorOrder: 1
             },
             {
-              id:'2',
-              name:'李四',
+              id:2,
+              mentorCategoryId:'boshi',
+              mentorName:'李四',
+              publishStatus:0,
+              mentorOrder: 2
             }
           ]
         },
         {
-          id:'shuoshi',
-          mentorClassifi:'硕士生导师',
-          person:[
+          mentorCategoryId:'shuoshi',
+          mentorCategoryName:'硕士生导师',
+          labDetails:[
             {
-              id:'3',
-              name:'王五',
+              id:3,
+              mentorName:'王五',
+              publishStatus:0,
+              mentorOrder: 1
             },
             {
-              id:'4',
-              name:'赵六',
+              id:4,
+              mentorName:'赵六',
+              publishStatus:0,
+              mentorOrder: 2
             }
           ]
         }
@@ -67,9 +79,9 @@ export default class Team extends Component {
     //获取一级岗位分类数据
     // const result = await reqJobClassifi();
     // if(result.code === 0){
-    //   const recruitList = result.result;
+    //   const teamList = result.result;
     //   this.setState({
-    //     recruitList
+    //     teamList
     //   })
     // }else{
     //   message.error('获取一级岗位分类失败，请稍后再试!')
@@ -84,7 +96,7 @@ export default class Team extends Component {
     //初始化编辑导师分类的表单
     this.MentorClassForm.resetFields();
     //清除当前一级分类中recruList中的disabled属性(去除)
-    // const recruitList = this.state.recruitList.map(recruit => {
+    // const teamList = this.state.teamList.map(recruit => {
     //   return {
     //     id:recruit.id,
     //     category:recruit.category,
@@ -92,7 +104,7 @@ export default class Team extends Component {
     //   }
     // });
     // this.setState({
-    //   recruitList
+    //   teamList
     // })
 
     //清除新增岗位的表单
@@ -118,14 +130,14 @@ export default class Team extends Component {
       // if(result.code === 0){
       //   const children = result.result;
       //   if(children.length > 0){
-      //     const recruitList = this.state.recruitList.map(recruit => {
+      //     const teamList = this.state.teamList.map(recruit => {
       //       if(recruit.id === key * 1){
       //         recruit.children = children
       //       }
       //       return recruit
       //     })
       //     this.setState({
-      //       recruitList
+      //       teamList
       //     })
       //   }
       // }
@@ -136,7 +148,7 @@ export default class Team extends Component {
 
 
   //跳转到更新人员编辑页面
-  editPerson = async (id) => {
+  editlabDetails = async (id) => {
     //获取岗位招聘信息
     // const result = await reqRecruit(id);
     // if(result.code === 0){
@@ -144,14 +156,33 @@ export default class Team extends Component {
     //   const recruit = result.result;
     //   this.props.history.push('/team/edit', {recruit})
     // }
-    let person = {name:'张三'}
-    this.props.history.push('/laboratory/team/edit', {person})
+    let labDetails = {name:'张三'}
+    this.props.history.push('/laboratory/team/edit', {labDetails})
   }
 
   
   //调整人员顺序
-  editOrder = (index) => {
-
+  editOrder = async (pindex,index) => {
+    //判断当前元素是否为第一个
+    if(index === 0){
+      message.warn('无法继续向前移动')
+    }else {
+      //获取对应的二级分类列表
+      const {teamList} = this.state;
+      const {labDetails} = teamList[pindex];
+      //交换顺序
+      let temp = labDetails[index];
+      labDetails[index] = labDetails[index - 1];
+      labDetails[index - 1] = temp;
+      const result = await reqSortTeam(labDetails);
+      if(result.code === 0){
+        this.setState({
+          teamList
+        })
+      }else{
+        message.error('排序失败，请稍后再试')
+      }
+    }
   }
 
 
@@ -168,21 +199,20 @@ export default class Team extends Component {
 
 
   async componentDidMount(){
-    //获取一级岗位分类数据
-    // const result = await reqJobClassifi();
-    // if(result.code === 0){
-    //   const recruitList = result.result;
-    //   this.setState({
-    //     recruitList
-    //   })
-    // }else{
-    //   message.error('获取一级岗位分类失败，请稍后再试!')
-    // }
+    //获取研究团队分类数据
+    const result = await reqResearchTeam();
+    if(result.code === 0){
+      const teamList = result.result;
+      this.setState({
+        teamList
+      })
+    }else{
+      message.error('获取研究团队信息失败，请稍后再试!')
+    }
   }
 
 
   render() {
-
     const {teamList, modalVisible, activeKey} = this.state;
     
     return (
@@ -206,17 +236,17 @@ export default class Team extends Component {
             <Button type="primary" style={{ width: 180, height: 40, margin: '0 0 20px 20px' }} onClick={this.publish}>发布</Button>
             <Collapse accordion expandIconPosition='right' onChange={this.changeCollapse}>
             {
-              teamList.map(mentor => (
-                  <Panel header={mentor.mentorClassifi} key={mentor.id}>
+              teamList.map((mentor,pindex) => (
+                  <Panel header={mentor.mentorCategoryName} key={pindex}>
                       {
-                        mentor.person ? mentor.person.map((c,index) => (
+                        mentor.labDetails ? mentor.labDetails.map((c,index) => (
                             <p className='panelitem' key={c.id}>
-                              {c.name}
-                              <span style={{marginLeft:20}} className="icospan" onClick={() => this.editOrder(index)}>
+                              {c.mentorName}
+                              <span style={{marginLeft:20}} className="icospan" onClick={() => this.editOrder(pindex,index)}>
                                 <Icon type="up"/>
                                 <span className="iconame">排序</span>
                               </span>
-                              <span className="icospan" onClick={() => this.editPerson(c.id)}>
+                              <span className="icospan" onClick={() => this.editlabDetails(c.id)}>
                                 <Icon type="edit"/>
                                 <span className="iconame">编辑</span>
                               </span>
@@ -236,10 +266,10 @@ export default class Team extends Component {
             >
             <Tabs activeKey={activeKey} onChange={this.changeTab}>
               <TabPane tab="编辑导师分类" key="1">
-                <MentorClassifi ref={this.mentorClassifi} teamList={teamList} setForm={(form) => this.MentorClassForm = form} closeModal={this.handleCancel} getAllJob={this.getAllJob} />
+                <MentorClasifi ref={this.mentorCategoryName} teamList={teamList} setForm={(form) => this.MentorClassForm = form} closeModal={this.handleCancel} getAllJob={this.getAllJob} />
               </TabPane>
               <TabPane tab="新增人员名单" key="2">
-                <AddPerson ref={this.addperson} teamList={teamList} setForm={(form) => this.jobForm = form} closeModal={this.handleCancel} getAllJob={this.getAllJob} />
+                <AddlabDetails ref={this.addlabDetails} teamList={teamList} setForm={(form) => this.jobForm = form} closeModal={this.handleCancel} getAllJob={this.getAllJob} />
               </TabPane>
             </Tabs>
             </Modal>

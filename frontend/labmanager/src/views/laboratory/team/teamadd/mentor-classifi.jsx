@@ -8,10 +8,11 @@ import {
   Input,
   Modal,
   Button,
+  message
 } from 'antd';
 import propTypes from 'prop-types'
 import AddMentorClassifi from './add-mentorclassifi';
-//import {reqUpdateJobClassifi, reqDeleteJobs} from '../../api';
+import {reqAddTeamClassifi} from '@/api';
 const {Item} = Form;
 
 class MentorClasifi extends Component{
@@ -40,15 +41,15 @@ class MentorClasifi extends Component{
           AddModalVisible: false
         })
         // 收集数据, 并提交添加分类的请求
-        //const {mentorClassifi} = values
+        const {mentorClassifi} = values
         
         //发送新增岗位分类请求
-        // const result = await reqUpdateJobClassifi([{
-        //   category:jobClassifi
-        // }]);
-        // if(result.code === 0){
-        //   message.success('添加岗位分类成功');
-        // }
+        const result = await reqAddTeamClassifi([{
+          category:mentorClassifi
+        }]);
+        if(result.code === 0){
+          message.success('添加岗位分类成功');
+        }
 
         // 清除输入数据
         this.MentorClassForm.resetFields();
@@ -61,10 +62,10 @@ class MentorClasifi extends Component{
 
   //编辑岗位分类
   editMentorClass = (mentor) => {
-    //获取当前的id
+    //获取当前的mentorCategoryId
     const {teamList} = this.state;
     teamList.forEach((item) => {
-      if(item.id === mentor.id){
+      if(item.mentorCategoryId === mentor.mentorCategoryId){
         item.disabled = true;
       }
     })
@@ -111,7 +112,6 @@ class MentorClasifi extends Component{
         //   this.props.getAllJob();
         // }
 
-        
          //关闭模态框
          this.props.closeModal();
       }
@@ -149,19 +149,18 @@ class MentorClasifi extends Component{
 
   render(){
     const {teamList, AddModalVisible} = this.state;
-    //console.log(teamList);
     const {getFieldDecorator} = this.props.form;
 
     return (
       <Form>
         {
           teamList.map((mentor,index) => {
-            const name = mentor.id
+            const name = mentor.mentorCategoryId
             return (
               <Item key={index}>
                 {
                   getFieldDecorator(`${name}`, {
-                    initialValue: mentor.mentorClassifi,
+                    initialValue: mentor.mentorCategoryName,
                     rules: [
                       {required: true, message: '必须指定分类名称'},
                     ]
