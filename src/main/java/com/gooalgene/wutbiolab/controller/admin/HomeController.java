@@ -18,12 +18,12 @@ public class HomeController {
     @Autowired
     private HomeService homeService;
 
-    @GetMapping("/images")
+    @GetMapping("/image")
     public CommonResponse<HomeImageResponse> getImges() {
         return homeService.getImages();
     }
 
-    @PostMapping("/images")
+    @PostMapping("/image")
     public CommonResponse<Boolean> saveImages(@RequestBody HomeRequest homeRequest){
         return homeService.saveImages(homeRequest);
     }

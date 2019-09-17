@@ -1,6 +1,5 @@
 package com.gooalgene.wutbiolab.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooalgene.wutbiolab.entity.Picture;
 import com.gooalgene.wutbiolab.exception.WutbiolabException;
@@ -11,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
