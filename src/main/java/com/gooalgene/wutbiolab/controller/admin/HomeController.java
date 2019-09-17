@@ -43,7 +43,7 @@ public class HomeController {
         return homeService.getFooter();
     }
 
-    @PostMapping
+    @PostMapping("/footer")
     public CommonResponse<Boolean> saveFooter(@RequestBody HomeRequest homeRequest) {
         return homeService.saveFooter(homeRequest);
     }

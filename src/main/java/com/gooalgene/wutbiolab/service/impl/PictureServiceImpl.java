@@ -97,7 +97,7 @@ public class PictureServiceImpl implements PictureService {
         }
         List<Picture> oldImageList = objectMapper.readValue(imageCodeInfoList,objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
         List<Picture> urlImageResponses = new ArrayList<>();
-        for (Picture picture : urlImageResponses) {
+        for (Picture picture : oldImageList) {
             //picture.getUrl()刚进来时为base64串而非url
             String base64Str = picture.getUrl();
             Matcher matcher = matchBase64(base64Str);

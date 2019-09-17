@@ -48,8 +48,8 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public CommonResponse<HomeImageResponse> getImages() {
-        NewsImage newsImage = newsImageDAO.findAll().get(0);
-        AcademicImage academicImage = academicImageDAO.findAll().get(0);
+        NewsImage newsImage = newsImageDAO.findAll().size() == 0 ? null : newsImageDAO.findAll().get(0);
+        AcademicImage academicImage = academicImageDAO.findAll().size() == 0 ? null : academicImageDAO.findAll().get(0);
         return ResponseUtil.success(new HomeImageResponse(academicImage, newsImage));
     }
 
