@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import propTypes from 'prop-types';
+//import propTypes from 'prop-types';
 import {
   Tabs,
   Select,
@@ -16,7 +16,7 @@ import BraftEditor from '@/components/rich-text-editor/rich-text-editor';
 //import PicturesWall from './pictures-wall';
 import PicturesWall from '@/components/picture-wall/pictures-wall';
 
-//import {reqsavePublishNews, reqNewItem} from '../../api';
+import {reqSourceTypeList, reqSourceItem, reqsavePublishSource} from '@/api';
 import {formateDate} from '@/utils/dateUtils'
 
 import './source.less';
@@ -29,9 +29,6 @@ const {Option} = Select;
 
 
 class EditSource extends Component{
-  static propTypes = {
-    newItem: propTypes.object
-  }
 
   constructor(props){
     super(props)
@@ -40,171 +37,178 @@ class EditSource extends Component{
     this.editor = React.createRef()
 
     // 取出携带的state
-    const id = this.props.location.state;  // 如果是添加则新闻id没值, 否则为编辑页面新闻id有值
+    const id = this.props.location.state;  // 如果是添加则资源id没值, 否则为编辑页面资源id有值
     // 保存是否是更新的标识
     this.isUpdate = !!id
     if(this.isUpdate){//说明是更新
         this.state = {
           id,
-          newItem:{
+          sourceItem:{
           },
-          categoryType:'热点新闻'
+          categoryList:[],  //资源类型下拉列表
+
         }
     }else{
       //说明是新增
       this.state = {
-        newItem:{
+        sourceItem:{
         },
-        categoryType:'热点新闻'
+        categoryList:[],  //资源类型下拉列表
       }
     }
   }
 
 
-  //保存或发布新闻
-  saveOrPublishNews = (type) => {
+  //保存或发布资源
+  saveOrPublishSource = (type) => {
     //首先进行表单验证，验证通过了再进行保存和发布的处理
     this.props.form.validateFields( async (error, values) => {
       if(!error){
-        //1. 收集数据,封装成new对象
+        //1. 收集数据,封装成source对象
         const {title, category,publishDate} = values;
 
         //获取封面图片及富文本
-        const imageList = JSON.stringify(this.pw.current.getImgs());
+        //判断是否有图片,获取封面图片
+        const image = JSON.stringify(this.pw.current.getImgs());
         const context = this.editor.current.getContext();
 
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {"news":{title, category, imageList, context,publishDate:Date.parse( new Date(publishDate._d))}};
+        let param = {title, category, image, context,publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
-          const {id} = this.state.newItem;
+          const {id} = this.state;
           //构建新对象的值
-          param.news.id = id;
+          param.id = id;
           //判断是保存还是发布
           if(type==='save'){
             //编辑状态下的保存
-            param.save = true;
-            param.publish = false;
+            param.publishStatus = 0;
           }else{
             //编辑状态下的发布
-            param.save = false;
-            param.publish = true;
+            param.publishStatus = 1;
           }
         }else{
           //新增操作不携带id
           //判断是保存还是发布
           if(type==='save'){
             //新增状态下的保存
-            param.save = true;
-            param.publish = false;
+            param.publishStatus = 0;
           }else{
             //新增状态下的发布
-            param.save = true;
-            param.publish = true;
+            param.publishStatus = 1;
           }
         }
         //发送请求
-        // const result = await reqsavePublishNews(param);
-        // if(result.code === 0){
-        //   //发送请求成功
-        //   message.success(`${type === 'save'?'保存':'发布'}成功`);
-        //   //路由跳转
-        //   setTimeout(() => {
-        //     this.props.history.replace('/news');
-        //   },100)
-        // }else{
-        //   message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
-        // }
+        const result = await reqsavePublishSource(param);
+        if(result.code === 0){
+          //发送请求成功
+          message.success(`${type === 'save'?'保存':'发布'}成功`);
+          //路由跳转
+          setTimeout(() => {
+            this.props.history.replace('/source');
+          },100)
+        }else{
+          message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
+        }
       }else{
         //提示错误
         message.error('表单验证不通过，请检查!');
         //如果富文本及照片墙已经填写则保留
          //获取封面图片及富文本
-         const {imageUrl,imageName} = this.pw.current.getImgs();
+         const image = this.pw.current.getImgs();
          const context = this.editor.current.getContext();
-         const newItem = this.state.newItem
-         newItem.context = context;
-         newItem.imageName = imageName;
-         newItem.imageUrl = imageUrl;
+         const sourceItem = this.state.sourceItem
+         sourceItem.context = context;
+         sourceItem.image = image;
          this.setState({
-          newItem
+          sourceItem
          })
       }
     })
   }
 
-  //选择框变化事件
-  handleChange = (e) => {
-    this.setState({
-      categoryType:e
-    })
-  }
 
   async componentDidMount(){
+    //获取资源类型下拉列表
+    const list = await reqSourceTypeList();
+    if(list.code === 0){
+        //携带资源的参数跳入资源编辑页面
+        const categoryList = list.result;
+        this.setState({
+          categoryList
+        })
+      }else{
+        message.error('获取资源类型失败，请稍后再试!');
+      }
+
     const {id} = this.state;
     if(id){
-      // const result = await reqNewItem(id);
-      // if(result.code === 0){
-      //   //携带新闻的参数跳入新闻编辑页面
-      //   const newItem = result.result;
-      //   this.setState({
-      //     newItem
-      //   })
-      // }else{
-      //   message.error('获取新闻失败，请稍后再试!');
-      // }
+      const result = await reqSourceItem(id);
+      if(result.code === 0){
+        //携带资源的参数跳入资源编辑页面
+        const sourceItem = result.result;
+        this.setState({
+          sourceItem
+        })
+      }else{
+        message.error('获取资源失败，请稍后再试!');
+      }
     }
   }
 
   render(){
-    const {newItem,categoryType} = this.state;
-    const {title, category, imageList, context,publishDate} = newItem;
+    const {sourceItem,categoryList} = this.state;
+    const {title, category, image, context,publishDate} = sourceItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
       labelAlign:'left',
       wrapperCol: { span: 5 }, // 右侧包裹的宽度
     }
-  
     const {getFieldDecorator} = this.props.form
 
 
     return (
-      <div className='news'>
-        <div className="new-title">
+      <div className='source'>
+        <div className="source-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
             <TabPane tab="资源编辑" key="/source/edit">
             </TabPane>
           </Tabs>
         </div>
-        <div className="new-body">
+        <div className="source-body">
           <Form>
             <Item label="编辑类型" {...formItemLayout}>
               {
                 getFieldDecorator('category', {
-                  initialValue: category || "热点新闻",
+                  initialValue: category || '公共数据集',
                   rules: [
                     {required: true, message: '必须指定分类'},
                   ]
                 })(
-                  <Select onChange={this.handleChange}>
-                    <Option value="热点新闻">热点新闻</Option>
-                    <Option value="其他新闻">其他新闻</Option>
+                  <Select>
+                    {
+                      categoryList.map(item => {
+                        return (
+                          <Option value={item.category} key={item.id}>{item.category}</Option>
+                        )
+                      })
+                    }
                   </Select>
                 )
               }
             </Item>
-            <Item label="新闻标题" {...formItemLayout}>
+            <Item label="资源标题" {...formItemLayout}>
               {
                 getFieldDecorator('title', {
                   initialValue: title,
                   rules: [
-                    {required: true, message: '必须指定新闻标题'},
+                    {required: true, message: '必须指定资源标题'},
                   ]
                 })(
-                  <Input placeholder="请输入新闻标题"/>
+                  <Input placeholder="请输入资源标题"/>
                 )
               }
             </Item>
@@ -220,14 +224,12 @@ class EditSource extends Component{
                 )
               }
             </Item>
-            {
-              categoryType === '热点新闻' ? (
-              <Item label="封面上传">
-                {imageList ? <PicturesWall ref={this.pw} imageList = {JSON.parse(imageList)} /> : null}
-                {!imageList ? <PicturesWall ref={this.pw} imageList = {[]} /> : null}
-              </Item>
-              ):null
-            }
+
+            <Item label="封面上传">
+              {image ? <PicturesWall ref={this.pw} image = {JSON.parse(image)} /> : null}
+              {!image ? <PicturesWall ref={this.pw} image = {[]} /> : null}
+            </Item>
+
             
             <Item>
               {
@@ -240,9 +242,9 @@ class EditSource extends Component{
               {/* <RichTextEdit ref={this.editor} context={context} changeRichText = {(context) => this.setState({context})}/> */}
             </Item>
             <Item>
-              <Button type='primary' style={{width:180,height:40}} onClick={() => this.saveOrPublishNews('save')}>保存</Button>
+              <Button type='primary' style={{width:180,height:40}} onClick={() => this.saveOrPublishSource('save')}>保存</Button>
               <Button style={{margin:'0 20px',width:180,height:40}} onClick={() => this.props.history.goBack()}>取消</Button>
-              <Button style={{width:180,height:40}} onClick={() => this.saveOrPublishNews('publish')}>发布</Button>
+              <Button style={{width:180,height:40}} onClick={() => this.saveOrPublishSource('publish')}>发布</Button>
             </Item>
           </Form>
         </div>

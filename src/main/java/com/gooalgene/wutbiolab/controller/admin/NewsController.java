@@ -6,6 +6,7 @@ import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,16 +21,19 @@ public class NewsController {
         this.newsService = newsService;
     }
 
+    @ApiOperation(value="查询新闻分类", notes="查询新闻分类")
     @GetMapping("/category")
     public CommonResponse<List<NewsCategory>> getNewsCategory() {
         return newsService.allNewsCategory();
     }
 
+    @ApiOperation(value="查询新闻分页列表", notes="查询新闻分页列表，参数为pageNum和pageSize")
     @GetMapping
     public CommonResponse<PageResponse<NewsOverview>> getNewsDetailPage(Integer pageNum, Integer pageSize) {
         return newsService.newsDetailPage(pageNum, pageSize);
     }
 
+    @ApiOperation(value="根据id查询新闻", notes="根据id查询新闻")
     @GetMapping("/{id}")
     public CommonResponse<NewsDetail> getNewsDetail(@PathVariable Integer id) {
         return newsService.newsDetailById(id);
