@@ -8,7 +8,7 @@ import imgzip from '@utils/imgZip'
 export default class PicturesWall extends React.Component {
 
   static propTypes = {
-    imageList: PropTypes.array,
+    image: PropTypes.array,
     length:PropTypes.number
   }
 
@@ -17,11 +17,11 @@ export default class PicturesWall extends React.Component {
     super(props)
 
     // 如果传入了imgs属性
-    const {imageList} = this.props
+    const {image} = this.props
 
     let fileList = [];
-    if (imageList && imageList.length>0) {
-      fileList = imageList.map((img, index) => ({
+    if (image && image.length>0) {
+      fileList = image.map((img, index) => ({
         uid: -index, // 每个file都有自己唯一的id
         name: img.name, // 图片文件名
         status: 'done', // 图片状态: done:已上传, uploading: 正在上传中, removed: 已删除
@@ -42,7 +42,7 @@ export default class PicturesWall extends React.Component {
   获取所有已上传图片的数组
    */
   getImgs  = () => {
-    return this.state.fileList.map(file => ({name:file.name,url:file.thumbUrl||file.url}));
+    return this.state.fileList.map(file => ({uid:file.uid,name:file.name,url:file.thumbUrl||file.url,status: 'done'}));
   }
 
   /*

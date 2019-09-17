@@ -5,41 +5,78 @@ import {
   Row,
   Col,
   Input,
-  Button
+  Button,
+  message
 } from 'antd'
 
 import BraftEditor from '@/components/rich-text-editor/rich-text-editor';
+import {reqlabDes,reqsavePublishlabDes} from '@/api';
 
 const {TabPane} = Tabs
 const {Item} = Form;
 
 class LabDescription extends Component {
-  state = {
-    title:'',
-    description:null
+  constructor(props){
+    super(props);
+    // 创建用来保存ref标识的标签对象的容器
+    this.editor = React.createRef()
+    this.state = {
+      title:'',
+      context:null
+    }
   }
+  
 
-
-  saveData = () => {
+  //保存或发布机构概况
+  saveOrPublishData = async (type) => {
     this.props.form.validateFields(async (err, values) => {
       if(!err){
-        //const id = this.id || null;
-       // const {title, description} = values;
+        const id = this.id || null;
+        const labCategoryId = this.labCategoryId || null;
+        const {title} = values;
+        const context = this.editor.current.getContext();
+        const param = {id,labCategoryId,title, context}
+        //判断是保存还是发布
+        if(type==='save'){
+          //编辑状态下的保存
+          param.publishStatus = 0;
+        }else{
+          //编辑状态下的发布
+          param.publishStatus = 1;
+        }
+        const result = await reqsavePublishlabDes(param);
+        if(result.code === 0){
+          message.success(`${type === 'save'?'保存':'发布'}成功`);
+        }else{
+          message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
+        }
       }
     })
   }
 
-  publishData = () => {
-    this.props.form.validateFields(async (err, values) => {
-      if(!err){
-        //const id = this.id || null;
-        //const {title, description} = values;
-      }
-    })
+  //取消编辑机构概况，重新获取原来的储存数据
+  handleCancel = async () => {
+
+  }
+
+  async componentDidMount(){
+    //获取机构概况
+    const result = await reqlabDes();
+    if(result.code === 0){
+      const {id,title,context,labCategoryId} = result.result;
+      this.id = id;
+      this.labCategoryId = labCategoryId;
+      this.setState({
+        title,
+        context
+      })
+    }else{
+      message.error('获取机构概况失败，请稍后再试')
+    }
   }
 
   render(){
-    const {title,description} = this.state
+    const {title,context} = this.state
     const {getFieldDecorator} = this.props.form;
 
     return (
@@ -74,19 +111,19 @@ class LabDescription extends Component {
                 <Item label='内容'>
                   {/* <RichTextEdit ref={this.editor} context={description} changeRichText = {(description) => this.setState({description})}/> */}
                   {
-                    description?<BraftEditor  ref={this.editor} context={description}></BraftEditor>:null
+                    context?<BraftEditor  ref={this.editor} context={context}></BraftEditor>:null
                   }
 
                   {
-                    description === null ?<BraftEditor  ref={this.editor} context={''}></BraftEditor>:null
+                    context === null ?<BraftEditor  ref={this.editor} context={''}></BraftEditor>:null
                   }
                   
                 </Item>
                 <Row type="flex" justify="end">
                     <Col>
-                      <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={this.saveData}>保存</Button>
-                      <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={this.publishData}>发布</Button>
-                      <Button type='danger' style={{width:180,height:40,cursor:'pointer'}} onClick={this.uploadImg}>取消</Button>
+                      <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={() => this.saveOrPublishData('save')}>保存</Button>
+                      <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={() => this.saveOrPublishData('publish')}>发布</Button>
+                      <Button type='danger' style={{width:180,height:40,cursor:'pointer'}} onClick={this.handleCancel}>取消</Button>
                     </Col>
                   </Row>
               </Form>
