@@ -66,6 +66,11 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         scientificResearchDetailDAO.save(scientificResearchDetail);
     }
 
+    @Transactional
+    public void deleteById(Long id){
+        scientificResearchDetailDAO.deleteById(id);
+    }
+
 
     /*********************************************** 前端使用 ***************************************************/
 

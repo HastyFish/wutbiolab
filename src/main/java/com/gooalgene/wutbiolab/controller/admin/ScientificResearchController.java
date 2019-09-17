@@ -69,4 +69,10 @@ public class ScientificResearchController {
         return ResponseUtil.success();
     }
 
+    @DeleteMapping("/{id}")
+    public CommonResponse deleteById(@PathVariable("id") Long id){
+        scientificResearchService.deleteById(id);
+        return ResponseUtil.success();
+    }
+
 }

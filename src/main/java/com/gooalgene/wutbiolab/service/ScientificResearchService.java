@@ -45,6 +45,7 @@ public interface ScientificResearchService {
      */
     void saveOrPublish(ScientificResearchDetail scientificResearchDetail,Integer publishStatus);
 
+    void deleteById(Long id);
 
     /*********************************************** 前端使用 ***************************************************/
 
