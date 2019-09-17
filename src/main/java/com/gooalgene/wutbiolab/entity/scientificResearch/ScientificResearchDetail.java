@@ -1,5 +1,7 @@
 package com.gooalgene.wutbiolab.entity.scientificResearch;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * 科研工作子模块详情
  */
+
+@ApiModel(value = "科研工作子模块详情", description = "科研工作子模块详情")
 @NoArgsConstructor
 @Table(name = "scientific_research_detail")
 @Entity
@@ -19,28 +23,37 @@ public class ScientificResearchDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ApiModelProperty(value = "一级分类id", example = "2")
     private Long scientificResearchCategoryId;
 
+    @ApiModelProperty(value = "标题", example = "标题1")
     @Column
     private String title;
 
+    @ApiModelProperty(value = "发布时间（时间戳）", example = "1568615594830")
     @Column
     private Long publishDate;
 
     /**
      * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
      */
+    @ApiModelProperty(value = "发布状态(0:未发布，1:已发布)", example = "0")
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus = 0;
 
 
+    @ApiModelProperty(value = "刊物名称", example = "刊物1")
     private String periodicalName;
+    @ApiModelProperty(value = "作者", example = "作者1")
     private String author;
+    @ApiModelProperty(value = "发布年度", example = "2019")
     private Long publishYear;
 
+    @ApiModelProperty(value = "富文本内容", example = "内容1")
     @Column(columnDefinition = "MEDIUMTEXT")
     private String context;
 
+    @ApiModelProperty(value = "学术类型id", example = "1")
     private Long academicCategoryId;
 
 

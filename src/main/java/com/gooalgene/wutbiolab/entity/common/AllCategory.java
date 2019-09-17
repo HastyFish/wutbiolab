@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.common;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,10 +15,12 @@ import java.io.Serializable;
 @DiscriminatorColumn(name = "discriminator")
 public class AllCategory implements Serializable {
 
+    private static final long serialVersionUID = -7330942254729890746L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ApiModelProperty(value = "分类名称", example = "分类1")
     private String category;
 
 }

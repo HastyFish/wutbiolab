@@ -32,4 +32,7 @@ public class ResourceDetail {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String image;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String context;
 }

@@ -14,7 +14,15 @@ import java.util.List;
 public interface LabService {
 
 
-//    Page<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize);
+    /**
+     * 目前针对机构概况和研究方向，所以查了所有字段（日后加了说不定要改）
+     * @param categoryId
+     * @param pageNum
+     * @param pageSize
+     * @param isList
+     * @return
+     */
+    Page<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize, Boolean isList);
 
     /**
      * 获取毕业生分页列表
@@ -43,11 +51,15 @@ public interface LabService {
     void saveOrPublishLabDetail(LabDetail labDetail,Integer publishStatus);
 
 
+
+//    void publishResearchTeam(List<MentorRequest> mentorRequests);
+
     /**
-     * 针对研究团队模块发布所有数据
-     * @param mentorRequests
+     * 发布多条数据
+     * @param ids
      */
-    void publishResearchTeam(List<MentorRequest> mentorRequests);
+    void publishList(List<Long> ids);
+
 
 
     /**
@@ -72,6 +84,18 @@ public interface LabService {
      * @return
      */
     List<LabCategory> getAllCategory();
+
+    /**
+     * 通过id删除一条记录
+     * @param id
+     */
+    void deleteById(Long id);
+
+    /**
+     * 通过id删除一条导师类型数据
+     * @param id
+     */
+    void deleteMentorCategoryById(Long id);
 
     /*********************************************** 前端使用 ***************************************************/
 

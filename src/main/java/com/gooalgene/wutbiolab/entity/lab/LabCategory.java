@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.lab;
 
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,12 +8,12 @@ import javax.persistence.*;
 @Table(name = "lab_category")
 @Entity
 @Data
-public class LabCategory {
+@DiscriminatorValue("lab")
+public class LabCategory extends AllCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String categoryName;
 
 
 }

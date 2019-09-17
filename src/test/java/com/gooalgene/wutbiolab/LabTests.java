@@ -1,6 +1,8 @@
 package com.gooalgene.wutbiolab;
 
 import com.gooalgene.wutbiolab.dao.LabDetailDAO;
+import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
+import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
@@ -9,6 +11,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,6 +32,9 @@ public class LabTests {
 //		LabDetail byIdAndPublishStatus = labDetailDAO.getByIdAndPublishStatus(1l, CommonConstants.PUBLISHED);
 
 //		List<Object[]> graduates = labDetailDAO.getGraduates(0, 3);
+//		Long graduatesCount = labDetailDAO.getGraduatesCount();
+//		List<LabDetail> byIdIn = labDetailDAO.getByIdIn(Arrays.asList(1l, 2l, 3l));
+		List<Object[]> graduates = labDetailDAO.getGraduates(0, 8);
 		Long graduatesCount = labDetailDAO.getGraduatesCount();
 		System.out.println(1);
 
@@ -39,7 +47,9 @@ public class LabTests {
 
 //		Page<LabDetail> labDetails = labService.getLabDetailByLabCategoryIdAndPublishStatus(
 //				3l, 0, 2, CommonConstants.PUBLISHED,true);
-		PageResponse<LabDetail> graduates = labService.getGraduates(1, 3);
+//		PageResponse<LabDetail> graduates = labService.getGraduates(1, 3);
+		List<GraduateCategory> allCategory = labService.getGraduateCategorys();
+
 		System.out.println(1);
 
 	}
