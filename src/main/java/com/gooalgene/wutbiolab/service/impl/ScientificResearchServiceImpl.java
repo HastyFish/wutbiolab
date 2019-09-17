@@ -7,6 +7,7 @@ import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
+import com.gooalgene.wutbiolab.response.AcademicResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +42,34 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         pageResponse.setTotal(total);
         pageResponse.setPageSize(pageSize);
         pageResponse.setPageNum(pageNum);
+        return pageResponse;
+    }
+
+    @Override
+    public PageResponse<AcademicResponse> getAcademicList(Integer pageNum,Integer pageSize){
+        List<Object[]> srAcademicList = scientificResearchDetailDAO.getSRAcademicList(pageNum-1,pageSize);
+        Long count = scientificResearchDetailDAO.getSRAcademicListCount();
+        List<AcademicResponse> academicResponses=new ArrayList<>();
+        srAcademicList.forEach(objects -> {
+            BigInteger idObj = (BigInteger) objects[0];
+            BigInteger publishDateObj = (BigInteger) objects[2];
+            Long id=null;
+            Long publishDate=null;
+            if(idObj!=null){
+                id=idObj.longValue();
+            }
+            if(publishDateObj!=null){
+                publishDate=publishDateObj.longValue();
+            }
+            String title= (String) objects[1];
+            Integer publishStatus= (Integer) objects[1];
+            String academicCategoryName = (String) objects[4];
+            AcademicResponse academicResponse = AcademicResponse.builder().id(id).publishDate(publishDate).publishStatus(publishStatus)
+                    .title(title).academicCategoryName(academicCategoryName).build();
+            academicResponses.add(academicResponse);
+        });
+
+        PageResponse<AcademicResponse> pageResponse=new PageResponse(academicResponses,pageNum,pageSize,count);
         return pageResponse;
     }
 

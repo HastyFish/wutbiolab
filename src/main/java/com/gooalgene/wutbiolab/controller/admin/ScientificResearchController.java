@@ -4,6 +4,7 @@ import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
+import com.gooalgene.wutbiolab.response.AcademicResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
@@ -31,6 +32,13 @@ public class ScientificResearchController {
         PageResponse<ScientificResearchDetail> scientificResearchDetails =
                 scientificResearchService.getSRDetialByCategoryId(categoryId, pageNum, pageSize);
         return ResponseUtil.success(scientificResearchDetails);
+    }
+
+    @GetMapping("/list/academic")
+    public CommonResponse<PageResponse<AcademicResponse>> getAcademicPage(@RequestParam("pageNum") Integer pageNum,
+                                                                          @RequestParam("pageSize") Integer pageSize){
+        PageResponse<AcademicResponse> academicList = scientificResearchService.getAcademicList(pageNum, pageSize);
+        return ResponseUtil.success(academicList);
     }
 
     @ApiOperation(value="通过id获取一条详情", notes="通过id获取一条详情")
