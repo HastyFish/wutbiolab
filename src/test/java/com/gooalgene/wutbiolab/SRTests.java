@@ -2,7 +2,6 @@ package com.gooalgene.wutbiolab;
 
 import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
-import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicOverview;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
