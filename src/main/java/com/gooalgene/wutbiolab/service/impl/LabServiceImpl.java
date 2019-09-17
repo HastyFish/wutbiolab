@@ -51,7 +51,7 @@ public class LabServiceImpl implements LabService {
         return labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
     }
 
-    public PageResponse<LabDetail> getGraduates(Integer pageNum, Integer pageSize){
+    public PageResponse<GraduateResponse> getGraduates(Integer pageNum, Integer pageSize){
         List<GraduateResponse> graduateResponses=new ArrayList<>();
         List<Object[]> objectsList = labDetailDAO.getGraduates(pageNum - 1, pageSize);
         objectsList.forEach(objects -> {

@@ -2,6 +2,7 @@ package com.gooalgene.wutbiolab;
 
 import com.gooalgene.wutbiolab.dao.lab.LabDetailDAO;
 import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
+import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.service.LabService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +31,11 @@ public class LabTests {
 //		List<Object[]> graduates = labDetailDAO.getGraduates(0, 3);
 //		Long graduatesCount = labDetailDAO.getGraduatesCount();
 //		List<LabDetail> byIdIn = labDetailDAO.getByIdIn(Arrays.asList(1l, 2l, 3l));
-		List<Object[]> graduates = labDetailDAO.getGraduates(0, 8);
-		Long graduatesCount = labDetailDAO.getGraduatesCount();
+//		List<Object[]> graduates = labDetailDAO.getGraduates(0, 8);
+//		Long graduatesCount = labDetailDAO.getGraduatesCount();
+		LabDetail labDetail = new LabDetail(23l, "ttt4", 123123123L);
+		labDetail.setPublishDate(null);
+		labDetailDAO.save(labDetail);
 		System.out.println(1);
 
 	}
