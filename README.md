@@ -21,12 +21,14 @@ insert into wutbiolab.all_category(discriminator, id, category) values ('notice'
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 37, '在线数据库');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 38, '公共数据集');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 39, '软件下载');
-	
 insert into wutbiolab.all_category(discriminator, id, category) values ('graduate', 40, '毕业生');		
 insert into wutbiolab.all_category(discriminator, id, category) values ('mentor', 41, '博士生导师');		
 insert into wutbiolab.all_category(discriminator, id, category) values ('mentor', 42, '硕士生导师');		
 insert into wutbiolab.all_category(discriminator, id, category) values ('academic', 43, '学术会议');	
 
-	
+truncate wutbiolab.home_info;
+insert into wutbiolab.home_info(discriminator, context, publishStatus) values ('academic_picture', '[]', 0);
+insert into wutbiolab.home_info(discriminator, context, publishStatus) values ('news_picture', '[]', 0);
+
 
 ```

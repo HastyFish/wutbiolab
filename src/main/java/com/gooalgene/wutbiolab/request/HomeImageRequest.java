@@ -10,17 +10,13 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class HomeRequest implements Serializable {
+public class HomeImageRequest implements Serializable {
 
     private static final long serialVersionUID = -5248568620857022978L;
 
     private String newsImage;
 
     private String academicImage;
-
-    private List<CooperationLink> cooperationLink;
-
-    private List<Footer> footer;
 
     private Integer publishStatus = 0;
 

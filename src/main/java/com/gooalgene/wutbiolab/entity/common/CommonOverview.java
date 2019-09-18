@@ -11,4 +11,6 @@ public interface CommonOverview {
     String getTitle();
 
     String getCategory();
+
+    String getImage();
 }

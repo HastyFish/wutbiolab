@@ -2,7 +2,7 @@ package com.gooalgene.wutbiolab.controller.admin;
 
 import com.gooalgene.wutbiolab.entity.home.CooperationLink;
 import com.gooalgene.wutbiolab.entity.home.Footer;
-import com.gooalgene.wutbiolab.request.HomeRequest;
+import com.gooalgene.wutbiolab.request.HomeImageRequest;
 import com.gooalgene.wutbiolab.response.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
@@ -10,13 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/home")
 public class HomeController {
-    @Autowired
+
     private HomeService homeService;
+
+    public HomeController(HomeService homeService) {
+        this.homeService = homeService;
+    }
 
     @GetMapping("/image")
     public CommonResponse<HomeImageResponse> getImges() {
@@ -24,8 +27,8 @@ public class HomeController {
     }
 
     @PostMapping("/image")
-    public CommonResponse<Boolean> saveImages(@RequestBody HomeRequest homeRequest){
-        return homeService.saveImages(homeRequest);
+    public CommonResponse<Boolean> saveImages(@RequestBody HomeImageRequest homeImageRequest){
+        return homeService.saveImages(homeImageRequest);
     }
 
     @GetMapping("/cooperation-link")
