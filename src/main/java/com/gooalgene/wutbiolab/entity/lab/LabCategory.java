@@ -10,10 +10,9 @@ import javax.persistence.*;
 @Data
 @DiscriminatorValue("lab")
 public class LabCategory extends AllCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
 
 }

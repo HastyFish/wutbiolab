@@ -1,6 +1,5 @@
 package com.gooalgene.wutbiolab.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooalgene.wutbiolab.entity.Picture;
 import com.gooalgene.wutbiolab.exception.WutbiolabException;
@@ -11,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -30,13 +28,14 @@ public class PictureServiceImpl implements PictureService {
     private final static String PERFIX = "(^data:image/(png|jpg|jpeg);base64,).*";
 
     private GooalApplicationProperty gooalApplicationProperty;
+
     private ObjectMapper objectMapper;
 
     private Logger logger = LoggerFactory.getLogger(PictureServiceImpl.class);
 
-    public PictureServiceImpl(GooalApplicationProperty gooalApplicationProperty,ObjectMapper objectMapper) {
+    public PictureServiceImpl(GooalApplicationProperty gooalApplicationProperty, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         this.gooalApplicationProperty = gooalApplicationProperty;
-        this.objectMapper=objectMapper;
     }
 
     @Override
@@ -98,7 +97,7 @@ public class PictureServiceImpl implements PictureService {
         }
         List<Picture> oldImageList = objectMapper.readValue(imageCodeInfoList,objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
         List<Picture> urlImageResponses = new ArrayList<>();
-        for (Picture picture : urlImageResponses) {
+        for (Picture picture : oldImageList) {
             //picture.getUrl()刚进来时为base64串而非url
             String base64Str = picture.getUrl();
             Matcher matcher = matchBase64(base64Str);
