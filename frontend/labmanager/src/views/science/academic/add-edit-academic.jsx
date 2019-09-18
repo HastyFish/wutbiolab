@@ -13,10 +13,8 @@ import moment from 'moment';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 
 import BraftEditor from '@/components/rich-text-editor/rich-text-editor';
-//import PicturesWall from './pictures-wall';
-import PicturesWall from '@/components/picture-wall/pictures-wall';
 
-//import {reqsavePublishNews, reqNewItem} from '../../api';
+import {reqAcademicCategory, reqAcademicData, reqSaveAcademic, reqPublishAcademic} from '@/api';
 import {formateDate} from '@/utils/dateUtils'
 
 import './academic.less';
@@ -36,7 +34,6 @@ class EditAcademic extends Component{
   constructor(props){
     super(props)
     // 创建用来保存ref标识的标签对象的容器
-    this.pw = React.createRef()
     this.editor = React.createRef()
 
     // 取出携带的state
@@ -48,14 +45,14 @@ class EditAcademic extends Component{
           id,
           newItem:{
           },
-          categoryType:'热点新闻'
+          categoryList:[],
         }
     }else{
       //说明是新增
       this.state = {
         newItem:{
         },
-        categoryType:'热点新闻'
+        categoryList:[],
       }
     }
   }
@@ -67,66 +64,47 @@ class EditAcademic extends Component{
     this.props.form.validateFields( async (error, values) => {
       if(!error){
         //1. 收集数据,封装成new对象
-        const {title, category,publishDate} = values;
+        const {title, academicCategoryId,publishDate} = values;
 
-        //获取封面图片及富文本
-        const image = JSON.stringify(this.pw.current.getImgs());
+        //获取富文本
         const context = this.editor.current.getContext();
 
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {"news":{title, category, image, context,publishDate:Date.parse( new Date(publishDate._d))}};
+        let param = {title, academicCategoryId, context, publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state.newItem;
           //构建新对象的值
-          param.news.id = id;
-          //判断是保存还是发布
-          if(type==='save'){
-            //编辑状态下的保存
-            param.save = true;
-            param.publish = false;
-          }else{
-            //编辑状态下的发布
-            param.save = false;
-            param.publish = true;
-          }
+          param.id = id;
         }else{
-          //新增操作不携带id
-          //判断是保存还是发布
-          if(type==='save'){
-            //新增状态下的保存
-            param.save = true;
-            param.publish = false;
-          }else{
-            //新增状态下的发布
-            param.save = true;
-            param.publish = true;
-          }
         }
-        //发送请求
-        // const result = await reqsavePublishNews(param);
-        // if(result.code === 0){
-        //   //发送请求成功
-        //   message.success(`${type === 'save'?'保存':'发布'}成功`);
-        //   //路由跳转
-        //   setTimeout(() => {
-        //     this.props.history.replace('/news');
-        //   },100)
-        // }else{
-        //   message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
-        // }
+         //判断是保存还是发布发送请求
+         let result;
+         if(type === 'save'){
+            result = await reqSaveAcademic(param);
+         }else{
+            result = await reqPublishAcademic(param);
+         }
+        if(result.code === 0){
+          //发送请求成功
+          message.success(`${type === 'save'?'保存':'发布'}成功`);
+          //路由跳转
+          setTimeout(() => {
+            this.props.history.replace('/science/academic');
+          },100)
+        }else{
+          message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
+        }
       }else{
         //提示错误
         message.error('表单验证不通过，请检查!');
-        //如果富文本及照片墙已经填写则保留
-         //获取封面图片及富文本
-         const image = this.pw.current.getImgs();
+        //如果富文本已经填写则保留
+         //获取富文本
          const context = this.editor.current.getContext();
          const newItem = this.state.newItem
          newItem.context = context;
-         newItem.image = image;
          this.setState({
           newItem
          })
@@ -134,32 +112,40 @@ class EditAcademic extends Component{
     })
   }
 
-  //选择框变化事件
-  handleChange = (e) => {
-    this.setState({
-      categoryType:e
-    })
-  }
 
   async componentDidMount(){
-    const {id} = this.state;
-    if(id){
-      // const result = await reqNewItem(id);
-      // if(result.code === 0){
-      //   //携带新闻的参数跳入新闻编辑页面
-      //   const newItem = result.result;
-      //   this.setState({
-      //     newItem
-      //   })
-      // }else{
-      //   message.error('获取新闻失败，请稍后再试!');
-      // }
+    //获取分类信息
+    const result = await reqAcademicCategory();
+    if(result.code === 0){
+      const categoryList = result.result;
+      this.setState({categoryList})
+      const {id} = this.state;
+      if(id){
+        const result = await reqAcademicData(id);
+        if(result.code === 0){
+          //携带新闻的参数跳入新闻编辑页面
+          const newItem = result.result;
+          this.setState({
+            newItem
+          })
+          const {academicCategoryId} = newItem;
+          academicCategoryId && this.props.form.setFieldsValue({'academicCategoryId':academicCategoryId})
+        }else{
+          message.error('获取新闻失败，请稍后再试!');
+        }
+      }else{
+        //select框赋值
+        this.props.form.setFieldsValue({'academicCategoryId':categoryList[0].id})
+      }
+    }else {
+      message.error('获取类型失败, 请稍后再试')
     }
+    
   }
 
   render(){
-    const {newItem,categoryType} = this.state;
-    const {title, category, image, context,publishDate} = newItem;
+    const {newItem,categoryList} = this.state;
+    const {title, context, publishDate} = newItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
@@ -168,7 +154,6 @@ class EditAcademic extends Component{
     }
   
     const {getFieldDecorator} = this.props.form
-
 
     return (
       <div className='article'>
@@ -180,21 +165,25 @@ class EditAcademic extends Component{
         </div>
         <div className="article-body">
           <Form>
-            <Item label="编辑类型" {...formItemLayout}>
-              {
-                getFieldDecorator('category', {
-                  initialValue: category || "热点新闻",
-                  rules: [
-                    {required: true, message: '必须指定分类'},
-                  ]
-                })(
-                  <Select onChange={this.handleChange}>
-                    <Option value="热点新闻">热点新闻</Option>
-                    <Option value="其他新闻">其他新闻</Option>
-                  </Select>
-                )
-              }
-            </Item>
+          <Item label="编辑类型" {...formItemLayout}>
+                  {
+                    getFieldDecorator('academicCategoryId', {
+                      rules: [
+                        {required: true, message: '必须指定分类'},
+                      ]
+                    })(
+                      <Select>
+                        {
+                          categoryList.map(item => {
+                            return (
+                              <Option value={item.id} key={item.id}>{item.category}</Option>
+                            )
+                          })
+                        }
+                      </Select>
+                    )
+                  }
+                </Item>
             <Item label="新闻标题" {...formItemLayout}>
               {
                 getFieldDecorator('title', {
@@ -219,15 +208,6 @@ class EditAcademic extends Component{
                 )
               }
             </Item>
-            {
-              categoryType === '热点新闻' ? (
-              <Item label="封面上传">
-                {image ? <PicturesWall ref={this.pw} image = {JSON.parse(image)} /> : null}
-                {!image ? <PicturesWall ref={this.pw} image = {[]} /> : null}
-              </Item>
-              ):null
-            }
-            
             <Item>
               {
                 context?<BraftEditor  ref={this.editor} context={context}></BraftEditor>:null

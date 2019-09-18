@@ -45,7 +45,6 @@ class EditNotice extends Component{
           noticeItem:{
           },
           categoryList:[],  //通知类型下拉列表
-          categoryType:'规章制度'  //默认选中类型
         }
     }else{
       //说明是新增
@@ -53,7 +52,6 @@ class EditNotice extends Component{
         noticeItem:{
         },
         categoryList:[],  //通知类型下拉列表
-        categoryType:'规章制度'
       }
     }
   }
@@ -125,46 +123,39 @@ class EditNotice extends Component{
     })
   }
 
-  //选择框变化事件
-  handleChange = (e) => {
-    this.setState({
-      categoryType:e
-    })
-  }
-
   async componentDidMount(){
     //获取通知类型下拉列表
     const list = await reqNoticeTypeList();
     if(list.code === 0){
-        //携带通知的参数跳入通知编辑页面
-        const categoryList = list.result;
-        this.setState({
-          categoryList
-        })
+      //携带通知的参数跳入通知编辑页面
+      const categoryList = list.result;
+      this.setState({categoryList})
+      const {id} = this.state;
+      if(id){
+        const result = await reqNoticeItem(id);
+        if(result.code === 0){
+          //携带通知的参数跳入通知编辑页面
+          const noticeItem = result.result;
+          this.setState({
+            noticeItem,
+          })
+          const {category} = noticeItem;
+          category && this.props.form.setFieldsValue({'category':category})
+        }else{
+          message.error('获取通知失败，请稍后再试!');
+        }
       }else{
-        message.error('获取通知类型失败，请稍后再试!');
+        //select框赋值
+        this.props.form.setFieldsValue({'category':categoryList[0].category})
       }
-
-    const {id} = this.state;
-    if(id){
-      const result = await reqNoticeItem(id);
-      if(result.code === 0){
-        //携带通知的参数跳入通知编辑页面
-        const noticeItem = result.result;
-        const {category} = noticeItem;
-        this.setState({
-          noticeItem,
-          categoryType:category
-        })
-      }else{
-        message.error('获取通知失败，请稍后再试!');
-      }
+    }else{
+      message.error('获取通知类型失败，请稍后再试!');
     }
   }
 
   render(){
     const {noticeItem,categoryList} = this.state;
-    const {title, category, context,publishDate} = noticeItem;
+    const {title, context,publishDate} = noticeItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
@@ -185,25 +176,72 @@ class EditNotice extends Component{
         <div className="notice-body">
           <Form>
             <Item label="编辑类型" {...formItemLayout}>
-              {
-                getFieldDecorator('category', {
-                  initialValue: category || '规章制度',
-                  rules: [
-                    {required: true, message: '必须指定分类'},
-                  ]
-                })(
-                  <Select onChange={this.handleChange}>
-                    {
-                      categoryList.map(item => {
-                        return (
-                          <Option value={item.category} key={item.id}>{item.category}</Option>
-                        )
-                      })
-                    }
-                  </Select>
-                )
-              }
-            </Item>
+                {
+                  getFieldDecorator('category', {
+                    rules: [
+                      {required: true, message: '必须指定分类'},
+                    ]
+                  })(
+                    <Select>
+                      {
+                        categoryList.map(item => {
+                          return (
+                            <Option value={item.category} key={item.id}>{item.category}</Option>
+                          )
+                        })
+                      }
+                    </Select>
+                  )
+                }
+              </Item>
+            {
+              // category ? (
+              //   <Item label="编辑类型" {...formItemLayout}>
+              //       {
+              //         getFieldDecorator('category', {
+              //           initialValue: category,
+              //           rules: [
+              //             {required: true, message: '必须指定分类'},
+              //           ]
+              //         })(
+              //           <Select>
+              //             {
+              //               categoryList.map(item => {
+              //                 return (
+              //                   <Option value={item.category} key={item.id}>{item.category}</Option>
+              //                 )
+              //               })
+              //             }
+              //           </Select>
+              //         )
+              //       }
+              //     </Item>
+              // ):(
+              //   initCategoryType ? (
+              //     <Item label="编辑类型" {...formItemLayout}>
+              //       {
+              //         getFieldDecorator('category', {
+              //           initialValue: initCategoryType,
+              //           rules: [
+              //             {required: true, message: '必须指定分类'},
+              //           ]
+              //         })(
+              //           <Select>
+              //             {
+              //               categoryList.map(item => {
+              //                 return (
+              //                   <Option value={item.category} key={item.id}>{item.category}</Option>
+              //                 )
+              //               })
+              //             }
+              //           </Select>
+              //         )
+              //       }
+              //     </Item>
+              //   ):null
+              // )
+            }
+            
             <Item label="通知标题" {...formItemLayout}>
               {
                 getFieldDecorator('title', {

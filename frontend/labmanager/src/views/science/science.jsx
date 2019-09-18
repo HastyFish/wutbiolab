@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import storageUtils from '@/utils/storageUtils';
 import {Switch, Route, Redirect} from 'react-router-dom';
 
 import Article from './article/article';
@@ -11,16 +10,6 @@ import './science.less'
 
 
 class Science extends Component {
-
-
-  componentWillMount(){
-    const user = storageUtils.getUser() || {};
-    if(!user || !user.username){
-      //自动跳转到登陆
-      this.props.history.replace('/login')
-    }
-  }
-
 
   render(){
     return (

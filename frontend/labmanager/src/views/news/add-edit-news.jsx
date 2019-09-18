@@ -152,25 +152,29 @@ class EditNews extends Component{
         this.setState({
           categoryList
         })
+        const {id} = this.state;
+        if(id){
+          const result = await reqNewItem(id);
+          if(result.code === 0){
+            //携带新闻的参数跳入新闻编辑页面
+            const newItem = result.result;
+            const {category} = newItem;
+            this.setState({
+              newItem,
+              categoryType:category
+            })
+            //select框赋值
+            this.props.form.setFieldsValue({'category':category})
+          }else{
+            message.error('获取新闻失败，请稍后再试!');
+          }
+        }else{
+          //select框赋值
+          this.props.form.setFieldsValue({'category':categoryList[0].category})
+        }
       }else{
         message.error('获取新闻类型失败，请稍后再试!');
       }
-
-    const {id} = this.state;
-    if(id){
-      const result = await reqNewItem(id);
-      if(result.code === 0){
-        //携带新闻的参数跳入新闻编辑页面
-        const newItem = result.result;
-        const {category} = newItem;
-        this.setState({
-          newItem,
-          categoryType:category
-        })
-      }else{
-        message.error('获取新闻失败，请稍后再试!');
-      }
-    }
   }
 
   render(){

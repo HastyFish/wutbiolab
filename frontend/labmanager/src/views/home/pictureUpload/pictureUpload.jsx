@@ -2,9 +2,10 @@ import React,{Component} from 'react';
 import {
   Row,
   Col,
-  Button
+  Button,
+  message
 } from 'antd';
-
+import {reqImageList, reqPublishImg} from '@/api';
 import PicturesWall from '@/components/picture-wall/pictures-wall'
 
 
@@ -19,18 +20,41 @@ class PictureUpload extends Component {
 
     //设置state
     this.state = {
-      newsImageList : [],  //新闻配图列表
-      sciImageList : [],   //学术活动配图
+      newsImage : null,  //新闻配图列表
+      academicImage : null,   //学术活动配图
     }
   }
 
-  componentDidMount(){
-    //发送请求获取配图
+  uploadImg = async () => {
+    //获取图片
+    const newsImage = JSON.stringify(this.newp.current.getImgs());
+    const academicImage = JSON.stringify(this.scip.current.getImgs());
+    //发送请求
+    const result = await reqPublishImg({newsImage, academicImage});
+    if(result.code === 0){
+      message.success('发布图片成功')
+    }else{
+      message.error('发布图片失败, 请稍后再试')
+    }
+  }
 
+  async componentDidMount(){
+    //发送请求获取配图
+    const result = await reqImageList();
+    if(result.code === 0){
+      let {newsImage,academicImage} = result.result;
+      newsImage && (newsImage = JSON.parse(newsImage));
+      academicImage && (academicImage = JSON.parse(academicImage));
+      this.setState({
+        newsImage,academicImage
+      })
+    }else{
+      message.error('获取图片失败, 请稍后再试')
+    }
   }
 
   render(){
-    const {newsImageList,sciImageList} = this.state;
+    const {newsImage,academicImage} = this.state;
 
     return (
       <div>
@@ -38,21 +62,21 @@ class PictureUpload extends Component {
           <Col span={12}>
             <p className="subtitle">新闻动态配图</p>
             <div className="subcontent">
-              {newsImageList ? <PicturesWall ref={this.newp} imageList = {newsImageList} /> : null}
-              {!newsImageList ? <PicturesWall ref={this.newp} imageList = {[]} /> : null}
+              {newsImage ? <PicturesWall ref={this.newp} image = {newsImage} /> : null}
+              {!newsImage ? <PicturesWall ref={this.newp} image = {[]} /> : null}
             </div> 
           </Col>
           <Col span={12}>
             <p className="subtitle">学术活动配图</p>
             <div className="subcontent">
-              {newsImageList ? <PicturesWall ref={this.scip} imageList = {sciImageList} /> : null}
-              {!newsImageList ? <PicturesWall ref={this.scip} imageList = {[]} /> : null}
+              {academicImage ? <PicturesWall ref={this.scip} image = {academicImage} /> : null}
+              {!academicImage ? <PicturesWall ref={this.scip} image = {[]} /> : null}
             </div>
           </Col>
         </Row>
         <Row type="flex" justify="end">
           <Col>
-            <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={this.uploadImg}>保存</Button>
+            {/* <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={this.uploadImg}>保存</Button> */}
             <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={this.uploadImg}>发布</Button>
             <Button type='danger' style={{width:180,height:40,cursor:'pointer'}} onClick={this.uploadImg}>取消</Button>
           </Col>

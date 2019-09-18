@@ -6,10 +6,12 @@ import {
   Table,
   Icon,
   Pagination,
-  LocaleProvider
+  LocaleProvider,
+  message
 } from 'antd';
 import {formateDate} from '@/utils/dateUtils';
 import zhCN from 'antd/lib/locale-provider/zh_CN';    //antd组件国际化
+import {reqGraduatesList, reqDeleteGradute} from '@/api';
 import './graduates.less';
 
 const {TabPane} = Tabs
@@ -22,25 +24,6 @@ class Team extends Component {
     pageNum: 1,  //当前页码
     pageSize:10,  //每页条数
     dataSource:[
-      {
-        id:'0',
-        publishDate:'2018-3-4',
-        publishStatus:0,
-        title:'测序周报: 17条共识！美权威机构发布NGS生物信息流程标准和指南',
-        category:'毕业生',
-      },{
-        id:'1',
-        publishDate:'2018-2-14',
-        publishStatus:1,
-        title:'英国科学家利用SNP统计模型识别27个新抑癌基因',
-        category:'毕业生',
-      },{
-        id:'2',
-        publishDate:'2017-12-14',
-        publishStatus:1,
-        title:'国内首个线上赌场上线了',
-        category:'毕业生',
-      }
     ],  //新闻数据数组
     loading: false,  //表格数据加载时显示loading效果
   }
@@ -53,15 +36,12 @@ class Team extends Component {
     this.setState({
       loading:true
     })
-    // const result =  await reqPersonList({pageNum:page,pageSize:this.state.pageSize});
-    // //将页码重置为page，每页条数不变
-    // this.setState({
-    //   pageNum: page,
-    //   total:result.result.total,
-    //   dataSource:result.result.list
-    // })
+    const result =  await reqGraduatesList({pageNum:page,pageSize:this.state.pageSize});
+    //将页码重置为page，每页条数不变
     this.setState({
       pageNum: page,
+      total:result.result.total,
+      dataSource:result.result.list
     })
     //隐藏loading
     this.setState({
@@ -78,19 +58,14 @@ class Team extends Component {
     })
 
     //重新获取数据
-    //const result = await reqNews(1,pageSize);
-    //const result = await reqPersonList({pageNum:1,pageSize:size});
+    const result = await reqGraduatesList({pageNum:1,pageSize:size});
 
     //将页码重置为1，每页条数为传进来的参数
-    // this.setState({
-    //   pageNum: 1,
-    //   pageSize:size,
-    //   total:result.result.total,
-    //   dataSource:result.result.list
-    // })
     this.setState({
       pageNum: 1,
       pageSize:size,
+      total:result.result.total,
+      dataSource:result.result.list
     })
     //隐藏loading
     this.setState({
@@ -127,20 +102,20 @@ class Team extends Component {
       },
       {
         title: '类型',
-        dataIndex: 'category',
-        key: 'category',
+        dataIndex: 'graduateCategoryName',
+        key: 'graduateCategoryName',
       },
       {
         title: '操作',
         render: (newItem) => {
           return (
             <span className='icotr'>
-              <span className='edit' onClick={() => this.editPerson(newItem.id)}>
+              <span className='edit' onClick={() => this.editPerson(newItem.labDetailId)}>
                 <Icon type='edit' style={{color:'#386CCA'}} />
                 <span style={{color:'#386CCA'}}>编辑</span>
               </span>
               <span className='linepsan'></span>
-              <span className='delete' onClick={() => this.deleteNew(newItem.id)}>
+              <span className='delete' onClick={() => this.deleteNew(newItem.labDetailId)}>
                 <Icon type='delete' />
                 <span>删除</span>
               </span>
@@ -154,7 +129,7 @@ class Team extends Component {
   //新增人员
   addPerson = () => {
     //不携带参数跳入新闻编辑页面
-    this.props.history.push('/laboratoty/graduates/edit');
+    this.props.history.push('/laboratory/graduates/edit');
   }
 
   //编辑人员
@@ -170,26 +145,28 @@ class Team extends Component {
     //   message.error('获取新闻失败，请稍后再试!');
     // }
 
-    this.props.history.push('/laboratory/graduates/edit',{id});
+    this.props.history.push('/laboratory/graduates/edit',id);
   }
 
   //删除一条新闻
   deleteNew = async (id) => {
-    // const result = await reqDeleteNew(id);
-    // if(result.code === 0){
-    //   //this.props.history.push('/news');  //刷新页面
-    //   //重新获取新闻列表数据
-    //   const result = await reqPersonList({pageNum:1,pageSize:10});
-    //   if(result.code === 0){
-    //     //更新state
-    //     this.setState({
-    //       total:result.total,
-    //       dataSource:result.result.list
-    //     })
-    //   }else{
-    //     message.error('获取新闻列表失败，请稍后再试!');
-    //   }
-    // }
+    const result = await reqDeleteGradute(id);
+    if(result.code === 0){
+      //this.props.history.push('/news');  //刷新页面
+      //重新获取新闻列表数据
+      const result = await reqGraduatesList({pageNum:1,pageSize:10});
+      if(result.code === 0){
+        //更新state
+        this.setState({
+          pageNum: 1,
+          pageSize:10,
+          total:result.total,
+          dataSource:result.result.list
+        })
+      }else{
+        message.error('获取新闻列表失败，请稍后再试!');
+      }
+    }
   }
 
   //初始化表格显示的列的格式
@@ -199,16 +176,16 @@ class Team extends Component {
 
   async componentDidMount(){
     //初始化
-    // const result = await reqPersonList({pageNum:1,pageSize:10});
-    // if(result.code === 0){
-    //   //更新state
-    //   this.setState({
-    //     total:result.result.total,
-    //     dataSource:result.result.list
-    //   })
-    // }else{
-    //   message.error('获取新闻列表失败，请稍后再试!');
-    // }
+    const result = await reqGraduatesList({pageNum:1,pageSize:10});
+    if(result.code === 0){
+      //更新state
+      this.setState({
+        total:result.result.total,
+        dataSource:result.result.list
+      })
+    }else{
+      message.error('获取新闻列表失败，请稍后再试!');
+    }
   }
 
   render(){
@@ -235,7 +212,7 @@ class Team extends Component {
             <Button type="primary" style={{width:180,height:40,margin:'0 0 20px 0'}} onClick={this.addPerson}>新增</Button>
             <Table
               bordered
-              rowKey='id'
+              rowKey= {(r,i)=>(i)}
               loading={loading}
               dataSource={dataSource} 
               columns={columns}

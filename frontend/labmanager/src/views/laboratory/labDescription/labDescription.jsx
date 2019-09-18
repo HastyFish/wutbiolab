@@ -10,7 +10,7 @@ import {
 } from 'antd'
 
 import BraftEditor from '@/components/rich-text-editor/rich-text-editor';
-import {reqlabDes,reqsavePublishlabDes} from '@/api';
+import {reqlabDes,reqSavelabDes, reqPublishlabDes} from '@/api';
 
 const {TabPane} = Tabs
 const {Item} = Form;
@@ -37,14 +37,16 @@ class LabDescription extends Component {
         const context = this.editor.current.getContext();
         const param = {id,labCategoryId,title, context}
         //判断是保存还是发布
+        let result;
         if(type==='save'){
           //编辑状态下的保存
           param.publishStatus = 0;
+          result = await reqSavelabDes(param);
         }else{
           //编辑状态下的发布
           param.publishStatus = 1;
+          result = await reqPublishlabDes(param);
         }
-        const result = await reqsavePublishlabDes(param);
         if(result.code === 0){
           message.success(`${type === 'save'?'保存':'发布'}成功`);
         }else{

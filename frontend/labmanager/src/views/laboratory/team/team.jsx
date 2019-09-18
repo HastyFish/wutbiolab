@@ -11,7 +11,7 @@ import {
 
 import MentorClasifi from './teamadd/mentor-classifi';
 import AddlabDetails from './teamadd/add-person';
-import {reqResearchTeam, reqSortTeam} from '@/api';
+import {reqResearchTeam, reqSortTeam, reqPublishResearchTeam} from '@/api';
 
 import './team.less';
 
@@ -31,61 +31,23 @@ export default class Team extends Component {
       modalVisible:false,  //编辑的模态框
       activeKey:'1',       //Tab活动页，1表示编辑岗位分类， 2表示新增岗位
       teamList:[
-        {
-          mentorCategoryId:'boshi',
-          mentorCategoryName:'博士生导师',
-          labDetails:[
-            {
-              id:1,
-              mentorCategoryId:'boshi',
-              mentorName:'张三',
-              publishStatus:0,
-              mentorOrder: 1
-            },
-            {
-              id:2,
-              mentorCategoryId:'boshi',
-              mentorName:'李四',
-              publishStatus:0,
-              mentorOrder: 2
-            }
-          ]
-        },
-        {
-          mentorCategoryId:'shuoshi',
-          mentorCategoryName:'硕士生导师',
-          labDetails:[
-            {
-              id:3,
-              mentorName:'王五',
-              publishStatus:0,
-              mentorOrder: 1
-            },
-            {
-              id:4,
-              mentorName:'赵六',
-              publishStatus:0,
-              mentorOrder: 2
-            }
-          ]
-        }
       ],     //导师分类及具体人员列表
     }
 
   }
 
   //获取所有分类的函数
-  getAllJob = async () => {
-    //获取一级岗位分类数据
-    // const result = await reqJobClassifi();
-    // if(result.code === 0){
-    //   const teamList = result.result;
-    //   this.setState({
-    //     teamList
-    //   })
-    // }else{
-    //   message.error('获取一级岗位分类失败，请稍后再试!')
-    // }
+  getAllTeamData = async () => {
+    //获取研究团队分类数据
+    const result = await reqResearchTeam();
+    if(result.code === 0){
+      const teamList = result.result;
+      this.setState({
+        teamList
+      })
+    }else{
+      message.error('获取研究团队信息失败，请稍后再试!')
+    }
   }
 
   handleCancel = () => {
@@ -96,16 +58,17 @@ export default class Team extends Component {
     //初始化编辑导师分类的表单
     this.MentorClassForm.resetFields();
     //清除当前一级分类中recruList中的disabled属性(去除)
-    // const teamList = this.state.teamList.map(recruit => {
-    //   return {
-    //     id:recruit.id,
-    //     category:recruit.category,
-    //     children:recruit.children
-    //   }
-    // });
-    // this.setState({
-    //   teamList
-    // })
+    const teamList = this.state.teamList.map(recruit => {
+      return {
+        mentorCategoryId:recruit.mentorCategoryId,
+        mentorCategoryName:recruit.mentorCategoryName,
+        labDetails:recruit.labDetails
+      }
+    });
+
+    this.setState({
+      teamList
+    })
 
     //清除新增岗位的表单
     if(this.jobForm){
@@ -124,7 +87,7 @@ export default class Team extends Component {
   changeCollapse = async (key) => {
     //console.log(key);
     //如果key存在说明是打开某个折叠面板，则加载对应的折叠面板数据
-    if(key){
+    //if(key){
       //打开某个折叠面板则获取对应岗位分类下所有的数据
       // const result = await reqJobsById(key);
       // if(result.code === 0){
@@ -141,9 +104,9 @@ export default class Team extends Component {
       //     })
       //   }
       // }
-    }else{
+    //}else{
       //关闭折叠面板则不做处理
-    }
+    //}
   }
 
 
@@ -156,8 +119,7 @@ export default class Team extends Component {
     //   const recruit = result.result;
     //   this.props.history.push('/team/edit', {recruit})
     // }
-    let labDetails = {name:'张三'}
-    this.props.history.push('/laboratory/team/edit', {labDetails})
+    this.props.history.push('/laboratory/team/edit', {id})
   }
 
   
@@ -174,6 +136,10 @@ export default class Team extends Component {
       let temp = labDetails[index];
       labDetails[index] = labDetails[index - 1];
       labDetails[index - 1] = temp;
+      //循环修改labDetails的mentorOrder
+      labDetails.forEach((item,index) => {
+        item.mentorOrder = index + 1;
+      })
       const result = await reqSortTeam(labDetails);
       if(result.code === 0){
         this.setState({
@@ -188,12 +154,12 @@ export default class Team extends Component {
 
   //发布按钮点击事件
   publish = async () => {
-    // const result = await reqPublishRecruit();
-    // if(result.code === 0){
-    //   message.success('发布成功')
-    // }else{
-    //   message.error('发布失败，请稍后再试')
-    // }
+    const result = await reqPublishResearchTeam();
+    if(result.code === 0){
+      message.success('发布成功')
+    }else{
+      message.error('发布失败，请稍后再试')
+    }
   }
 
 
@@ -266,10 +232,10 @@ export default class Team extends Component {
             >
             <Tabs activeKey={activeKey} onChange={this.changeTab}>
               <TabPane tab="编辑导师分类" key="1">
-                <MentorClasifi ref={this.mentorCategoryName} teamList={teamList} setForm={(form) => this.MentorClassForm = form} closeModal={this.handleCancel} getAllJob={this.getAllJob} />
+                <MentorClasifi ref={this.mentorCategoryName} teamList={teamList} setForm={(form) => this.MentorClassForm = form} closeModal={this.handleCancel} getAllTeamData={this.getAllTeamData} />
               </TabPane>
               <TabPane tab="新增人员名单" key="2">
-                <AddlabDetails ref={this.addlabDetails} teamList={teamList} setForm={(form) => this.jobForm = form} closeModal={this.handleCancel} getAllJob={this.getAllJob} />
+                <AddlabDetails ref={this.addlabDetails} teamList={teamList} setForm={(form) => this.jobForm = form} closeModal={this.handleCancel} getAllTeamData={this.getAllTeamData} />
               </TabPane>
             </Tabs>
             </Modal>

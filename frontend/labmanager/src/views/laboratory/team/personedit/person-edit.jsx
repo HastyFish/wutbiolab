@@ -6,18 +6,12 @@ import React, { Component } from 'react';
 import {
   Form,
   Button,
+  message
 } from 'antd';
-// import {
-//   Form,
-//   Input,
-//   Button,
-//   message,
-//   DatePicker
-// } from 'antd';
 
 
 import BraftEditor from '@/components/rich-text-editor/rich-text-editor';
-//import { reqAddJob, reqDeleteperson } from '@/api';
+import {reqGetPerson, reqSavePerson, reqPublishPerson} from '@/api';
 import './person-edit.less';
 const { Item } = Form;
 
@@ -27,60 +21,66 @@ class PersonEdit extends Component {
   constructor(props) {
     super(props);
     // 创建用来保存ref标识的标签对象的容器
-    this.editor1 = React.createRef();   //保存职位描述
+    this.editor = React.createRef()
 
-    const { person } = this.props.location.state;
+    const { id } = this.props.location.state;
     this.state = {
-      person
+      id,
+      person:{},
     }
   }
 
-  /*
- 验证招聘人数的自定义验证函数
-  */
-  validateNumber = (rule, value, callback) => {
-    if (value * 1 > 0 && /^[1-9]\d*$/.test(value)) {
-      callback() // 验证通过
-    } else {
-      callback('必须为正整数') // 验证没通过
-    }
-  }
 
   //保存招聘信息
-  saveperson = () => {
+  savePerson = () => {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
-        //更新岗位信息
-        // const { id, categoryId, positionName } = this.state.person
-        // const { experience, education, workplace, num, releaseDate } = values;
-        // const description = this.editor1.current.getContext();
-
-        // const params = { id, description }
-        // const result = await reqAddJob(params);
-        // if (result.code === 0) {
-        //   //说明更新成功
-        //   this.props.history.replace('/person');
-        // } else {
-        //   message.error('保存失败，请稍后再试');
-        // }
-
-        this.props.history.replace('/laboratory/team');
+        //更新人员信息
+        const context = this.editor.current.getContext();
+        const {person} = this.state;
+        person.context = context;
+        const result = await reqSavePerson(person);
+        if (result.code === 0) {
+          //说明更新成功
+          this.props.history.replace('/laboratory/team');
+        } else {
+          message.error('保存失败，请稍后再试');
+        }
       }
     })
   }
 
-  //删除招聘信息
-  deleteperson = async () => {
-    // const result = await reqDeleteperson(this.state.person.id);
-    // if (result.code === 0) {
-    //   //说明更新成功
-    //   this.props.history.replace('/person');
-    // } else {
-    //   message.error('删除失败，请稍后再试');
-    // }
-    this.props.history.replace('/laboratory/team');
+
+  //发布招聘信息
+  publishPerson = () => {
+    this.props.form.validateFields(async (err, values) => {
+      if (!err) {
+        //更新人员信息
+        const context = this.editor.current.getContext();
+        const {person} = this.state;
+        person.context = context;
+        const result = await reqPublishPerson(person);
+        if (result.code === 0) {
+          //说明更新成功
+          this.props.history.replace('/laboratory/team');
+        } else {
+          message.error('发布失败，请稍后再试');
+        }
+      }
+    })
   }
 
+  async componentDidMount(){
+    //获取当前人员的信息
+    const {id} = this.state;
+    const result = await reqGetPerson(id);
+    if(result.code === 0){
+      const person = result.result;
+      this.setState({person});
+    }else{
+      message.error('获取个人信息失败, 请稍后再试')
+    }
+  }
 
   render() {
     // // 指定Item布局的配置对象
@@ -93,7 +93,7 @@ class PersonEdit extends Component {
     // const { getFieldDecorator } = this.props.form
 
     const { person } = this.state;
-    const { name, description } = person;
+    const { mentorName, context } = person;
 
     return (
       <div className='personEdit'>
@@ -101,18 +101,19 @@ class PersonEdit extends Component {
           个人信息编辑
         </div>
         <div className='personEdit-body'>
-          <div className='title'>{name}</div>
+          <div className='title'>{mentorName}</div>
           <div className="content">
             <Form className="personEdit-form">
               <Item label='描述' className="personEdit-editor">
                 {/* <RichTextEdit ref={this.editor1} context = {description} /> */}
-                <BraftEditor ref={this.editor1} context={description}></BraftEditor>
+                {context ? <BraftEditor ref={this.editor} context={context}></BraftEditor>:null}
+                {!context ? <BraftEditor ref={this.editor} context={''}></BraftEditor>:null}
               </Item>
             </Form>
             <div className='footer' style={{ width: '100%' }}>
-              <Button type="primary" style={{ marginLeft: '4%', width: 150, height: 40 }} onClick={this.saveperson}>保存</Button>
-              <Button type="danger" style={{ margin: '0 25px', width: 150, height: 40 }} onClick={this.deleteperson}>删除</Button>
-              <Button style={{ width: 150, height: 40 }} onClick={() => this.props.history.replace('/laboratory/team')}>取消</Button>
+              <Button type="primary" style={{ marginLeft: '8%', width: 150, height: 40 }} onClick={this.savePerson}>保存</Button>
+              <Button type="primary" style={{ margin: '0 25px', width: 150, height: 40 }} onClick={this.publishPerson}>发布</Button>
+              <Button type="danger"  style={{width: 150, height: 40 }} onClick={() => this.props.history.replace('/laboratory/team')}>取消</Button>
             </div>
           </div>
         </div>

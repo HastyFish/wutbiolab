@@ -7,14 +7,13 @@ import {
   Modal,
   Row,
   Col,
-  Message
+  message
 } from 'antd';
 import logo from '@/assets/images/logo.png';
 import bgCom from './images/bgCom.png'
 import './login.less';
 import storageUtils from '@/utils/storageUtils.js'
-// import Register from '../../components/register/register'
-//import {reqLogin} from '@api/index'
+import {reqLogin} from '@api/index'
 
 
 class Login extends PureComponent {
@@ -31,31 +30,23 @@ class Login extends PureComponent {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         //console.log('提交登陆的ajax请求', values)
-        //模拟登录
-        const {username,password} = values;
-        if(username === 'admin' && password === '123456'){
-          storageUtils.saveUser({username})
-          this.props.history.replace('/');
-        }else{
-          Message.error('账号密码错误');
-        }
 
         // 请求登陆
-        // const result = await reqLogin(values);
+        const {username,password} = values;
+        const result = await reqLogin(username,password);
         // this.setState({msg:result.msg})
-        // if(result.code === -1){
-        //   return 
-        // }
-        // //console.log('请求成功', result.data);
-        // if (result.code === 0) {
-        //   const { username, token,authorities } = result.result;
-        //   //提示登录成功
-        //   storageUtils.saveUser({username,authorities}); //保存到localStorage中
-        //   storageUtils.saveToken(token); //保存到localStorage中
-        // }
-
+        if(result.code === -1){
+          message.error(result.msg);
+        }else if(result.code === 0) {
+          const { username, token, } = result.result;
+          //提示登录成功
+          storageUtils.saveUser({username}); //保存到localStorage中
+          storageUtils.saveToken(token); //保存到localStorage中
+          //跳转页面
+          this.props.history.replace('/home');
+        }
       } else {
-        console.log('检验失败');
+        message.error('检验失败');
       }
     });
 

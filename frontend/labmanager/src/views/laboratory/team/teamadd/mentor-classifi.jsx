@@ -12,13 +12,15 @@ import {
 } from 'antd';
 import propTypes from 'prop-types'
 import AddMentorClassifi from './add-mentorclassifi';
-import {reqAddTeamClassifi} from '@/api';
+import {reqAddTeamClassifi, reqDeleteTeamClassifi, reqResearchTeam, reqUpdateTeamClassifi} from '@/api';
 const {Item} = Form;
 
 class MentorClasifi extends Component{
 
   static propTypes = {
-    teamList: propTypes.array.isRequired
+    teamList: propTypes.array.isRequired,
+    setForm: propTypes.func.isRequired,
+    getAllTeamData: propTypes.func.isRequired,
   }
 
   constructor(props){
@@ -49,13 +51,20 @@ class MentorClasifi extends Component{
         }]);
         if(result.code === 0){
           message.success('添加岗位分类成功');
+          //更新当前的一级分类
+          const result = await reqResearchTeam();
+          if(result.code === 0){
+            //更新当前组件
+            const teamList = result.result;
+            this.setState({teamList})
+            //调用更新父组件中所有岗位分类的方法
+            this.props.getAllTeamData();
+          }
         }
 
         // 清除输入数据
         this.MentorClassForm.resetFields();
 
-        //调用更新所有岗位分类的方法
-        this.props.getAllJob();
       }
     })
   }
@@ -74,21 +83,31 @@ class MentorClasifi extends Component{
     })
   }
 
-  //删除岗位分类
+  //删除研究团队一级分类
   deleteMentorClass = async (mentor) => {
     //获取当前的id
-    // const {id} = mentor;
-    // const result = await reqDeleteJobs(id);
-    // if(result.code === 0){
-    //   //删除成功，删除当前一级分类列表中的对应数据
-    //   const teamList = this.state.teamList.filter(recruit => recruit.id !== id);
-    //   this.setState({
-    //     teamList
-    //   })
-    // }else{
-    //   //删除失败
-    //   message.error('删除岗位分类失败, 请稍后再试');
-    // }
+    const {mentorCategoryId} = mentor;
+    const result = await reqDeleteTeamClassifi(mentorCategoryId);
+    if(result.code === 0){
+      //删除成功，删除当前一级分类列表中的对应数据
+      const teamList = this.state.teamList.filter(recruit => recruit.mentorCategoryId !== mentorCategoryId);
+      this.setState({
+        teamList
+      })
+      //更新当前的一级分类
+      const result = await reqResearchTeam();
+      if(result.code === 0){
+        //更新当前组件
+        // const teamList = result.result;
+        // this.setState({teamList})
+        //调用更新父组件中所有岗位分类的方法
+        this.props.getAllTeamData();
+      }
+
+    }else{
+      //删除失败
+      message.error('删除岗位分类失败, 请稍后再试');
+    }
   }
 
   //保存当前编辑的岗位
@@ -105,15 +124,23 @@ class MentorClasifi extends Component{
             category:values[c]
           })
         })
-        //发送更新一级岗位分类的请求
-        // const result = await reqUpdateJobClassifi(params);
-        // if(result.code === 0){
-        //   //更新招聘管理页面的数据
-        //   this.props.getAllJob();
-        // }
+        //发送更新的请求
+        const result = await reqUpdateTeamClassifi(params);
+        if(result.code === 0){
+          //更新当前一级分类
+          const result = await reqResearchTeam();
+          if(result.code === 0){
+            //更新当前组件
+            const teamList = result.result;
+            this.setState({teamList})
+            //调用更新父组件中所有岗位分类的方法
+            this.props.getAllTeamData();
+          }
+          
+        }
 
-         //关闭模态框
-         this.props.closeModal();
+        //关闭模态框
+        this.props.closeModal();
       }
     })
   }
@@ -134,13 +161,13 @@ class MentorClasifi extends Component{
   }
 
 
-  //componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps){
     //一旦接收到新数据则重置其中的disabled属性
-    // const {teamList} = nextProps;
-    // this.setState({
-    //   teamList
-    // })
-  //}
+    const {teamList} = nextProps;
+    this.setState({
+      teamList
+    })
+  }
 
   componentDidMount(){
     this.props.setForm(this.props.form);
