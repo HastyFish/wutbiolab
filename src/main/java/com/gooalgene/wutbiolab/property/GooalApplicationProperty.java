@@ -15,8 +15,8 @@ public class GooalApplicationProperty {
 
     private String imageNginxUrl;
 
-    private String exportTempPath;
-
-    private String exportNginxUrl;
+//    private String exportTempPath;
+//
+//    private String exportNginxUrl;
 
 }

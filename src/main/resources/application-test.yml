@@ -36,12 +36,12 @@ mybatis:
 ## 图片存放路径
 gooal:
   application:
-    image-path: D:\tempFile
-    image-nginx-url: http://192.168.0.110:83/tempFile/
+    image-path: /gooal/data
+    image-nginx-url: http://192.168.0.110:83/images/
     #    export-temp-path: D:\
     #    export-nginx-url: http://192.168.0.110:83/tempFile
-    export-temp-path: /tmp/data/
-    export-nginx-url: http://wang-108:93/tempFile
+#    export-temp-path: /tmp/data/
+#    export-nginx-url: http://wang-108:93/tempFile
 
 
 enable:
