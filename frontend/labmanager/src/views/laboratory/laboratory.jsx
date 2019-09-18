@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import storageUtils from '@/utils/storageUtils';
 import {Switch, Route, Redirect} from 'react-router-dom';
 
 import LabDscription from './labDescription/labDescription';
@@ -13,16 +12,6 @@ import './laboratory.less'
 
 
 class Laboratory extends Component {
-
-
-  componentWillMount(){
-    const user = storageUtils.getUser() || {};
-    if(!user || !user.username){
-      //自动跳转到登陆
-      this.props.history.replace('/login')
-    }
-  }
-
 
   render(){
     return (

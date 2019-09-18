@@ -4,7 +4,7 @@ import {
 } from 'antd';
 
 // import {reqHomePublish} from '../../api';
-import storageUtils from '@/utils/storageUtils';
+// import storageUtils from '@/utils/storageUtils';
 
 import PictureUpload from './pictureUpload/pictureUpload';
 import FriendLink from './friendLink/friendLink';
@@ -15,24 +15,6 @@ import './home.less';
 const {TabPane} = Tabs
 
 class Home extends Component{
-
-  publish = async () => {
-    // const result = await reqHomePublish();
-    // if(result.code === 0){
-    //   message.success('发布成功');
-    // }else{
-    //   message.error('发布失败，请稍后再试');
-    // }
-  }
-
-  componentWillMount(){
-    const user = storageUtils.getUser() || {};
-    if(!user || !user.username){
-      //自动跳转到登陆
-      this.props.history.replace('/login')
-    }
-  }
-
   render(){
     return (
       <div className='home'>

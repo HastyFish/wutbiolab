@@ -136,31 +136,33 @@ class EditSource extends Component{
     if(list.code === 0){
         //携带资源的参数跳入资源编辑页面
         const categoryList = list.result;
-        this.setState({
-          categoryList
-        })
+        this.setState({categoryList})
+        const {id} = this.state;
+        if(id){
+          const result = await reqSourceItem(id);
+          if(result.code === 0){
+            //携带资源的参数跳入资源编辑页面
+            const sourceItem = result.result;
+            this.setState({
+              sourceItem
+            })
+            const {category} = sourceItem;
+            category && this.props.form.setFieldsValue({'category':category})
+          }else{
+            message.error('获取资源失败，请稍后再试!');
+          }
+        }else{
+          //select框赋值
+          this.props.form.setFieldsValue({'category':categoryList[0].id})
+        }
       }else{
         message.error('获取资源类型失败，请稍后再试!');
       }
-
-    const {id} = this.state;
-    if(id){
-      const result = await reqSourceItem(id);
-      if(result.code === 0){
-        //携带资源的参数跳入资源编辑页面
-        const sourceItem = result.result;
-        this.setState({
-          sourceItem
-        })
-      }else{
-        message.error('获取资源失败，请稍后再试!');
-      }
-    }
   }
 
   render(){
     const {sourceItem,categoryList} = this.state;
-    const {title, category, image, context,publishDate} = sourceItem;
+    const {title, image, context,publishDate} = sourceItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
@@ -183,7 +185,6 @@ class EditSource extends Component{
             <Item label="编辑类型" {...formItemLayout}>
               {
                 getFieldDecorator('category', {
-                  initialValue: category || '公共数据集',
                   rules: [
                     {required: true, message: '必须指定分类'},
                   ]
@@ -192,7 +193,7 @@ class EditSource extends Component{
                     {
                       categoryList.map(item => {
                         return (
-                          <Option value={item.category} key={item.id}>{item.category}</Option>
+                          <Option value={item.id} key={item.id}>{item.category}</Option>
                         )
                       })
                     }

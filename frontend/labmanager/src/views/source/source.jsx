@@ -11,7 +11,6 @@ import {
 
 import {reqSourceList, reqDeleteSource} from '@/api';
 import {formateDate} from '@/utils/dateUtils';
-import storageUtils from '@/utils/storageUtils';
 import './source.less';
 
 import zhCN from 'antd/lib/locale-provider/zh_CN';    //antd组件国际化
@@ -157,6 +156,8 @@ export default class Source extends Component{
       if(result.code === 0){
         //更新state
         this.setState({
+          pageNum:1,
+          pageSize:10,
           total:result.result.total,
           dataSource:result.result.list
         })
@@ -168,13 +169,7 @@ export default class Source extends Component{
 
   //初始化表格显示的列的格式
   componentWillMount(){
-    const user = storageUtils.getUser() || {};
-    if(!user || !user.username){
-      //自动跳转到登陆
-      this.props.history.replace('/login')
-    }else{
-      this.initColumns();
-    }
+    this.initColumns();
   }
 
   async componentDidMount(){

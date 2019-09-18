@@ -6,14 +6,15 @@ import {
   Button,
   Form,
   message,
-  DatePicker 
+  DatePicker,
 } from 'antd';
 import moment from 'moment';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 
 import BraftEditor from '@/components/rich-text-editor/rich-text-editor';
 
-//import {reqsavePublishNews, reqNewItem} from '@/api';
+import {reqGraduatesTypes, reqGraduateData, reqSaveGraduate, reqPublishGraduate} from '@/api';
+
 import {formateDate} from '@/utils/dateUtils'
 
 import './graduates.less';
@@ -26,7 +27,7 @@ const {Option} = Select;
 
 class GraduatesEdit extends Component{
   static propTypes = {
-    newItem: propTypes.object
+    id: propTypes.string
   }
 
   constructor(props){
@@ -42,13 +43,15 @@ class GraduatesEdit extends Component{
         this.state = {
           id,
           newItem:{
-          }
+          },
+          typeList:[]
         }
     }else{
       //说明是新增
       this.state = {
         newItem:{
-        }
+        },
+        typeList:[]
       }
     }
   }
@@ -60,7 +63,7 @@ class GraduatesEdit extends Component{
     this.props.form.validateFields( async (error, values) => {
       if(!error){
         //1. 收集数据,封装成new对象
-        const {title, category,publishDate} = values;
+        const {title, graduateCategoryId, publishDate} = values;
 
         //获取富文本
         const context = this.editor.current.getContext();
@@ -68,47 +71,34 @@ class GraduatesEdit extends Component{
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {"news":{title, category, context,publishDate:Date.parse( new Date(publishDate._d))}};
+        let param = {title, graduateCategoryId, context, publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
-          const {id} = this.state.newItem;
+          const {id} = this.state;
           //构建新对象的值
-          param.news.id = id;
-          //判断是保存还是发布
-          if(type==='save'){
-            //编辑状态下的保存
-            param.save = true;
-            param.publish = false;
-          }else{
-            //编辑状态下的发布
-            param.save = false;
-            param.publish = true;
-          }
+          param.id = id;
         }else{
           //新增操作不携带id
-          //判断是保存还是发布
-          if(type==='save'){
-            //新增状态下的保存
-            param.save = true;
-            param.publish = false;
-          }else{
-            //新增状态下的发布
-            param.save = true;
-            param.publish = true;
-          }
         }
-        //发送请求
-        // const result = await reqsavePublishNews(param);
-        // if(result.code === 0){
-        //   //发送请求成功
-        //   message.success(`${type === 'save'?'保存':'发布'}成功`);
-        //   //路由跳转
-        //   setTimeout(() => {
-        //     this.props.history.replace('/news');
-        //   },100)
-        // }else{
-        //   message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
-        // }
+        //判断是保存还是发布
+        let result;
+        if(type === 'save'){
+          //发送请求
+          result = await reqSaveGraduate(param);
+        }else{
+          result = await reqPublishGraduate(param);
+        }
+        if(result.code === 0){
+          //发送请求成功
+          message.success(`${type === 'save'?'保存':'发布'}成功`);
+          //路由跳转
+          setTimeout(() => {
+            this.props.history.replace('/laboratory/graduates');
+          },100)
+        }else{
+          message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
+        }
+        
       }else{
         //提示错误
         message.error('表单验证不通过，请检查!');
@@ -125,25 +115,35 @@ class GraduatesEdit extends Component{
   }
 
   async componentDidMount(){
-    const {id} = this.state;
-    if(id){
-      // const result = await reqNewItem(id);
-      // if(result.code === 0){
-      //   //携带新闻的参数跳入新闻编辑页面
-      //   const newItem = result.result;
-      //   this.setState({
-      //     newItem
-      //   })
-      // }else{
-      //   message.error('获取新闻失败，请稍后再试!');
-      // }
+    //获取毕业生类型列表
+    const result = await reqGraduatesTypes();
+    if(result.code === 0){
+      const typeList = result.result;
+      this.setState({
+        typeList
+      })
+      const {id} = this.state;
+      if(id){
+        const result = await reqGraduateData(id);
+        if(result.code === 0){
+          //携带新闻的参数跳入新闻编辑页面
+          const newItem = result.result;
+          this.setState({
+            newItem
+          })
+        }else{
+          message.error('获取毕业生信息失败，请稍后再试!');
+        }
+      }
+    }else {
+      message.error('获取毕业生类型失败, 请稍后重试')
     }
   }
 
 
   render(){
-    const {newItem} = this.state;
-    const {title, category, context,publishDate} = newItem;
+    const {newItem,typeList} = this.state;
+    const {title, graduateCategoryId, context,publishDate} = newItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
@@ -164,14 +164,20 @@ class GraduatesEdit extends Component{
             <Form>
               <Item label="类型选择" {...formItemLayout}>
                 {
-                  getFieldDecorator('category', {
-                    initialValue: category || "毕业生",
+                  getFieldDecorator('graduateCategoryId', {
+                    initialValue: graduateCategoryId || '毕业生',
                     rules: [
                       {required: true, message: '必须指定分类'},
                     ]
                   })(
                     <Select>
-                      <Option value="毕业生">行业热点</Option>
+                      {
+                        typeList.map(item => {
+                          return (
+                            <Option value={item.id} key={item.id}>{item.category}</Option>
+                          )
+                        })
+                      }
                     </Select>
                   )
                 }
