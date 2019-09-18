@@ -23,7 +23,7 @@ public class ApiFooterController {
 
     @GetMapping
     public CommonResponse<List<Footer>> getFooter() {
-        return homeService.getFooter();
+        return homeService.displayFooter();
     }
 
 }

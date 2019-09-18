@@ -10,7 +10,7 @@ public interface CommonConstants {
     //通知公告
     Integer TONGZHI=4;
     //学术活动
-    Integer XUESHU=5;
+    Integer XUESHU=33;
 
     /**
      * 发布
@@ -36,6 +36,7 @@ public interface CommonConstants {
     Integer RESEARCHDIRECTION=2;
 
 
+    String PUBLISHSTATUSFIELD = "publishStatus";
     String DB_CONFIG_CACHE="db_config_cache";
     String TOKEN_CACHE="token_cache";
 

@@ -55,7 +55,9 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public CommonResponse<ResourceDetail> resourceDetailById(Integer id) {
         if (null != id && resourceDetailDAO.findById(id.longValue()).isPresent()) {
-            return ResponseUtil.success(resourceDetailDAO.findById(id.longValue()).get());
+            ResourceDetail resourceDetail = resourceDetailDAO.findById(id.longValue()).get();
+            resourceDetail.setImage(pictureService.formImageUrl(resourceDetail.getImage()));
+            return ResponseUtil.success(resourceDetail);
         } else {
             return ResponseUtil.error("No such id:" + id);
         }

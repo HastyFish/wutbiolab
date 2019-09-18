@@ -58,7 +58,9 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public CommonResponse<NewsDetail> newsDetailById(Integer id) {
         if (newsDetailDAO.findById(id.longValue()).isPresent()) {
-            return ResponseUtil.success(newsDetailDAO.findById(id.longValue()).get());
+            NewsDetail newsDetail = newsDetailDAO.findById(id.longValue()).get();
+            newsDetail.setImage(pictureService.formImageUrl(newsDetail.getImage()));
+            return ResponseUtil.success(newsDetail);
         } else {
             return ResponseUtil.error("no such news!!!");
         }

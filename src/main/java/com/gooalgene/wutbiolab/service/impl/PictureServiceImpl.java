@@ -40,12 +40,12 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public String saveBase64(String oldPictureListString, String newPictureListString) {
-        if (null != oldPictureListString) {
+        if (null != oldPictureListString && !oldPictureListString.equalsIgnoreCase("[]")) {
             try {
                 List<Picture> oldImageList = objectMapper.readValue(oldPictureListString,
                         objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
                 oldImageList.forEach(one -> {
-                    String oldImageName = StringUtils.substringAfterLast(one.getUrl(), "/");
+                    String oldImageName = one.getUrl();
                     String oldImagePath = gooalApplicationProperty.getImagePath() + oldImageName;
                     File oldImageFile = new File(oldImagePath);
                     if (oldImageFile.exists()) {
@@ -201,6 +201,19 @@ public class PictureServiceImpl implements PictureService {
         } catch (Exception e) {
             logger.error("base64转换失败", e);
             return false;
+        }
+    }
+
+    public String formImageUrl(String oldImageListString) {
+        try {
+            List<Picture> oldImageList = objectMapper.readValue(oldImageListString,
+                    objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+            oldImageList.forEach(one -> one.setUrl(gooalApplicationProperty.getImageNginxUrl() + one.getUrl()));
+            return objectMapper.writeValueAsString(oldImageList);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("conver failed");
+            return "[]";
         }
     }
 }

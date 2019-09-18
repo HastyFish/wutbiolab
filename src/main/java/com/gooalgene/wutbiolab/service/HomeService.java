@@ -54,12 +54,16 @@ public interface HomeService {
     /**
      * 前台获取轮播图
      */
-    CommonResponse<List<String>> getNewsSlideShow();
-
-
+    CommonResponse<List<String>> displayNewsSlideShow();
 
     /**
-     * 前台展示
+     * 前台展示页脚
+     * @return 已发布的页脚
      */
-    CommonResponse<Map<String, ?>> displayHomeInfo();
+    CommonResponse<List<Footer>> displayFooter();
+
+    /**
+     * 前台展示首页信息
+     */
+    CommonResponse<Map<String, Object>> displayHomeInfo();
 }

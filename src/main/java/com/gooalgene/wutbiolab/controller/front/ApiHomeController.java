@@ -23,11 +23,11 @@ public class ApiHomeController {
 
     @GetMapping("/slideshow")
     public CommonResponse<List<String>> getSlideshow() {
-        return homeService.getNewsSlideShow();
+        return homeService.displayNewsSlideShow();
     }
 
     @GetMapping
-    public CommonResponse<Map<String, ?>> displayHomeInfo() {
+    public CommonResponse<Map<String, Object>> displayHomeInfo() {
         return homeService.displayHomeInfo();
     }
 
