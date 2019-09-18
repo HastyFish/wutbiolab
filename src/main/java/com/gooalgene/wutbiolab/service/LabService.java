@@ -5,11 +5,13 @@ import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.request.MentorRequest;
+import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LabService {
 
@@ -22,13 +24,13 @@ public interface LabService {
      * @param isList
      * @return
      */
-    Page<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize, Boolean isList);
+    PageResponse<LabDetail> getLabDetailByLabCategoryId(Long categoryId, Integer pageNum, Integer pageSize, Boolean isList);
 
     /**
      * 获取毕业生分页列表
      *
      */
-    PageResponse<LabDetail> getGraduates(Integer pageNum, Integer pageSize);
+    PageResponse<GraduateResponse> getGraduates(Integer pageNum, Integer pageSize);
     /**
      * 通过id获取一条数据
      * @param id
@@ -43,6 +45,11 @@ public interface LabService {
      */
     List<MentorResponse> getResearchTeam();
 
+    /**
+     * 保存多条数据
+     * @param labDetails
+     */
+    void saveList(List<LabDetail> labDetails);
 
     /**
      * 保存或发布模块的一条数据
@@ -55,18 +62,18 @@ public interface LabService {
 //    void publishResearchTeam(List<MentorRequest> mentorRequests);
 
     /**
-     * 发布多条数据
-     * @param ids
+     * 通过一级分类id进行发布
+     * @param labCategoryId
      */
-    void publishList(List<Long> ids);
+    void publishByLabCategoryId(Long labCategoryId);
 
 
 
     /**
      * 保存导师类型
-     * @param mentorCategory
+     * @param mentorCategorys
      */
-    void saveMentorCategory(MentorCategory mentorCategory);
+    void saveMentorCategory(List<MentorCategory> mentorCategorys);
 
     /**
      * 获取所有导师分类
@@ -103,7 +110,7 @@ public interface LabService {
      * 通过id和发布状态查询一行数据
      * @return
      */
-    LabDetail getPublishedById(Long id);
+    Map<String,LabDetail> getPublishedById(Long id);
 
     /**
      * 获取已发布的研究团队的数据
@@ -119,6 +126,6 @@ public interface LabService {
      * @param publishStatus
      * @return
      */
-    Page<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer pageNum,
+    PageResponse<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer pageNum,
                                                                 Integer pageSize,Integer publishStatus,Boolean isList);
 }

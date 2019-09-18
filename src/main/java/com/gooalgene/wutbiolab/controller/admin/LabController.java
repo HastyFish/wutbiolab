@@ -5,7 +5,7 @@ import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
-import com.gooalgene.wutbiolab.request.MentorRequest;
+import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
@@ -15,7 +15,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,12 +39,12 @@ public class LabController {
     @ApiOperation(value="通过一级分类的id查询一条数据（只包含一条数据的子模块）", notes="通过一级分类的id查询一条数据（目前针对机构概况和研究方向）")
     @GetMapping("/one/{labCategoryId}")
     public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("labCategoryId")Long labCategoryId){
-        Page<LabDetail> labDetails =
+        PageResponse<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryId(labCategoryId,
                         null, null,false);
         LabDetail labDetail=null;
         if(labDetails!=null){
-            List<LabDetail> content = labDetails.getContent();
+            List<LabDetail> content = labDetails.getList();
             if(content!=null&&!content.isEmpty()){
                 labDetail = content.get(0);
             }
@@ -56,9 +55,9 @@ public class LabController {
 
     @ApiOperation(value="查询毕业生分页列表", notes="查询毕业生分页列表，参数为pageNum和pageSize")
     @GetMapping("/graduate")
-    public CommonResponse<PageResponse<LabDetail>> getListByCategoryId(@RequestParam("pageNum") Integer pageNum,
+    public CommonResponse<PageResponse<GraduateResponse>> getListByCategoryId(@RequestParam("pageNum") Integer pageNum,
                                                                @RequestParam("pageSize") Integer pageSize) {
-        PageResponse<LabDetail> graduates = labService.getGraduates(pageNum, pageSize);
+        PageResponse<GraduateResponse> graduates = labService.getGraduates(pageNum, pageSize);
         return ResponseUtil.success(graduates);
     }
 
@@ -77,9 +76,16 @@ public class LabController {
     }
 
     @ApiOperation(value="保存一条数据", notes="保存一条数据")
-    @PostMapping("/")
+    @PostMapping
     public CommonResponse saveLabDetail(@RequestBody LabDetail labDetail){
         labService.saveOrPublishLabDetail(labDetail, CommonConstants.UNPUBLISHED);
+        return ResponseUtil.success();
+    }
+
+    @ApiOperation(value="研究团队排序", notes="研究团队排序")
+    @PostMapping("/researchTeam/sort")
+    public CommonResponse saveLabDetails(@RequestBody List<LabDetail> labDetails){
+        labService.saveList(labDetails);
         return ResponseUtil.success();
     }
 
@@ -95,17 +101,17 @@ public class LabController {
 //        labService.publishResearchTeam(mentorRequests);
 //        return ResponseUtil.success();
 //    }
-    @ApiOperation(value="发布多条数据", notes="发布多条数据")
-    @PostMapping("/publish/list")
-    public CommonResponse publishList(@RequestBody List<Long> ids){
-        labService.publishList(ids);
+    @ApiOperation(value="通过一级分类id发布多条数据", notes="通过一级分类id发布多条数据")
+    @PostMapping("/publish/{labCategoryId}")
+    public CommonResponse publishList(@PathVariable("labCategoryId") Long labCategoryId){
+        labService.publishByLabCategoryId(labCategoryId);
         return ResponseUtil.success();
     }
 
-    @ApiOperation(value="保存一条导师类型的数据", notes="保存一条导师类型的数据")
-    @PostMapping("/mentorCategory")
-    public CommonResponse saveMentorCategory(@RequestBody MentorCategory mentorCategory){
-        labService.saveMentorCategory(mentorCategory);
+    @ApiOperation(value="保存多条导师类型的数据", notes="保存多条导师类型的数据")
+    @PostMapping("/mentorCategorys")
+    public CommonResponse saveMentorCategory(@RequestBody List<MentorCategory> mentorCategorys){
+        labService.saveMentorCategory(mentorCategorys);
         return ResponseUtil.success();
     }
 
@@ -144,7 +150,6 @@ public class LabController {
         return ResponseUtil.success();
     }
 
-    //todo 研究团队排序接口
 
 
 
