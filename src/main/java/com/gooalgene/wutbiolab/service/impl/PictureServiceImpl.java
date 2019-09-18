@@ -60,38 +60,44 @@ public class PictureServiceImpl implements PictureService {
         }
 
         try {
-            List<Picture> newImageList = objectMapper.readValue(newPictureListString,
-                    objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-            newImageList.forEach(one -> {
-                try {
-                    byte[] bytes = Base64.decodeBase64(one.getUrl());
-                    String newImageName = UUID.randomUUID() + ".png";
-                    String newImagePath = gooalApplicationProperty.getImagePath() + newImageName;
-                    for (int i = 0; i < bytes.length; i++) {
-                        if (bytes[i] < 0) {
-                            bytes[i] += 256;
-                        }
-                    }
-                    OutputStream out = new FileOutputStream(newImagePath);
-                    out.write(bytes);
-                    out.flush();
-                    out.close();
-                    one.setUrl(gooalApplicationProperty.getImageNginxUrl() + newImageName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    one.setUrl("");
-                }
-            });
-            return objectMapper.writeValueAsString(newImageList);
-        } catch (IOException e) {
+            return convertPropertyImageAndSave(newPictureListString);
+        }  catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+//        try {
+//            List<Picture> newImageList = objectMapper.readValue(newPictureListString,
+//                    objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+//            newImageList.forEach(one -> {
+//                try {
+//                    byte[] bytes = Base64.decodeBase64(one.getUrl());
+//                    String newImageName = UUID.randomUUID() + ".png";
+//                    String newImagePath = gooalApplicationProperty.getImagePath() + newImageName;
+//                    for (int i = 0; i < bytes.length; i++) {
+//                        if (bytes[i] < 0) {
+//                            bytes[i] += 256;
+//                        }
+//                    }
+//                    OutputStream out = new FileOutputStream(newImagePath);
+//                    out.write(bytes);
+//                    out.flush();
+//                    out.close();
+//                    one.setUrl(gooalApplicationProperty.getImageNginxUrl() + newImageName);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    one.setUrl("");
+//                }
+//            });
+//            return objectMapper.writeValueAsString(newImageList);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
     }
 
 
 
-    public  String convertPropertyImageAndSave(String imageCodeInfoList) throws IOException {
+    private String convertPropertyImageAndSave(String imageCodeInfoList) throws IOException {
         if (StringUtils.isEmpty(imageCodeInfoList)) {
             return "";
         }
@@ -121,7 +127,7 @@ public class PictureServiceImpl implements PictureService {
         return objectMapper.writeValueAsString(urlImageResponses);
     }
 
-    public  Picture saveToLocal(String base64Str, String fileSuffix) {
+    private Picture saveToLocal(String base64Str, String fileSuffix) {
         Boolean needCompress = false;
         //通过base64判断图片大小
 //        Integer imgSize = getImgSize(base64Str);
@@ -169,17 +175,16 @@ public class PictureServiceImpl implements PictureService {
         return new Picture(fileName, fileName, targetFile.getAbsolutePath());
     }
 
-    public Matcher matchBase64(String base64Str) {
+    private Matcher matchBase64(String base64Str) {
         Pattern pattern = Pattern.compile(PERFIX);
-        Matcher matcher = pattern.matcher(base64Str);
-        return matcher;
+        return pattern.matcher(base64Str);
     }
-    public  String formatBase64(String base64Str, String perfix) {
+    private String formatBase64(String base64Str, String perfix) {
         base64Str = base64Str.substring(perfix.length());
         return base64Str;
     }
 
-    public  boolean base64ToImage(String imgStr, File file) { // 对字节数组字符串进行Base64解码并生成图片
+    private boolean base64ToImage(String imgStr, File file) { // 对字节数组字符串进行Base64解码并生成图片
         if (StringUtils.isEmpty(imgStr)) // 图像数据为空
             return false;
         try (OutputStream out = new FileOutputStream(file)) {

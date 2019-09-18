@@ -2,7 +2,7 @@ package com.gooalgene.wutbiolab.constant;
 
 public interface CommonConstants {
     //头条新闻
-    Integer TOUTIAO=1;
+    Integer TOUTIAO=30;
     //综合新闻
     Integer ZONGHE=2;
     //科研动态

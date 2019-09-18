@@ -31,9 +31,13 @@ public class NewsServiceImpl implements NewsService {
 
     private PictureService pictureService;
 
+    private ObjectMapper objectMapper;
+
     private Logger logger = LoggerFactory.getLogger(NewsServiceImpl.class);
 
-    public NewsServiceImpl(NewsCategoryDAO newsCategoryDAO, NewsDetailDAO newsDetailDAO, PictureService pictureService) {
+    public NewsServiceImpl(NewsCategoryDAO newsCategoryDAO, NewsDetailDAO newsDetailDAO,
+                           PictureService pictureService, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         this.pictureService = pictureService;
         this.newsDetailDAO = newsDetailDAO;
         this.newsCategoryDAO = newsCategoryDAO;
@@ -63,7 +67,6 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public CommonResponse<Boolean> renewNews(NewsDetail newsDetail) {
-        ObjectMapper objectMapper = new ObjectMapper();
         if (null != newsDetail.getId()) {
             if (newsDetailDAO.findById(newsDetail.getId()).isPresent()) {
                 NewsDetail oldNewsDetail = newsDetailDAO.findById(newsDetail.getId()).get();
@@ -87,6 +90,9 @@ public class NewsServiceImpl implements NewsService {
             }
         } else {
             try {
+                if (newsDetailDAO.findByCategoryEquals(newsDetail.getCategory()).size() >= 5) {
+                    return ResponseUtil.error("more than 5 item");
+                }
                 String newImage = pictureService.saveBase64(null, newsDetail.getImage());
                 if (null != newImage) {
                     newsDetail.setImage(newImage);
