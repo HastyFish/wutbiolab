@@ -12,12 +12,12 @@ public class HomeImageResponse {
     public HomeImageResponse() {
     }
 
-    public HomeImageResponse(AcademicImage academicImage, NewsImage newsImage) {
+    public HomeImageResponse(String academicImage, String newsImage) {
         this.academicImage = academicImage;
         this.newsImage = newsImage;
     }
 
-    private AcademicImage academicImage;
+    private String academicImage;
 
-    private NewsImage newsImage;
+    private String newsImage;
 }

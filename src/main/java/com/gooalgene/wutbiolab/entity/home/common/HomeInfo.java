@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.home.common;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,4 +20,8 @@ public class HomeInfo {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String context;
+
+    @ApiModelProperty(value = "发布状态(0:未发布，1:已发布)", example = "0")
+    @Column(columnDefinition = "INT default 0")
+    private Integer publishStatus;
 }

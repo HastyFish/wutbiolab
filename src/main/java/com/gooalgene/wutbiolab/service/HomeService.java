@@ -19,9 +19,13 @@ public interface HomeService {
 
     CommonResponse<List<CooperationLink>> getCooperationLink();
 
-    CommonResponse<Boolean> saveCooperationLink(HomeRequest homeRequest);
+    CommonResponse<Boolean> saveCooperationLink(List<CooperationLink> cooperationLinkList);
 
     CommonResponse<List<Footer>> getFooter();
 
-    CommonResponse<Boolean> saveFooter(HomeRequest homeRequest);
+    CommonResponse<Boolean> saveFooter(List<Footer> footerList);
+
+    CommonResponse<Boolean> deleteCooperationLinkById(long id);
+
+    CommonResponse<Boolean> deleteFooterById(long id);
 }

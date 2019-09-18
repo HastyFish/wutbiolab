@@ -34,8 +34,13 @@ public class HomeController {
     }
 
     @PostMapping("/cooperation-link")
-    public CommonResponse<Boolean> saveCooperationLink(@RequestBody HomeRequest homeRequest) {
-        return homeService.saveCooperationLink(homeRequest);
+    public CommonResponse<Boolean> saveCooperationLink(@RequestBody List<CooperationLink> cooperationLinkList) {
+        return homeService.saveCooperationLink(cooperationLinkList);
+    }
+
+    @DeleteMapping("/cooperation-link/{id}")
+    public CommonResponse<Boolean> deleteCooperationLink(@PathVariable long id) {
+        return homeService.deleteCooperationLinkById(id);
     }
 
     @GetMapping("/footer")
@@ -44,8 +49,13 @@ public class HomeController {
     }
 
     @PostMapping("/footer")
-    public CommonResponse<Boolean> saveFooter(@RequestBody HomeRequest homeRequest) {
-        return homeService.saveFooter(homeRequest);
+    public CommonResponse<Boolean> saveFooter(@RequestBody List<Footer> footerList) {
+        return homeService.saveFooter(footerList);
+    }
+
+    @DeleteMapping("/footer/{id}")
+    public CommonResponse<Boolean> deleteFooter(@PathVariable long id) {
+        return homeService.deleteFooterById(id);
     }
 
 }
