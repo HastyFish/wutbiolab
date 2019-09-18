@@ -35,4 +35,8 @@ public interface CommonConstants {
     //研究方向
     Integer RESEARCHDIRECTION=2;
 
+
+    String DB_CONFIG_CACHE="db_config_cache";
+    String TOKEN_CACHE="token_cache";
+
 }

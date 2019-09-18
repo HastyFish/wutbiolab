@@ -11,6 +11,7 @@ import com.gooalgene.wutbiolab.response.common.PageResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LabService {
 
@@ -109,7 +110,7 @@ public interface LabService {
      * 通过id和发布状态查询一行数据
      * @return
      */
-    LabDetail getPublishedById(Long id);
+    Map<String,LabDetail> getPublishedById(Long id);
 
     /**
      * 获取已发布的研究团队的数据

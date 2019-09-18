@@ -15,6 +15,7 @@ import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,12 +24,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+@Slf4j
 @Service
 public class LabServiceImpl implements LabService {
 
@@ -40,6 +43,8 @@ public class LabServiceImpl implements LabService {
     private GraduateCategoryDAO graduateCategoryDAO;
     @Autowired
     private LabCategoryDAO labCategoryDAO;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public PageResponse<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize, Boolean isList) {
@@ -167,8 +172,39 @@ public class LabServiceImpl implements LabService {
     /*********************************************** 前端使用 ***************************************************/
 
     @Override
-    public LabDetail getPublishedById(Long id) {
-        return labDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+    public Map<String,LabDetail> getPublishedById(Long id) {
+        LabDetail labDetail = labDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        Long publishDate = labDetail.getPublishDate();
+        LabDetail pre = getOneByPublishDate(publishDate, ">");
+        LabDetail next = getOneByPublishDate(publishDate, "<");
+        Map<String,LabDetail> map=new HashMap<>();
+        map.put("labDetail",labDetail);
+        map.put("pre",pre);
+        map.put("next",next);
+        return map;
+    }
+
+    private LabDetail getOneByPublishDate(Long publishDate,String operation){
+        String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operation+
+                " :publishDate ORDER BY publishDate limit 1";
+        Query nativeQuery = entityManager.createNativeQuery(sql);
+        nativeQuery.setParameter("publishDate",publishDate);
+        Object object = null;
+        try {
+            object = nativeQuery.getSingleResult();
+        } catch (NoResultException e) {
+            log.info("publishDate为：{}是最后一条数据了",publishDate);
+            return null;
+        }
+        Object[] objects = (Object[])object;
+        LabDetail labDetail=new LabDetail();
+        BigInteger idBigInt = (BigInteger) objects[0];
+        if(idBigInt!=null){
+            labDetail.setId(idBigInt.longValue());
+        }
+        String title = (String) objects[1];
+        labDetail.setTitle(title);
+        return labDetail;
     }
 
     @Override

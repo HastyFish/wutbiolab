@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.controller.front;
 
 import com.gooalgene.wutbiolab.constant.CommonConstants;
+import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "前端实验室模块", tags = {"前端实验室模块接口"})
 @RestController
@@ -22,6 +24,12 @@ public class ApiLabController {
     @Autowired
     private LabService labService;
 
+    @ApiOperation(value="获取所有一级分类", notes="获取所有一级分类")
+    @GetMapping("/all/category")
+    public CommonResponse<List<LabCategory>> getAllCategory(){
+        List<LabCategory> allCategory = labService.getAllCategory();
+        return ResponseUtil.success(allCategory);
+    }
 
     @ApiOperation(value="通过一级分类的id查询列表", notes="通过一级分类的id查询列表")
     //查询列表（分页）
@@ -54,8 +62,8 @@ public class ApiLabController {
     @ApiOperation(value="通过id查询一条已发布数据", notes="通过id查询一条已发布数据")
     //通过id查询一条数据(已发布)
     @GetMapping("/{id}")
-    public CommonResponse<LabDetail> getPublishedById(@PathVariable("id")Long id){
-        LabDetail publishedById = labService.getPublishedById(id);
+    public CommonResponse<Map<String, LabDetail>> getPublishedById(@PathVariable("id")Long id){
+        Map<String, LabDetail> publishedById = labService.getPublishedById(id);
         return ResponseUtil.success(publishedById);
     }
 
