@@ -44,14 +44,14 @@ class GraduatesEdit extends Component{
           id,
           newItem:{
           },
-          typeList:[]
+          categoryList:[]
         }
     }else{
       //说明是新增
       this.state = {
         newItem:{
         },
-        typeList:[]
+        categoryList:[]
       }
     }
   }
@@ -118,9 +118,9 @@ class GraduatesEdit extends Component{
     //获取毕业生类型列表
     const result = await reqGraduatesTypes();
     if(result.code === 0){
-      const typeList = result.result;
+      const categoryList = result.result;
       this.setState({
-        typeList
+        categoryList
       })
       const {id} = this.state;
       if(id){
@@ -131,9 +131,14 @@ class GraduatesEdit extends Component{
           this.setState({
             newItem
           })
+          const {graduateCategoryId} = newItem;
+          graduateCategoryId && this.props.form.setFieldsValue({'graduateCategoryId':graduateCategoryId})
         }else{
           message.error('获取毕业生信息失败，请稍后再试!');
         }
+      }else{
+        //select框赋值
+        this.props.form.setFieldsValue({'graduateCategoryId':categoryList[0].id})
       }
     }else {
       message.error('获取毕业生类型失败, 请稍后重试')
@@ -142,8 +147,8 @@ class GraduatesEdit extends Component{
 
 
   render(){
-    const {newItem,typeList} = this.state;
-    const {title, graduateCategoryId, context,publishDate} = newItem;
+    const {newItem,categoryList} = this.state;
+    const {title, context, publishDate} = newItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
@@ -165,14 +170,13 @@ class GraduatesEdit extends Component{
               <Item label="类型选择" {...formItemLayout}>
                 {
                   getFieldDecorator('graduateCategoryId', {
-                    initialValue: graduateCategoryId || '毕业生',
                     rules: [
                       {required: true, message: '必须指定分类'},
                     ]
                   })(
                     <Select>
                       {
-                        typeList.map(item => {
+                        categoryList.map(item => {
                           return (
                             <Option value={item.id} key={item.id}>{item.category}</Option>
                           )
