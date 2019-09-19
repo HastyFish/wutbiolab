@@ -69,16 +69,16 @@ function canvasDataURLScale(path, options,imgType, callback) {
       // 在canvas绘制前填充白色背景   
       ctx.fillStyle = "#fff";
       ctx.fillRect(0,0,canvas.width,canvas.height);
-      //图片框的尺寸大于图片原始尺寸则不缩放，只留白
-      if(options.width > w){
+      //计算缩放比,取得其中较大值作为缩放基准
+      var scaleX = w / options.width;
+      var scaleY = h / options.height;
+      var newScale = scaleX > scaleY ? scaleX:scaleY;
+      //图片框的尺寸大于图片原始尺寸(newScale<1)则不缩放，只留白
+      if(newScale < 1){
         var dx = (options.width - w)/2;
         var dy = (options.height - h)/2;
         ctx.drawImage(that, 0, 0, w, h, dx, dy, w, h);
       }else{
-        //计算缩放比
-        var scaleX = w / options.width;
-        var scaleY = h / options.height;
-        var newScale = scaleX > scaleY ? scaleX:scaleY;
         var sdx = (options.width - w/newScale)/2;
         var sdy = (options.height - h/newScale)/2;
         ctx.drawImage(that, 0, 0, w, h, sdx, sdy, w/newScale, h/newScale);
