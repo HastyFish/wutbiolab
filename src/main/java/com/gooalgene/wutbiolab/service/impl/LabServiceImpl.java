@@ -173,20 +173,22 @@ public class LabServiceImpl implements LabService {
 
     @Override
     public Map<String,LabDetail> getPublishedById(Long id) {
-        LabDetail labDetail = labDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
-        Long publishDate = labDetail.getPublishDate();
-        LabDetail pre = getOneByPublishDate(publishDate, ">");
-        LabDetail next = getOneByPublishDate(publishDate, "<");
         Map<String,LabDetail> map=new HashMap<>();
-        map.put("labDetail",labDetail);
-        map.put("previous",pre);
-        map.put("next",next);
+        LabDetail labDetail = labDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        if (labDetail != null) {
+            Long publishDate = labDetail.getPublishDate();
+            LabDetail pre = getOneByPublishDate(publishDate, ">");
+            LabDetail next = getOneByPublishDate(publishDate, "<");
+            map.put("labDetail",labDetail);
+            map.put("previous",pre);
+            map.put("next",next);
+        }
         return map;
     }
 
     private LabDetail getOneByPublishDate(Long publishDate,String operation){
         String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operation+
-                " :publishDate ORDER BY publishDate limit 1";
+                " :publishDate  and labDetail.publishStatus=1 ORDER BY publishDate limit 1";
         Query nativeQuery = entityManager.createNativeQuery(sql);
         nativeQuery.setParameter("publishDate",publishDate);
         Object object = null;
