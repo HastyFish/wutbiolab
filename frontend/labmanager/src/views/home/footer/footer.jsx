@@ -31,16 +31,24 @@ class Footer extends Component{
   deleteItem = async (index) => {
     const {footerlist} = this.state;
     const {id} = footerlist[index];
-    const result = await reqDeleteFooter(id);
-    if(result.code === 0){
-      message.error('删除页脚成功');
+    if(id === null){
       footerlist.splice(index, 1);
       this.setState(state => (
         {footerlist}
       ));
     }else{
-      message.error('删除页脚失败，请稍后再试')
+      const result = await reqDeleteFooter(id);
+      if(result.code === 0){
+        message.error('删除页脚成功');
+        footerlist.splice(index, 1);
+        this.setState(state => (
+          {footerlist}
+        ));
+      }else{
+        message.error('删除页脚失败，请稍后再试')
+      }
     }
+    
   }
 
   //新增页脚设置中的某一项
