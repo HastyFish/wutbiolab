@@ -41,16 +41,18 @@ class AddPerson extends Component{
         //遍历teamList找到当前的元素
         const {teamList} = this.state
         var item = teamList.find((element) => (element.mentorCategoryId === mentorCategoryId));
+        
         const mentorOrder = item.labDetails.length + 1;
         //发送新增人员请求
         const params = {
           mentorCategoryId,     //一级ID
           mentorName,  //二级
           mentorOrder,         //二级排序
+          labCategoryId:3
         }
         const result = await reqAddPerson(params);
         if(result.code === 0){
-          message.success('新增岗位成功');
+          message.success('新增人员成功');
           //调用更新父组件中所有岗位分类的方法
           this.props.getAllTeamData();
         }
