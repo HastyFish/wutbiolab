@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -15,7 +16,12 @@ public interface ResourceDetailDAO extends JpaRepository<ResourceDetail, Long> {
             "a.category as category, a.title as title from ResourceDetail a")
     Page<ResourceOverview> findNewsDetailBy(Pageable pageable);
 
+    @Query("select a.id as id,  a.publishDate as publishDate, " +
+            " a.title as title from ResourceDetail a where a.publishStatus=:publishStatus")
+    Page<ResourceOverview> findNewsDetailByPublishStatus(@Param("publishStatus") Integer publishStatus, Pageable pageable);
+
     @Query("select a.image as image, a.title as title, a.id as id, a.category as category from ResourceDetail a")
     List<ResourceOverview> findByPublishStatusEquals(Integer publishStatus, Pageable pageable);
 
+    ResourceDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
 }

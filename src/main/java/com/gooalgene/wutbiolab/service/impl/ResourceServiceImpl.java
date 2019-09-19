@@ -1,9 +1,12 @@
 package com.gooalgene.wutbiolab.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.resource.ResourceCategoryDAO;
 import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
+import com.gooalgene.wutbiolab.entity.common.CommonOverview;
+import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
@@ -18,8 +21,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -30,6 +40,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     private PictureService pictureService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     private Logger logger = LoggerFactory.getLogger(ResourceServiceImpl.class);
 
     public ResourceServiceImpl(ResourceDetailDAO resourceDetailDAO, ResourceCategoryDAO resourceCategoryDAO,
@@ -39,6 +52,8 @@ public class ResourceServiceImpl implements ResourceService {
         this.resourceDetailDAO = resourceDetailDAO;
 
     }
+
+
 
     @Override
     public CommonResponse<List<ResourceCategory>> allResourceCategory() {
@@ -113,5 +128,51 @@ public class ResourceServiceImpl implements ResourceService {
         } catch (IllegalArgumentException e) {
             return ResponseUtil.error("id is null");
         }
+    }
+
+
+
+
+    @Override
+    public Map<String,ResourceDetail> getPublishedById(Long id){
+        Map<String,ResourceDetail> map=new HashMap<>();
+        ResourceDetail resourceDetail = resourceDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        if(resourceDetail!=null){
+            Long publishDate = resourceDetail.getPublishDate();
+            ResourceDetail pre = getOneByPublishDate(publishDate, ">");
+            ResourceDetail next = getOneByPublishDate(publishDate, "<");
+            map.put("labDetail",resourceDetail);
+            map.put("previous",pre);
+            map.put("next",next);
+        }
+        return map;
+    }
+
+    private ResourceDetail getOneByPublishDate(Long publishDate, String operation) {
+        String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
+                " :publishDate and rd.publishStatus=1 ORDER BY publishDate limit 1";
+        Query nativeQuery = entityManager.createNativeQuery(sql);
+        nativeQuery.setParameter("publishDate",publishDate);
+        Object object = null;
+        try {
+            object = nativeQuery.getSingleResult();
+        } catch (NoResultException e) {
+            logger.info("publishDate为：{}是最后一条数据了",publishDate);
+            return null;
+        }
+        Object[] objects = (Object[])object;
+        ResourceDetail resourceDetail=new ResourceDetail();
+        BigInteger idBigInt = (BigInteger) objects[0];
+        if(idBigInt!=null){
+            resourceDetail.setId(idBigInt.longValue());
+        }
+        String title = (String) objects[1];
+        resourceDetail.setTitle(title);
+        return resourceDetail;
+    }
+    @Override
+    public PageResponse<ResourceOverview> getByPublishStatus(Integer publishStatus,Integer pageNum, Integer pageSize){
+        Page<ResourceOverview> resourceOverviewPage = resourceDetailDAO.findNewsDetailByPublishStatus(publishStatus, PageRequest.of(pageNum - 1, pageSize));
+        return new PageResponse<>(resourceOverviewPage.getContent(),pageNum,pageSize,resourceOverviewPage.getTotalElements());
     }
 }

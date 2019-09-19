@@ -3,7 +3,7 @@ import { Modal, Button, Menu, Dropdown, } from 'antd';
 import {Link,withRouter} from 'react-router-dom';
 
 import storageUtils from '@/utils/storageUtils.js';
-import Logo from '@/assets/images/logo.png';
+//import Logo from '@/assets/images/logo.png';
 import './index.less';
 import {logout} from "@/api"
 class MyHeader extends Component{
@@ -57,9 +57,9 @@ class MyHeader extends Component{
     );
     return (
       <div className='headerBox'>
-        <img src={Logo} alt='logo' />
+        {/* <img src={Logo} alt='logo' /> */}
         <div className='headerTitle'>
-          实验室后台管理中心
+        武汉理工大学生物信息实验室后台管理中心
         </div>
         <span className='usermes'>
         <Dropdown overlay={menu}>
