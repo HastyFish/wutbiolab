@@ -246,8 +246,8 @@ class EditNews extends Component{
             {
               categoryType === '头条新闻' ? (
               <Item label="封面上传">
-                {image ? <PicturesWall ref={this.pw} image = {JSON.parse(image)} /> : null}
-                {!image ? <PicturesWall ref={this.pw} image = {[]} /> : null}
+                {image ? <PicturesWall ref={this.pw} option={{width:660,height:400}} image = {JSON.parse(image)} /> : null}
+                {!image ? <PicturesWall ref={this.pw} option={{width:660,height:400}} image = {[]} /> : null}
               </Item>
               ):null
             }
