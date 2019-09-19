@@ -40,17 +40,23 @@ changeText = (index, type, e) => {
   deleteItem = async (index) => {
     const {friendLinks} = this.state;
     const {id} = friendLinks[index];
-    const result = await reqDeleteCooplink(id);
-    if(result.code === 0){
-      message.error('删除友情链接成功');
+    if(id === null){
       friendLinks.splice(index, 1);
       this.setState(state => (
         {friendLinks}
       ));
     }else{
-      message.error('删除友情链接失败，请稍后再试')
+      const result = await reqDeleteCooplink(id);
+      if(result.code === 0){
+        message.error('删除友情链接成功');
+        friendLinks.splice(index, 1);
+        this.setState(state => (
+          {friendLinks}
+        ));
+      }else{
+        message.error('删除友情链接失败，请稍后再试')
+      }
     }
-    
   }
 
   //新增友情链接中的某一项
