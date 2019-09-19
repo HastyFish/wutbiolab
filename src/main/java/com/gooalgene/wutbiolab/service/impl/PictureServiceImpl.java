@@ -212,7 +212,7 @@ public class PictureServiceImpl implements PictureService {
             return objectMapper.writeValueAsString(oldImageList);
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("conver failed");
+            logger.error("convert failed");
             return "[]";
         }
     }

@@ -5,6 +5,7 @@ import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.front.NewsResponse;
 
 import java.util.List;
 
@@ -21,9 +22,5 @@ public interface NewsService {
 
     CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category, int pageNum, int pageSize);
 
-    CommonResponse<NewsDetail> newsDetailPublishedById(long id);
-
-    CommonResponse<NewsDetail> newsDetailPublishedNext(long publishDate);
-
-    CommonResponse<NewsDetail> newsDetailPublishedPrevious(long publishDate);
+    CommonResponse<NewsResponse> newsDetailPublishedById(long id);
 }

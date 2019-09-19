@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.news.NewsCategoryDAO;
 import com.gooalgene.wutbiolab.dao.news.NewsDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
@@ -10,12 +11,14 @@ import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.response.front.NewsResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -123,22 +126,40 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category, int pageNum, int pageSize) {
-        return null;
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category,
+                                                                               int pageNum,
+                                                                               int pageSize) {
+        Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(category,
+                CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
+        return ResponseUtil.success(new PageResponse<>(newsOverviewPage.getContent(), pageNum,
+                pageSize, newsOverviewPage.getTotalElements()));
     }
 
     @Override
-    public CommonResponse<NewsDetail> newsDetailPublishedById(long id) {
-        return null;
+    public CommonResponse<NewsResponse> newsDetailPublishedById(long id) {
+        NewsDetail newsDetail = newsDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        NewsOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
+        NewsOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
+        return ResponseUtil.success(new NewsResponse(newsDetail, previous, next));
     }
 
-    @Override
-    public CommonResponse<NewsDetail> newsDetailPublishedNext(long publishDate) {
-        return null;
+    private NewsOverview nextPublishedNewsDetail(long publishDate, String category) {
+        Page<NewsOverview> newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
+        if (newsDetailPage.getTotalElements() > 0) {
+            return newsDetailPage.getContent().get(0);
+        } else {
+            return null;
+        }
     }
 
-    @Override
-    public CommonResponse<NewsDetail> newsDetailPublishedPrevious(long publishDate) {
-        return null;
+    private NewsOverview previousPublishedNewsDetail(long publishDate, String category) {
+        Page<NewsOverview> newsDetailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+        if (newsDetailPage.getTotalElements() > 0) {
+            return newsDetailPage.getContent().get(0);
+        } else {
+            return null;
+        }
     }
 }

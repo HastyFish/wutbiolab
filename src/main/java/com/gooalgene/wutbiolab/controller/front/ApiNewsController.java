@@ -1,10 +1,10 @@
 package com.gooalgene.wutbiolab.controller.front;
 
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
-import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.front.NewsResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,26 +30,15 @@ public class ApiNewsController {
         return newsService.allNewsCategory();
     }
 
-    @GetMapping("/{category}")
-    public CommonResponse<PageResponse<NewsOverview>> newsDetailByCategory(@PathVariable String category,
+    @GetMapping
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailByCategory(String category,
                                                                            Integer pageNum,
                                                                            Integer pageSize) {
         return newsService.newsDetailPageByCategory(category, pageNum, pageSize);
     }
 
     @GetMapping("/{id}")
-    public CommonResponse<NewsDetail> newsDetailById(@PathVariable long id) {
+    public CommonResponse<NewsResponse> newsDetailById(@PathVariable long id) {
         return newsService.newsDetailPublishedById(id);
     }
-
-    @GetMapping("/next")
-    public CommonResponse<NewsDetail> nextNewsDetail(long publishDate) {
-        return newsService.newsDetailPublishedNext(publishDate);
-    }
-
-    @GetMapping("/previous")
-    public CommonResponse<NewsDetail> peviousNewsDetail(long publishDate) {
-        return newsService.newsDetailPublishedPrevious(publishDate);
-    }
-
 }
