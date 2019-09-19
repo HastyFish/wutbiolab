@@ -23,7 +23,7 @@ public class ScientificResearchDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ApiModelProperty(value = "一级分类id", example = "2")
+    @ApiModelProperty(value = "一级分类id", example = "10")
     private Long scientificResearchCategoryId;
 
     @ApiModelProperty(value = "标题", example = "标题1")

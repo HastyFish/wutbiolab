@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.response.frontend;
+package com.gooalgene.wutbiolab.response.front;
 
 import lombok.Getter;
 import lombok.Setter;
