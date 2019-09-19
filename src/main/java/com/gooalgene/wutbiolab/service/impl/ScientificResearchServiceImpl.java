@@ -125,20 +125,22 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
 
     @Override
     public Map<String,ScientificResearchDetail> getPublishedById(Long id){
-        ScientificResearchDetail one = scientificResearchDetailDAO.getByIdAndPublishStatus(id,CommonConstants.PUBLISHED);
-        Long publishDate = one.getPublishDate();
-        ScientificResearchDetail pre = getOneByPublishDate(publishDate, ">");
-        ScientificResearchDetail next = getOneByPublishDate(publishDate, "<");
         Map<String,ScientificResearchDetail> map=new HashMap<>();
-        map.put("scientificResearchDetail",one);
-        map.put("previous",pre);
-        map.put("next",next);
+        ScientificResearchDetail one = scientificResearchDetailDAO.getByIdAndPublishStatus(id,CommonConstants.PUBLISHED);
+        if(one!=null){
+            Long publishDate = one.getPublishDate();
+            ScientificResearchDetail pre = getOneByPublishDate(publishDate, ">");
+            ScientificResearchDetail next = getOneByPublishDate(publishDate, "<");
+            map.put("scientificResearchDetail",one);
+            map.put("previous",pre);
+            map.put("next",next);
+        }
         return map;
     }
 
     private ScientificResearchDetail getOneByPublishDate(Long publishDate, String operation){
         String sql="select srd.id,srd.title from scientific_research_detail srd where  srd.publishDate "+operation+
-                " :publishDate ORDER BY publishDate limit 1";
+                " :publishDate  and srd.publishStatus=1 ORDER BY publishDate limit 1";
         Query nativeQuery = entityManager.createNativeQuery(sql);
         nativeQuery.setParameter("publishDate",publishDate);
         Object object = null;

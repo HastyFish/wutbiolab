@@ -7,8 +7,12 @@ import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ResourceService {
+
+
+
     CommonResponse<List<ResourceCategory>> allResourceCategory();
 
     CommonResponse<PageResponse<ResourceOverview>> resourceDetailPage(Integer pageNum, Integer pageSize);
@@ -19,6 +23,9 @@ public interface ResourceService {
 
     CommonResponse<Boolean> deleteResourceDetail(Integer id);
 
+
+    /******************************************前端使用************************************************/
+    Map<String,ResourceDetail> getPublishedById(Long id);
     /**
      * 通过状态查询分页列表
      * @param publishStatus

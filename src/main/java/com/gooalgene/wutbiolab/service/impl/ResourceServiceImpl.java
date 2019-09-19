@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.resource.ResourceCategoryDAO;
 import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
@@ -26,7 +27,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -50,30 +53,7 @@ public class ResourceServiceImpl implements ResourceService {
 
     }
 
-//    private <T extends CommonOverview> T getOneByPublishDate(Class<? extends CommonOverview> tClass, Long publishDate, String operation){
-//        String name = tClass.getName();
-//        String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operation+
-//                " :publishDate ORDER BY publishDate limit 1";
-//        Query nativeQuery = entityManager.createNativeQuery(sql);
-//        nativeQuery.setParameter("publishDate",publishDate);
-//        Object object = null;
-//        try {
-//            object = nativeQuery.getSingleResult();
-//        } catch (NoResultException e) {
-//            logger.info("publishDate为：{}是最后一条数据了",publishDate);
-//            return null;
-//        }
-//        Object[] objects = (Object[])object;
-//        LabDetail labDetail=new LabDetail();
-//        BigInteger idBigInt = (BigInteger) objects[0];
-//        if(idBigInt!=null){
-//            labDetail.setId(idBigInt.longValue());
-//        }
-//        T t=null;
-//        String title = (String) objects[1];
-//        labDetail.setTitle(title);
-//        return t;
-//    }
+
 
     @Override
     public CommonResponse<List<ResourceCategory>> allResourceCategory() {
@@ -150,6 +130,46 @@ public class ResourceServiceImpl implements ResourceService {
         }
     }
 
+
+
+
+    @Override
+    public Map<String,ResourceDetail> getPublishedById(Long id){
+        Map<String,ResourceDetail> map=new HashMap<>();
+        ResourceDetail resourceDetail = resourceDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        if(resourceDetail!=null){
+            Long publishDate = resourceDetail.getPublishDate();
+            ResourceDetail pre = getOneByPublishDate(publishDate, ">");
+            ResourceDetail next = getOneByPublishDate(publishDate, "<");
+            map.put("labDetail",resourceDetail);
+            map.put("previous",pre);
+            map.put("next",next);
+        }
+        return map;
+    }
+
+    private ResourceDetail getOneByPublishDate(Long publishDate, String operation) {
+        String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
+                " :publishDate and rd.publishStatus=1 ORDER BY publishDate limit 1";
+        Query nativeQuery = entityManager.createNativeQuery(sql);
+        nativeQuery.setParameter("publishDate",publishDate);
+        Object object = null;
+        try {
+            object = nativeQuery.getSingleResult();
+        } catch (NoResultException e) {
+            logger.info("publishDate为：{}是最后一条数据了",publishDate);
+            return null;
+        }
+        Object[] objects = (Object[])object;
+        ResourceDetail resourceDetail=new ResourceDetail();
+        BigInteger idBigInt = (BigInteger) objects[0];
+        if(idBigInt!=null){
+            resourceDetail.setId(idBigInt.longValue());
+        }
+        String title = (String) objects[1];
+        resourceDetail.setTitle(title);
+        return resourceDetail;
+    }
     @Override
     public PageResponse<ResourceOverview> getByPublishStatus(Integer publishStatus,Integer pageNum, Integer pageSize){
         Page<ResourceOverview> resourceOverviewPage = resourceDetailDAO.findNewsDetailByPublishStatus(publishStatus, PageRequest.of(pageNum - 1, pageSize));
