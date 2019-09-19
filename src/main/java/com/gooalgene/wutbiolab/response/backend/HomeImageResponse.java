@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.response;
+package com.gooalgene.wutbiolab.response.backend;
 
 import com.gooalgene.wutbiolab.entity.home.AcademicImage;
 import com.gooalgene.wutbiolab.entity.home.NewsImage;
