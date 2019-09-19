@@ -16,7 +16,6 @@ import com.gooalgene.wutbiolab.entity.home.CooperationLink;
 import com.gooalgene.wutbiolab.entity.home.Footer;
 import com.gooalgene.wutbiolab.entity.home.NewsImage;
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
-import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.entity.notice.NoticeDetail;
 import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
@@ -36,10 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class HomeServiceImpl implements HomeService {
@@ -168,10 +164,10 @@ public class HomeServiceImpl implements HomeService {
     public CommonResponse<List<String>> displayNewsSlideShow() {
         if (newsCategoryDAO.findById(CommonConstants.TOUTIAO.longValue()).isPresent()) {
             NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO.longValue()).get();
-            List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryEquals(headline.getCategory());
+            List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryAndPublishStatus(
+                    headline.getCategory(), CommonConstants.PUBLISHED);
             List<String> imageUrlList = new ArrayList<>();
             newsDetailList.forEach(one -> {
-                if (one.getPublishStatus().equals(CommonConstants.PUBLISHED)) {
                     try {
                         String pictureListImage = pictureService.formImageUrl(one.getImage());
                         List<Picture> pictureList = objectMapper.readValue(
@@ -182,7 +178,6 @@ public class HomeServiceImpl implements HomeService {
                         e.printStackTrace();
                         logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
                     }
-                }
             });
             return ResponseUtil.success(imageUrlList);
         } else {
@@ -207,10 +202,10 @@ public class HomeServiceImpl implements HomeService {
                                 CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
         result.put(ScientificResearchDetail.class.getSimpleName(), scientificResearchOverviewList);
 
-        /*新闻*/
+        /*最新新闻*/
         List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByPublishStatusEquals(
                 CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
-        result.put(NewsDetail.class.getSimpleName(), latestNewsOverviewList);
+        result.put(CommonConstants.TOUTIAOFIELD, latestNewsOverviewList);
 
         /*通知*/
         List<NoticeOverview> noticeDetailList = noticeDetailDAO.findByPublishStatusEquals(
@@ -218,14 +213,19 @@ public class HomeServiceImpl implements HomeService {
         result.put(NoticeDetail.class.getSimpleName(), noticeDetailList);
 
         /*学术活动*/
-//        List<NewsOverview> newsOverviewList1
+        if (newsCategoryDAO.findById(CommonConstants.XUESHU.longValue()).isPresent()) {
+            NewsCategory academicNewsCategory = newsCategoryDAO.findById(CommonConstants.XUESHU.longValue()).get();
+            List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryAndPublishStatus(
+                    academicNewsCategory.getCategory(), CommonConstants.PUBLISHED);
+            result.put(CommonConstants.XUESHUFIELD, acadeimcNewsList);
+        }
+
 
         /*学术活动与新闻图片*/
         AcademicImage academicImage = academicImageDAO.findAll().get(0);
         NewsImage newsImage = newsImageDAO.findAll().get(0);
         result.put(AcademicImage.class.getSimpleName(), academicImage);
         result.put(NewsImage.class.getSimpleName(), newsImage);
-
 
 
         return ResponseUtil.success(result);

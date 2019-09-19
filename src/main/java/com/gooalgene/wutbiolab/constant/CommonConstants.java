@@ -3,6 +3,7 @@ package com.gooalgene.wutbiolab.constant;
 public interface CommonConstants {
     //头条新闻
     Integer TOUTIAO=30;
+    String TOUTIAOFIELD = "TOUTIAO";
     //综合新闻
     Integer ZONGHE=2;
     //科研动态
@@ -11,6 +12,7 @@ public interface CommonConstants {
     Integer TONGZHI=4;
     //学术活动
     Integer XUESHU=33;
+    String XUESHUFIELD = "XUESHU";
 
     /**
      * 发布
@@ -20,6 +22,7 @@ public interface CommonConstants {
      * 草稿（未发布）
      */
     Integer UNPUBLISHED=0;
+    String PUBLISHSTATUSFIELD = "publishStatus";
 
     /**
     * 模块分类
@@ -36,7 +39,6 @@ public interface CommonConstants {
     Integer RESEARCHDIRECTION=2;
 
 
-    String PUBLISHSTATUSFIELD = "publishStatus";
     String DB_CONFIG_CACHE="db_config_cache";
     String TOKEN_CACHE="token_cache";
 

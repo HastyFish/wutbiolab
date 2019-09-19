@@ -3,6 +3,7 @@ package com.gooalgene.wutbiolab;
 import com.gooalgene.wutbiolab.dao.news.NewsCategoryDAO;
 import com.gooalgene.wutbiolab.dao.news.NewsDetailDAO;
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
+import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +34,8 @@ public class NewsTests {
 
     @Test
     public void testPage() {
-//        Page<NewsOverview> newsOverviewPage = newsDetailDAO.findNewsDetailBy(PageRequest.of(0, 10));
-//        System.out.println(newsOverviewPage.getTotalElements());
+//        List<NewsOverview> newsCategory = newsDetailDAO.findByCategoryAndId("头条新闻", 7l);
+        System.out.println();
     }
 
 }
