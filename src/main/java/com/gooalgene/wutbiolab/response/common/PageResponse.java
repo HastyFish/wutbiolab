@@ -23,6 +23,7 @@ public class PageResponse<T> {
         this.total = total;
     }
 
+
     private List<T> list;
 
     private Integer pageNum;

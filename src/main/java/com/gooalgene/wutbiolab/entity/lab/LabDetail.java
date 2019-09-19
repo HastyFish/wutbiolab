@@ -73,4 +73,9 @@ public class LabDetail implements Serializable {
         this.title = title;
         this.publishDate = publishDate;
     }
+
+    public LabDetail(Long id,String title) {
+        this.id=id;
+        this.title = title;
+    }
 }

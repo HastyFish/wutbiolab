@@ -23,25 +23,23 @@ const { Header,  Sider, Content } = Layout;
 
 export default class Admin extends Component {
 
-  componentWillMount(){
-    const user = storageUtils.getUser() || {};
-    if(!user || !user.username){
-      //自动跳转到登陆
-      this.props.history.replace('/login')
-    }
-  }
+  // componentWillMount(){
+  //   const user = storageUtils.getUser() || {};
+  //   const token = storageUtils.getToken();
+  //   if(!user || !user.username || !token) {
+  //     // 自动跳转到登陆(在render()中)
+  //     this.props.history.replace('/login')
+  //   }
+  // }
 
-  //componentDidMount(){
-    //const user = storageUtils.getUser() || {};
-    //const token = storageUtils.getToken();
-    // if(!user || !user.username || !token) {
-    //   // 自动跳转到登陆(在render()中)
-    //   // return <Redirect to='/login'/>
-    //   this.props.history.replace('/login')
-    // }
-  //}
 
   render() {
+    const user = storageUtils.getUser() || {};
+    const token = storageUtils.getToken();
+    if(!user || !user.username || !token) {
+      // 自动跳转到登陆(在render()中)
+      return <Redirect to='/login'/>
+    }
     return (
       <Layout className='pageLayout'>
         <Header className='header' style={{ 

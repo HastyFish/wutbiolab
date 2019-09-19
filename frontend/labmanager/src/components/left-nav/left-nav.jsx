@@ -7,7 +7,7 @@ import {
   Button 
 } from 'antd';
 
-//import {logout} from "@api/index"
+import {logout} from "@/api"
 import menuList from '@/config/menuConfig';
 import storageUtils from '@/utils/storageUtils.js';
 
@@ -28,13 +28,13 @@ class LeftNav extends Component{
     this.props.history.replace('/login');
 
     //删除localStorage中保存的用户
-    // let data = await logout();
-    // if(data.code === 0){
-    //  storageUtils.removeUser();
-    //  storageUtils.removeToken();
-    //  //跳转到login页面
-    //  this.props.history.replace('/login');
-    // }
+    let data = await logout();
+    if(data.code === 0){
+     storageUtils.removeUser();
+     storageUtils.removeToken();
+     //跳转到login页面
+     this.props.history.replace('/login');
+    }
   };
 
   handleCancel = e => {
@@ -57,7 +57,7 @@ class LeftNav extends Component{
           //给退出选项添加点击事件
           return (
             <Menu.Item key={item.key}>
-              <Link to='' onClick={this.logout}>
+              <Link to='/' onClick={this.logout}>
                 <Icon type={item.icon}/>
                 <span>{item.title}</span>
               </Link>

@@ -5,7 +5,7 @@ import {Link,withRouter} from 'react-router-dom';
 import storageUtils from '@/utils/storageUtils.js';
 import Logo from '@/assets/images/logo.png';
 import './index.less';
-import {logout} from "@api/index"
+import {logout} from "@/api"
 class MyHeader extends Component{
   constructor(props){
     super(props);
@@ -22,10 +22,10 @@ class MyHeader extends Component{
       visible: false,
     });
     //删除localStorage中保存的用户
-   let data = await logout();
-   if(data.code === 0){
+   let result = await logout();
+   if(result.code === 0){
     storageUtils.removeUser();
-    //storageUtils.removeToken();
+    storageUtils.removeToken();
     //跳转到login页面
     this.props.history.replace('/login');
    }

@@ -1,4 +1,4 @@
-package com.gooalgene.wutbiolab.dao;
+package com.gooalgene.wutbiolab.dao.lab;
 
 import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import org.springframework.data.jpa.repository.JpaRepository;

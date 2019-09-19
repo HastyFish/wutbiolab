@@ -5,6 +5,7 @@ import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
+import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
@@ -24,9 +25,9 @@ public class ApiScientificResearchController {
 
 
     @GetMapping("/list/{labCategoryId}")
-    public CommonResponse<Page<ScientificResearchDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
                                 @RequestParam("pageNum")Integer pageNum,@RequestParam("pageSize")Integer pageSize){
-        Page<ScientificResearchDetail> scientificResearchDetails = scientificResearchService.getPublishedByCategoryId(labCategoryId, pageNum, pageSize);
+        PageResponse<ScientificResearchDetail> scientificResearchDetails = scientificResearchService.getPublishedByCategoryId(labCategoryId, pageNum, pageSize);
         return ResponseUtil.success(scientificResearchDetails);
     }
 
