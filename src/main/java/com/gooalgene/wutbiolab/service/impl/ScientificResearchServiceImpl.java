@@ -4,12 +4,14 @@ import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.scientific.AcademicCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
+import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
 import com.gooalgene.wutbiolab.response.AcademicResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,11 +19,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+@Slf4j
 @Service
 public class ScientificResearchServiceImpl implements ScientificResearchService {
     @Autowired
@@ -30,6 +35,8 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     private ScientificResearchCategoryDAO scientificResearchCategoryDAO;
     @Autowired
     private AcademicCategoryDAO academicCategoryDAO;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public PageResponse<ScientificResearchDetail> getSRDetialByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize) {
@@ -117,9 +124,39 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     }
 
     @Override
-    public ScientificResearchDetail getPublishedById(Long id){
+    public Map<String,ScientificResearchDetail> getPublishedById(Long id){
         ScientificResearchDetail one = scientificResearchDetailDAO.getByIdAndPublishStatus(id,CommonConstants.PUBLISHED);
-        return one;
+        Long publishDate = one.getPublishDate();
+        ScientificResearchDetail pre = getOneByPublishDate(publishDate, ">");
+        ScientificResearchDetail next = getOneByPublishDate(publishDate, "<");
+        Map<String,ScientificResearchDetail> map=new HashMap<>();
+        map.put("scientificResearchDetail",one);
+        map.put("pre",pre);
+        map.put("next",next);
+        return map;
+    }
+
+    private ScientificResearchDetail getOneByPublishDate(Long publishDate, String operation){
+        String sql="select srd.id,srd.title from scientific_research_detail srd where  srd.publishDate "+operation+
+                " :publishDate ORDER BY publishDate limit 1";
+        Query nativeQuery = entityManager.createNativeQuery(sql);
+        nativeQuery.setParameter("publishDate",publishDate);
+        Object object = null;
+        try {
+            object = nativeQuery.getSingleResult();
+        } catch (NoResultException e) {
+            log.info("publishDate为：{}是最后一条数据了",publishDate);
+            return null;
+        }
+        Object[] objects = (Object[])object;
+        ScientificResearchDetail scientificResearchDetail=new ScientificResearchDetail();
+        BigInteger idBigInt = (BigInteger) objects[0];
+        if(idBigInt!=null){
+            scientificResearchDetail.setId(idBigInt.longValue());
+        }
+        String title = (String) objects[1];
+        scientificResearchDetail.setTitle(title);
+        return scientificResearchDetail;
     }
 
 }
