@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.parameters.P;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -141,13 +141,16 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<NewsDetail> newsDetailPublishedNext(long publishDate) {
-//        NewsDetail newsDetail = newsDetailDAO.findNewsDetailBy(publishDate);
-        return null;
+    public CommonResponse<NewsOverview> nextPublishedNewsDetail(long publishDate) {
+        Page<NewsOverview> newsDetailPage = newsDetailDAO.findNewsDetailPrevious(publishDate, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
+        return ResponseUtil.success(newsDetailPage.getContent().get(0));
     }
 
     @Override
-    public CommonResponse<NewsDetail> newsDetailPublishedPrevious(long publishDate) {
-        return null;
+    public CommonResponse<NewsOverview> previousPublishedNewsDetail(long publishDate) {
+        Page<NewsOverview> newsDetailPage = newsDetailDAO.findNewsDetailPrevious(publishDate, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+        return ResponseUtil.success(newsDetailPage.getContent().get(0));
     }
 }

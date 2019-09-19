@@ -206,7 +206,7 @@ public class HomeServiceImpl implements HomeService {
         List<Object> result = new ArrayList<>();
 
         /*科研动态*/
-        Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATE);
+        Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
         List<ScientificResearchOverview> scientificResearchOverviewList =
                 scientificResearchDetailDAO
                         .findByPublishStatusEquals(
@@ -265,7 +265,7 @@ public class HomeServiceImpl implements HomeService {
         /*资源发布*/
         List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
                 CommonConstants.PUBLISHED, PageRequest.of(0, 4,
-                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATE)));
+                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
         List<ImageResponse> resourceImageUrlList = new ArrayList<>();
         resourceOverviewList.forEach(one -> {
             try {
