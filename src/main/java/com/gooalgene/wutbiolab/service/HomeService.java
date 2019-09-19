@@ -3,9 +3,9 @@ package com.gooalgene.wutbiolab.service;
 import com.gooalgene.wutbiolab.entity.home.CooperationLink;
 import com.gooalgene.wutbiolab.entity.home.Footer;
 import com.gooalgene.wutbiolab.request.HomeImageRequest;
-import com.gooalgene.wutbiolab.response.backend.HomeImageResponse;
+import com.gooalgene.wutbiolab.response.admin.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
-import com.gooalgene.wutbiolab.response.frontend.ImageResponse;
+import com.gooalgene.wutbiolab.response.front.ImageResponse;
 
 import java.util.List;
 

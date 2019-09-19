@@ -18,4 +18,12 @@ public interface NewsService {
     CommonResponse<Boolean> renewNews(NewsDetail newsDetail);
 
     CommonResponse<Boolean> deleteById(Integer id);
+
+    CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category, int pageNum, int pageSize);
+
+    CommonResponse<NewsDetail> newsDetailPublishedById(long id);
+
+    CommonResponse<NewsDetail> newsDetailPublishedNext(long publishDate);
+
+    CommonResponse<NewsDetail> newsDetailPublishedPrevious(long publishDate);
 }
