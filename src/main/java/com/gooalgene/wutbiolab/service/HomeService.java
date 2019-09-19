@@ -3,11 +3,11 @@ package com.gooalgene.wutbiolab.service;
 import com.gooalgene.wutbiolab.entity.home.CooperationLink;
 import com.gooalgene.wutbiolab.entity.home.Footer;
 import com.gooalgene.wutbiolab.request.HomeImageRequest;
-import com.gooalgene.wutbiolab.response.HomeImageResponse;
+import com.gooalgene.wutbiolab.response.backend.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
+import com.gooalgene.wutbiolab.response.frontend.ImageResponse;
 
 import java.util.List;
-import java.util.Map;
 
 public interface HomeService {
 
@@ -54,7 +54,7 @@ public interface HomeService {
     /**
      * 前台获取轮播图
      */
-    CommonResponse<List<String>> displayNewsSlideShow();
+    CommonResponse<List<ImageResponse>> displayNewsSlideShow();
 
     /**
      * 前台展示页脚
@@ -65,5 +65,5 @@ public interface HomeService {
     /**
      * 前台展示首页信息
      */
-    CommonResponse<Map<String, Object>> displayHomeInfo();
+    CommonResponse<List<Object>> displayHomeInfo();
 }
