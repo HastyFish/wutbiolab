@@ -43,13 +43,13 @@ public class ApiNewsController {
     }
 
     @GetMapping("/next")
-    public CommonResponse<NewsDetail> nextNewsDetail(long publishDate) {
-        return newsService.newsDetailPublishedNext(publishDate);
+    public CommonResponse<NewsOverview> nextNewsDetail(long publishDate) {
+        return newsService.nextPublishedNewsDetail(publishDate);
     }
 
     @GetMapping("/previous")
-    public CommonResponse<NewsDetail> peviousNewsDetail(long publishDate) {
-        return newsService.newsDetailPublishedPrevious(publishDate);
+    public CommonResponse<NewsOverview> peviousNewsDetail(long publishDate) {
+        return newsService.previousPublishedNewsDetail(publishDate);
     }
 
 }

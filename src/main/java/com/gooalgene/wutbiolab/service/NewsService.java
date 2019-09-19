@@ -23,7 +23,7 @@ public interface NewsService {
 
     CommonResponse<NewsDetail> newsDetailPublishedById(long id);
 
-    CommonResponse<NewsDetail> newsDetailPublishedNext(long publishDate);
+    CommonResponse<NewsOverview> nextPublishedNewsDetail(long publishDate);
 
-    CommonResponse<NewsDetail> newsDetailPublishedPrevious(long publishDate);
+    CommonResponse<NewsOverview> previousPublishedNewsDetail(long publishDate);
 }

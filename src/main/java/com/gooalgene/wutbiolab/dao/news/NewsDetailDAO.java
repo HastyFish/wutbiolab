@@ -31,4 +31,6 @@ public interface NewsDetailDAO extends JpaRepository<NewsDetail, Long> {
 
     NewsDetail findByIdAndPublishStatus(Long id, Integer publishStatus);
 
+    @Query("select a.id as id, a.title as title from NewsDetail a where publishDate < ?1 and publishStatus = ?2")
+    Page<NewsOverview> findNewsDetailPrevious(long publishDate, int publishStatus, Pageable pageable);
 }
