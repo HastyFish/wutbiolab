@@ -131,7 +131,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         ScientificResearchDetail next = getOneByPublishDate(publishDate, "<");
         Map<String,ScientificResearchDetail> map=new HashMap<>();
         map.put("scientificResearchDetail",one);
-        map.put("pre",pre);
+        map.put("previous",pre);
         map.put("next",next);
         return map;
     }

@@ -179,7 +179,7 @@ public class LabServiceImpl implements LabService {
         LabDetail next = getOneByPublishDate(publishDate, "<");
         Map<String,LabDetail> map=new HashMap<>();
         map.put("labDetail",labDetail);
-        map.put("pre",pre);
+        map.put("previous",pre);
         map.put("next",next);
         return map;
     }
