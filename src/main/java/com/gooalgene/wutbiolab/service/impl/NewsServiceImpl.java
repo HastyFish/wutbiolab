@@ -121,4 +121,24 @@ public class NewsServiceImpl implements NewsService {
             return ResponseUtil.error("id is null");
         }
     }
+
+    @Override
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category, int pageNum, int pageSize) {
+        return null;
+    }
+
+    @Override
+    public CommonResponse<NewsDetail> newsDetailPublishedById(long id) {
+        return null;
+    }
+
+    @Override
+    public CommonResponse<NewsDetail> newsDetailPublishedNext(long publishDate) {
+        return null;
+    }
+
+    @Override
+    public CommonResponse<NewsDetail> newsDetailPublishedPrevious(long publishDate) {
+        return null;
+    }
 }

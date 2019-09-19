@@ -24,10 +24,10 @@ import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchOverview;
 import com.gooalgene.wutbiolab.request.HomeImageRequest;
-import com.gooalgene.wutbiolab.response.backend.HomeImageResponse;
+import com.gooalgene.wutbiolab.response.admin.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
-import com.gooalgene.wutbiolab.response.frontend.ImageResponse;
+import com.gooalgene.wutbiolab.response.front.ImageResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
@@ -237,7 +237,6 @@ public class HomeServiceImpl implements HomeService {
             result.add(acadeimcNewsList);
         }
 
-
         /*学术活动图片*/
         AcademicImage academicImage = academicImageDAO.findAll().get(0);
         result.add(academicImage);
@@ -268,6 +267,12 @@ public class HomeServiceImpl implements HomeService {
             }
         });
         result.add(resourceImageUrlList);
+
+        /*友情链接*/
+        List<CooperationLink> cooperationLinkList = cooperationLinkDAO.findByPublishStatusEquals(
+                CommonConstants.PUBLISHED);
+        result.add(cooperationLinkList);
+
 
         return ResponseUtil.success(result);
     }
