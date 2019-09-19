@@ -194,6 +194,8 @@ export default class News extends Component{
     if(result.code === 0){
       //更新state
       this.setState({
+        pageNum:1,
+        pageSize:10,
         total:result.result.total,
         dataSource:result.result.list
       })

@@ -129,7 +129,7 @@ export const reqPublishGraduate = (data) => ajax('/lab/publish', data, 'POST')
 export const reqDeleteGradute = (id) => ajax('/lab/' + id, {}, 'DELETE')
 
 //获取论文总览列表
-export const reqArticleList = (data) => ajax('/scientificResearch/list/19', data, 'GET')
+export const reqArticleList = (data) => ajax('/scientificResearch/list/10', data, 'GET')
 
 //获取某个论文信息
 export const reqArticleData = (id) => ajax('/scientificResearch/' + id, {}, 'GET')
