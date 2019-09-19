@@ -18,4 +18,13 @@ public interface ResourceService {
     CommonResponse<Boolean> renewResourceDetail(ResourceDetail resourceDetail);
 
     CommonResponse<Boolean> deleteResourceDetail(Integer id);
+
+    /**
+     * 通过状态查询分页列表
+     * @param publishStatus
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    PageResponse<ResourceOverview> getByPublishStatus(Integer publishStatus,Integer pageNum, Integer pageSize);
 }

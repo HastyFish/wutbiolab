@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooalgene.wutbiolab.dao.resource.ResourceCategoryDAO;
 import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
+import com.gooalgene.wutbiolab.entity.common.CommonOverview;
+import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
@@ -18,7 +20,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -30,6 +37,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     private PictureService pictureService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     private Logger logger = LoggerFactory.getLogger(ResourceServiceImpl.class);
 
     public ResourceServiceImpl(ResourceDetailDAO resourceDetailDAO, ResourceCategoryDAO resourceCategoryDAO,
@@ -39,6 +49,31 @@ public class ResourceServiceImpl implements ResourceService {
         this.resourceDetailDAO = resourceDetailDAO;
 
     }
+
+//    private <T extends CommonOverview> T getOneByPublishDate(Class<? extends CommonOverview> tClass, Long publishDate, String operation){
+//        String name = tClass.getName();
+//        String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operation+
+//                " :publishDate ORDER BY publishDate limit 1";
+//        Query nativeQuery = entityManager.createNativeQuery(sql);
+//        nativeQuery.setParameter("publishDate",publishDate);
+//        Object object = null;
+//        try {
+//            object = nativeQuery.getSingleResult();
+//        } catch (NoResultException e) {
+//            logger.info("publishDate为：{}是最后一条数据了",publishDate);
+//            return null;
+//        }
+//        Object[] objects = (Object[])object;
+//        LabDetail labDetail=new LabDetail();
+//        BigInteger idBigInt = (BigInteger) objects[0];
+//        if(idBigInt!=null){
+//            labDetail.setId(idBigInt.longValue());
+//        }
+//        T t=null;
+//        String title = (String) objects[1];
+//        labDetail.setTitle(title);
+//        return t;
+//    }
 
     @Override
     public CommonResponse<List<ResourceCategory>> allResourceCategory() {
@@ -113,5 +148,11 @@ public class ResourceServiceImpl implements ResourceService {
         } catch (IllegalArgumentException e) {
             return ResponseUtil.error("id is null");
         }
+    }
+
+    @Override
+    public PageResponse<ResourceOverview> getByPublishStatus(Integer publishStatus,Integer pageNum, Integer pageSize){
+        Page<ResourceOverview> resourceOverviewPage = resourceDetailDAO.findNewsDetailByPublishStatus(publishStatus, PageRequest.of(pageNum - 1, pageSize));
+        return new PageResponse<>(resourceOverviewPage.getContent(),pageNum,pageSize,resourceOverviewPage.getTotalElements());
     }
 }
