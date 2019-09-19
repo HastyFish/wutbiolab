@@ -8,6 +8,7 @@ import com.gooalgene.wutbiolab.response.common.PageResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ScientificResearchService {
     /**
@@ -71,5 +72,5 @@ public interface ScientificResearchService {
      * @param id
      * @return
      */
-    ScientificResearchDetail getPublishedById(Long id);
+    Map<String,ScientificResearchDetail> getPublishedById(Long id);
 }

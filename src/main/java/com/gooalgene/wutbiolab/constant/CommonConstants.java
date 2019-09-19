@@ -3,16 +3,16 @@ package com.gooalgene.wutbiolab.constant;
 public interface CommonConstants {
     //头条新闻
     Integer TOUTIAO=30;
-    String TOUTIAOFIELD = "TOUTIAO";
     //综合新闻
     Integer ZONGHE=2;
     //科研动态
     Integer KEYAN=3;
     //通知公告
     Integer TONGZHI=4;
+    //招聘招生
+    Integer ZHAOPIN = 36;
     //学术活动
     Integer XUESHU=33;
-    String XUESHUFIELD = "XUESHU";
 
     /**
      * 发布
@@ -22,7 +22,7 @@ public interface CommonConstants {
      * 草稿（未发布）
      */
     Integer UNPUBLISHED=0;
-    String PUBLISHSTATUSFIELD = "publishStatus";
+    String PUBLISHDATE = "publishDate";
 
     /**
     * 模块分类
