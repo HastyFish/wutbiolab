@@ -41,8 +41,8 @@ gooal:
     image-nginx-url: http://192.168.0.113/images/
     #    export-temp-path: D:\
     #    export-nginx-url: http://192.168.0.110:83/tempFile
-    export-temp-path: /tmp/data/
-    export-nginx-url: http://wang-108:93/tempFile
+#    export-temp-path: /tmp/data/
+#    export-nginx-url: http://wang-108:93/tempFile
 
 enable:
   swagger: true
