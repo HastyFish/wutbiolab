@@ -160,7 +160,7 @@ class Team extends Component {
         this.setState({
           pageNum: 1,
           pageSize:10,
-          total:result.total,
+          total:result.result.total,
           dataSource:result.result.list
         })
       }else{
