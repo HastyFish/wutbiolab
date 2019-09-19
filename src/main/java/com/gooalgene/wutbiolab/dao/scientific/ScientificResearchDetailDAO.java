@@ -43,6 +43,6 @@ public interface ScientificResearchDetailDAO extends JpaRepository<ScientificRes
 
     ScientificResearchDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
 
-    @Query("select a.title as title, a.publishDate as publishDate from ScientificResearchDetail a")
+    @Query("select a.title as title, a.publishDate as publishDate, a.academicCategoryId as categoryId from ScientificResearchDetail a")
     Page<ScientificResearchOverview> findByPublishStatusEquals(Integer publishStatus, Pageable pageable);
 }

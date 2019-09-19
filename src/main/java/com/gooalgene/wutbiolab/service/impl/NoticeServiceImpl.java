@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.service.impl;
 
+import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.notice.NoticeCategoryDAO;
 import com.gooalgene.wutbiolab.dao.notice.NoticeDetailDAO;
 import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
@@ -8,9 +9,11 @@ import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.response.front.NoticeResponse;
 import com.gooalgene.wutbiolab.service.NoticeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +67,42 @@ public class NoticeServiceImpl implements NoticeService {
             return ResponseUtil.success(true);
         } catch (IllegalArgumentException e) {
             return ResponseUtil.error("id is null");
+        }
+    }
+
+    @Override
+    public CommonResponse<PageResponse<NoticeOverview>> noticeDetailPageByCategory(String category, Integer pageNum, Integer pageSize) {
+        Page<NoticeOverview> noticeOverviewPage = noticeDetailDAO.findByCategoryAndPublishStatusPage(category,
+                CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
+        return ResponseUtil.success(new PageResponse<>(noticeOverviewPage.getContent(), pageNum,
+                pageSize, noticeOverviewPage.getTotalElements()));
+    }
+
+    @Override
+    public CommonResponse<NoticeResponse> noticeDetailPublishedById(long id) {
+        NoticeDetail newsDetail = noticeDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        NoticeOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
+        NoticeOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
+        return ResponseUtil.success(new NoticeResponse(newsDetail, previous, next));
+    }
+
+    private NoticeOverview nextPublishedNewsDetail(long publishDate, String category) {
+        Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
+        if (newsDetailPage.getTotalElements() > 0) {
+            return newsDetailPage.getContent().get(0);
+        } else {
+            return null;
+        }
+    }
+
+    private NoticeOverview previousPublishedNewsDetail(long publishDate, String category) {
+        Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+        if (newsDetailPage.getTotalElements() > 0) {
+            return newsDetailPage.getContent().get(0);
+        } else {
+            return null;
         }
     }
 }
