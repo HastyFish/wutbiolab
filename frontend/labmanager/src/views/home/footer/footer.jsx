@@ -102,7 +102,7 @@ class Footer extends Component{
 
 
   async componentDidMount(){
-    //发送获取友情链接请求
+    //发送获取请求
     const result = await reqFooter();
     if(result.code === 0){
       const footerlist = result.result;

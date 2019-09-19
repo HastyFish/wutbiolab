@@ -65,7 +65,8 @@ class LabDescription extends Component {
     //获取机构概况
     const result = await reqlabDes();
     if(result.code === 0){
-      const {id,title,context,labCategoryId} = result.result;
+      let id = null,title = null ,labCategoryId = 1,context = null;
+      result.result && ({id,title,labCategoryId,context} = result.result)
       this.id = id;
       this.labCategoryId = labCategoryId;
       this.setState({
