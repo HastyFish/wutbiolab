@@ -5,7 +5,7 @@ import com.gooalgene.wutbiolab.entity.home.Footer;
 import com.gooalgene.wutbiolab.request.HomeImageRequest;
 import com.gooalgene.wutbiolab.response.backend.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
-import com.gooalgene.wutbiolab.response.frontend.SlideshowResponse;
+import com.gooalgene.wutbiolab.response.frontend.ImageResponse;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public interface HomeService {
     /**
      * 前台获取轮播图
      */
-    CommonResponse<List<SlideshowResponse>> displayNewsSlideShow();
+    CommonResponse<List<ImageResponse>> displayNewsSlideShow();
 
     /**
      * 前台展示页脚

@@ -1,7 +1,7 @@
 package com.gooalgene.wutbiolab.controller.front;
 
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
-import com.gooalgene.wutbiolab.response.frontend.SlideshowResponse;
+import com.gooalgene.wutbiolab.response.frontend.ImageResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ public class ApiHomeController {
     }
 
     @GetMapping("/slideshow")
-    public CommonResponse<List<SlideshowResponse>> getSlideshow() {
+    public CommonResponse<List<ImageResponse>> getSlideshow() {
         return homeService.displayNewsSlideShow();
     }
 

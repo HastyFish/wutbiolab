@@ -10,6 +10,7 @@ import com.gooalgene.wutbiolab.dao.news.NewsCategoryDAO;
 import com.gooalgene.wutbiolab.dao.news.NewsDetailDAO;
 import com.gooalgene.wutbiolab.dao.notice.NoticeCategoryDAO;
 import com.gooalgene.wutbiolab.dao.notice.NoticeDetailDAO;
+import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
 import com.gooalgene.wutbiolab.entity.home.AcademicImage;
@@ -20,12 +21,13 @@ import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
 import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
+import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchOverview;
 import com.gooalgene.wutbiolab.request.HomeImageRequest;
 import com.gooalgene.wutbiolab.response.backend.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
-import com.gooalgene.wutbiolab.response.frontend.SlideshowResponse;
+import com.gooalgene.wutbiolab.response.frontend.ImageResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
@@ -64,6 +66,8 @@ public class HomeServiceImpl implements HomeService {
 
     private ScientificResearchDetailDAO scientificResearchDetailDAO;
 
+    private ResourceDetailDAO resourceDetailDAO;
+
     private Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);
 
     public HomeServiceImpl(AcademicImageDAO academicImageDAO, NewsImageDAO newsImageDAO,
@@ -71,7 +75,9 @@ public class HomeServiceImpl implements HomeService {
                            PictureService pictureService, NewsCategoryDAO newsCategoryDAO,
                            NewsDetailDAO newsDetailDAO, ObjectMapper objectMapper,
                            ScientificResearchDetailDAO scientificResearchDetailDAO,
-                           NoticeDetailDAO noticeDetailDAO, NoticeCategoryDAO noticeCategoryDAO) {
+                           NoticeDetailDAO noticeDetailDAO, NoticeCategoryDAO noticeCategoryDAO,
+                           ResourceDetailDAO resourceDetailDAO) {
+        this.resourceDetailDAO = resourceDetailDAO;
         this.noticeCategoryDAO = noticeCategoryDAO;
         this.noticeDetailDAO = noticeDetailDAO;
         this.scientificResearchDetailDAO = scientificResearchDetailDAO;
@@ -165,20 +171,19 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public CommonResponse<List<SlideshowResponse>> displayNewsSlideShow() {
+    public CommonResponse<List<ImageResponse>> displayNewsSlideShow() {
         if (newsCategoryDAO.findById(CommonConstants.TOUTIAO.longValue()).isPresent()) {
             NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO.longValue()).get();
             List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryAndPublishStatus(
                     headline.getCategory(), CommonConstants.PUBLISHED);
-            List<SlideshowResponse> imageUrlList = new ArrayList<>();
+            List<ImageResponse> imageUrlList = new ArrayList<>();
             newsDetailList.forEach(one -> {
                     try {
-
                         String pictureListImage = pictureService.formImageUrl(one.getImage());
                         List<Picture> pictureList = objectMapper.readValue(
                                 pictureListImage,
                                 objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                        imageUrlList.add(new SlideshowResponse(one.getTitle(), pictureList.get(0).getUrl()));
+                        imageUrlList.add(new ImageResponse(one.getTitle(), pictureList.get(0).getUrl()));
                     } catch (IOException e) {
                         e.printStackTrace();
                         logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
@@ -201,7 +206,7 @@ public class HomeServiceImpl implements HomeService {
         List<Object> result = new ArrayList<>();
 
         /*科研动态*/
-        Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHSTATUSFIELD);
+        Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATE);
         List<ScientificResearchOverview> scientificResearchOverviewList =
                 scientificResearchDetailDAO
                         .findByPublishStatusEquals(
@@ -244,6 +249,25 @@ public class HomeServiceImpl implements HomeService {
                     noticeCategory.getCategory(), CommonConstants.PUBLISHED);
             result.add(acadeimcNewsList);
         }
+
+        /*资源发布*/
+        List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
+                CommonConstants.PUBLISHED, PageRequest.of(0, 4,
+                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATE)));
+        List<ImageResponse> resourceImageUrlList = new ArrayList<>();
+        resourceOverviewList.forEach(one -> {
+            try {
+                String pictureListImage = pictureService.formImageUrl(one.getImage());
+                List<Picture> pictureList = objectMapper.readValue(
+                        pictureListImage,
+                        objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+                resourceImageUrlList.add(new ImageResponse(one.getTitle(), pictureList.get(0).getUrl()));
+            } catch (IOException e) {
+                logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
+                e.printStackTrace();
+            }
+        });
+        result.add(resourceImageUrlList);
 
         return ResponseUtil.success(result);
     }

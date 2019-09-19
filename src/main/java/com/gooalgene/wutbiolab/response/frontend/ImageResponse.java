@@ -5,12 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SlideshowResponse {
+public class ImageResponse {
 
-    public SlideshowResponse() {
+    public ImageResponse() {
     }
 
-    public SlideshowResponse(String title, String imageurl) {
+    public ImageResponse(String title, String imageurl) {
         this.title = title;
         this.imageurl = imageurl;
     }

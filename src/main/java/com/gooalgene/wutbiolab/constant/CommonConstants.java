@@ -22,7 +22,7 @@ public interface CommonConstants {
      * 草稿（未发布）
      */
     Integer UNPUBLISHED=0;
-    String PUBLISHSTATUSFIELD = "publishStatus";
+    String PUBLISHDATE = "publishDate";
 
     /**
     * 模块分类
