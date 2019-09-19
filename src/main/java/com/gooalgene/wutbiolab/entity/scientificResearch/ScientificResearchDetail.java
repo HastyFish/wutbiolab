@@ -23,7 +23,7 @@ public class ScientificResearchDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ApiModelProperty(value = "一级分类id", example = "2")
+    @ApiModelProperty(value = "一级分类id", example = "10")
     private Long scientificResearchCategoryId;
 
     @ApiModelProperty(value = "标题", example = "标题1")
@@ -47,7 +47,7 @@ public class ScientificResearchDetail implements Serializable {
     @ApiModelProperty(value = "作者", example = "作者1")
     private String author;
     @ApiModelProperty(value = "发布年度", example = "2019")
-    private Long publishYear;
+    private String publishYear;
 
     @ApiModelProperty(value = "富文本内容", example = "内容1")
     @Column(columnDefinition = "MEDIUMTEXT")
@@ -57,7 +57,8 @@ public class ScientificResearchDetail implements Serializable {
     private Long academicCategoryId;
 
 
-    public ScientificResearchDetail(Long id,String title, Long publishDate, Integer publishStatus, String periodicalName, String author, Long publishYear) {
+    public ScientificResearchDetail(Long id,String title, Long publishDate, Integer publishStatus, String periodicalName, String author,
+                                    String publishYear) {
         this.id=id;
         this.title = title;
         this.publishDate = publishDate;

@@ -67,7 +67,7 @@ class EditArticle extends Component{
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {title, periodicalName, author, publishYear, context, publishDate:Date.parse( new Date(publishDate._d)), scientificResearchCategoryId: 19,};
+        let param = {title, periodicalName, author, publishYear, context, publishDate:Date.parse( new Date(publishDate._d)), scientificResearchCategoryId: 10,};
         
         if(isUpdate){
           //编辑更新,需要获取当前Id

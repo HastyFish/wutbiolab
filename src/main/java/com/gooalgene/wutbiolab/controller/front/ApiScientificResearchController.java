@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "前端科研工作模块", tags = {"前端科研工作模块接口"})
 @RestController
@@ -32,9 +33,9 @@ public class ApiScientificResearchController {
     }
 
     @GetMapping("/{id}")
-    public CommonResponse<ScientificResearchDetail> getPublishedById(@PathVariable("id") Long id){
-        ScientificResearchDetail scientificResearchDetail = scientificResearchService.getPublishedById(id);
-        return ResponseUtil.success(scientificResearchDetail);
+    public CommonResponse<Map<String,ScientificResearchDetail>> getPublishedById(@PathVariable("id") Long id){
+        Map<String,ScientificResearchDetail> map = scientificResearchService.getPublishedById(id);
+        return ResponseUtil.success(map);
     }
 
 
