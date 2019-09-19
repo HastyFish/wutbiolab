@@ -9,7 +9,7 @@ import {
   Col,
   message
 } from 'antd';
-import logo from '@/assets/images/logo.png';
+// import logo from '@/assets/images/logo.png';
 import bgCom from './images/bgCom.png'
 import './login.less';
 import storageUtils from '@/utils/storageUtils.js'
@@ -86,9 +86,9 @@ class Login extends PureComponent {
       <div className="login">
         <header className="login-header">
           <div className="login-header-content">
-            <img src={logo} alt="LOGO" />
+            {/* <img src={logo} alt="LOGO" /> */}
             <span className="line"></span>
-            <h1>后台管理中心</h1>
+            <h1>武汉理工大学生物信息实验室后台管理中心</h1>
           </div>
         </header>
         <section className="login-content">
