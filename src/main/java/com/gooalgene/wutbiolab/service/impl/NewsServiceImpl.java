@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.news.NewsCategoryDAO;
 import com.gooalgene.wutbiolab.dao.news.NewsDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -123,17 +125,24 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category, int pageNum, int pageSize) {
-        return null;
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category,
+                                                                               int pageNum,
+                                                                               int pageSize) {
+        Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(category,
+                CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
+        return ResponseUtil.success(new PageResponse<>(newsOverviewPage.getContent(), pageNum,
+                pageSize, newsOverviewPage.getTotalElements()));
     }
 
     @Override
     public CommonResponse<NewsDetail> newsDetailPublishedById(long id) {
-        return null;
+        NewsDetail newsDetail = newsDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        return ResponseUtil.success(newsDetail);
     }
 
     @Override
     public CommonResponse<NewsDetail> newsDetailPublishedNext(long publishDate) {
+//        NewsDetail newsDetail = newsDetailDAO.findNewsDetailBy(publishDate);
         return null;
     }
 

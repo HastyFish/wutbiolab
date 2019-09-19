@@ -221,8 +221,15 @@ public class HomeServiceImpl implements HomeService {
         result.add(latestNewsOverviewList);
 
         /*新闻动态图片*/
-        NewsImage newsImage = newsImageDAO.findAll().get(0);
-        result.add(newsImage);
+        try {
+            NewsImage newsImage = newsImageDAO.findAll().get(0);
+            List<Picture> pictureList = objectMapper.readValue((pictureService.formImageUrl(newsImage.getContext())),
+                    objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+            result.add(pictureList.get(0).getUrl());
+        } catch (IOException e) {
+            e.printStackTrace();
+            result.add("");
+        }
 
         /*通知公告*/
         List<NoticeOverview> noticeDetailList = noticeDetailDAO.findByPublishStatusEquals(
@@ -238,8 +245,14 @@ public class HomeServiceImpl implements HomeService {
         }
 
         /*学术活动图片*/
-        AcademicImage academicImage = academicImageDAO.findAll().get(0);
-        result.add(academicImage);
+        try {
+            AcademicImage academicImage = academicImageDAO.findAll().get(0);
+            List<Picture> pictureList = objectMapper.readValue((pictureService.formImageUrl(academicImage.getContext())),
+                    objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+            result.add(pictureList.get(0).getUrl());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         /*招聘招生*/
         if (noticeCategoryDAO.findById(CommonConstants.ZHAOPIN.longValue()).isPresent()) {
@@ -257,8 +270,7 @@ public class HomeServiceImpl implements HomeService {
         resourceOverviewList.forEach(one -> {
             try {
                 String pictureListImage = pictureService.formImageUrl(one.getImage());
-                List<Picture> pictureList = objectMapper.readValue(
-                        pictureListImage,
+                List<Picture> pictureList = objectMapper.readValue(pictureListImage,
                         objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
                 resourceImageUrlList.add(new ImageResponse(one.getTitle(), pictureList.get(0).getUrl()));
             } catch (IOException e) {
