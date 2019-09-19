@@ -9,7 +9,8 @@ export default class PicturesWall extends React.Component {
 
   static propTypes = {
     image: PropTypes.array,
-    length:PropTypes.number
+    length:PropTypes.number,
+    option:PropTypes.object
   }
 
 
@@ -17,7 +18,11 @@ export default class PicturesWall extends React.Component {
     super(props)
 
     // 如果传入了imgs属性
-    const {image} = this.props
+    const {image} = this.props;
+
+    //如果传入了option属性
+    const {option} = this.props;
+    this.option = option || null
 
     let fileList = [];
     if (image && image.length>0) {
@@ -78,12 +83,23 @@ export default class PicturesWall extends React.Component {
     //   }));
     // };
     //使用新的图片压缩插件
-    imgzip.photoCompress(file, {quality:1} ,(base64)=>{
-      file.thumbUrl = base64;
-      this.setState(state => ({
-        fileList: [...state.fileList, file],
-      }));
-    });
+    if(this.option){
+      //外部传入了图片参数
+      imgzip.photoCompress(file, {quality:1,...this.option} ,(base64)=>{
+        file.thumbUrl = base64;
+        this.setState(state => ({
+          fileList: [...state.fileList, file],
+        }));
+      });
+    }else{
+      imgzip.photoCompress(file, {quality:1} ,(base64)=>{
+        file.thumbUrl = base64;
+        this.setState(state => ({
+          fileList: [...state.fileList, file],
+        }));
+      });
+    }
+    
     return false;
   }
 
