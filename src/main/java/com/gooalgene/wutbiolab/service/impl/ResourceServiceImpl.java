@@ -84,9 +84,9 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public CommonResponse<Boolean> renewResourceDetail(ResourceDetail resourceDetail) {
         /*新增或保存时，查询前端返回的categoryId对应的category*/
-        if (resourceCategoryDAO.findById(resourceDetail.getCategoryId().longValue()).isPresent()) {
+        if (resourceCategoryDAO.findById(resourceDetail.getCategoryId()).isPresent()) {
             ResourceCategory resourceCategory = resourceCategoryDAO.findById(
-                    resourceDetail.getCategoryId().longValue()).get();
+                    resourceDetail.getCategoryId()).get();
             resourceDetail.setCategory(resourceCategory.getCategory());
         } else {
             return ResponseUtil.error("Wrong category");

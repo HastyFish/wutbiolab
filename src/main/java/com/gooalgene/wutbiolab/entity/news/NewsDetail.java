@@ -28,7 +28,7 @@ public class NewsDetail implements Serializable {
     private String context;
 
     @Column
-    private Integer categoryId;
+    private Long categoryId;
 
     /**
      * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）

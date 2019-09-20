@@ -172,8 +172,8 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public CommonResponse<List<ImageResponse>> displayNewsSlideShow() {
-        if (newsCategoryDAO.findById(CommonConstants.TOUTIAO.longValue()).isPresent()) {
-            NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO.longValue()).get();
+        if (newsCategoryDAO.findById(CommonConstants.TOUTIAO).isPresent()) {
+            NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO).get();
             List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryAndPublishStatus(
                     headline.getCategory(), CommonConstants.PUBLISHED);
             List<ImageResponse> imageUrlList = new ArrayList<>();
@@ -209,7 +209,9 @@ public class HomeServiceImpl implements HomeService {
         Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
 
         /*科研动态*/
-//        List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryAndPublishStatus();
+//        List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+//                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+//                        new Sort(Sort.Direction.DESC)));
 //        List<ScientificResearchOverview> scientificResearchOverviewList =
 //                scientificResearchDetailDAO
 //                        .findByPublishStatusEquals(
@@ -240,8 +242,8 @@ public class HomeServiceImpl implements HomeService {
         result.add(noticeDetailList);
 
         /*学术活动*/
-        if (newsCategoryDAO.findById(CommonConstants.XUESHU.longValue()).isPresent()) {
-            NewsCategory academicNewsCategory = newsCategoryDAO.findById(CommonConstants.XUESHU.longValue()).get();
+        if (newsCategoryDAO.findById(CommonConstants.XUESHU).isPresent()) {
+            NewsCategory academicNewsCategory = newsCategoryDAO.findById(CommonConstants.XUESHU).get();
             List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryAndPublishStatus(
                     academicNewsCategory.getCategory(), CommonConstants.PUBLISHED);
             result.add(acadeimcNewsList);
@@ -258,8 +260,8 @@ public class HomeServiceImpl implements HomeService {
         }
 
         /*招聘招生*/
-        if (noticeCategoryDAO.findById(CommonConstants.ZHAOPIN.longValue()).isPresent()) {
-            NoticeCategory noticeCategory = noticeCategoryDAO.findById(CommonConstants.ZHAOPIN.longValue()).get();
+        if (noticeCategoryDAO.findById(CommonConstants.ZHAOPIN).isPresent()) {
+            NoticeCategory noticeCategory = noticeCategoryDAO.findById(CommonConstants.ZHAOPIN).get();
             List<NoticeOverview> acadeimcNewsList = noticeDetailDAO.findByCategoryAndPublishStatus(
                     noticeCategory.getCategory(), CommonConstants.PUBLISHED);
             result.add(acadeimcNewsList);
