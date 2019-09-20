@@ -27,6 +27,8 @@ public class NewsDetail implements Serializable {
     @Column(columnDefinition = "MEDIUMTEXT")
     private String context;
 
+    @Column
+    private Integer categoryId;
 
     /**
      * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）

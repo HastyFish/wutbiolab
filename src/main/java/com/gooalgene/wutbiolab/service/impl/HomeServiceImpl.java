@@ -205,14 +205,17 @@ public class HomeServiceImpl implements HomeService {
 //        Map<String, Object> result = new HashMap<>();
         List<Object> result = new ArrayList<>();
 
-        /*科研动态*/
+        /*按发布时间降序排序*/
         Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
-        List<ScientificResearchOverview> scientificResearchOverviewList =
-                scientificResearchDetailDAO
-                        .findByPublishStatusEquals(
-                                CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
-//        result.put(ScientificResearchDetail.class.getSimpleName(), scientificResearchOverviewList);
-        result.add(scientificResearchOverviewList);
+
+        /*科研动态*/
+//        List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryAndPublishStatus();
+//        List<ScientificResearchOverview> scientificResearchOverviewList =
+//                scientificResearchDetailDAO
+//                        .findByPublishStatusEquals(
+//                                CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
+////        result.put(ScientificResearchDetail.class.getSimpleName(), scientificResearchOverviewList);
+//        result.add(scientificResearchOverviewList);
 
         /*新闻动态*/
         List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByPublishStatusEquals(
