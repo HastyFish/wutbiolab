@@ -12,6 +12,7 @@ import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -240,6 +241,8 @@ public class LabServiceImpl implements LabService {
             }
         }
         if(labDetailPage!=null){
+//            Optional<LabCategory> optional = labCategoryDAO.findById(labCategoryId);
+//            String category = optional.isPresent() ? optional.get().getCategory() : null;
             List<LabDetail> content = labDetailPage.getContent();
             long totalElements = labDetailPage.getTotalElements();
             PageResponse<LabDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);

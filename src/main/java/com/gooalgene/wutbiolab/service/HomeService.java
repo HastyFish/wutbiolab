@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.service;
 
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import com.gooalgene.wutbiolab.entity.home.CooperationLink;
 import com.gooalgene.wutbiolab.entity.home.Footer;
 import com.gooalgene.wutbiolab.request.HomeImageRequest;
@@ -66,4 +67,10 @@ public interface HomeService {
      * 前台展示首页信息
      */
     CommonResponse<List<Object>> displayHomeInfo();
+
+
+    /**
+     * 获取所有分类信息
+     */
+    List<AllCategory> getAllCategorys();
 }

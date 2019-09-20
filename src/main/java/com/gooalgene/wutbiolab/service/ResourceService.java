@@ -33,5 +33,5 @@ public interface ResourceService {
      * @param pageSize
      * @return
      */
-    PageResponse<ResourceOverview> getByPublishStatus(Integer publishStatus,Integer pageNum, Integer pageSize);
+    PageResponse<ResourceOverview> getByPublishStatus(Long categoryId,Integer publishStatus,Integer pageNum, Integer pageSize);
 }
