@@ -175,7 +175,11 @@ public class LabServiceImpl implements LabService {
     @Override
     public Map<String,LabDetail> getPublishedById(Long id) {
         Map<String,LabDetail> map=new HashMap<>();
-        LabDetail labDetail = labDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        List<Object[]> objects = labDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        LabDetail labDetail =null;
+        if(objects!=null&&!objects.isEmpty()){
+            labDetail= formatObj2Detail(objects.get(0));
+        }
         if (labDetail != null) {
             Long publishDate = labDetail.getPublishDate();
             LabDetail pre = getOneByPublishDate(publishDate, ">");
@@ -302,4 +306,28 @@ public class LabServiceImpl implements LabService {
         return mentorResponses;
     }
 
+    private LabDetail formatObj2Detail(Object[] objects){
+        BigInteger idBigInt = (BigInteger) objects[0];
+        Long id=idBigInt!=null?idBigInt.longValue():null;
+        BigInteger categoryIdBigInt = (BigInteger) objects[1];
+        Long categoryId=categoryIdBigInt!=null?categoryIdBigInt.longValue():null;
+        String context = (String) objects[2];
+        BigInteger graduateCategoryIdBigInt = (BigInteger) objects[3];
+        Long graduateCategoryId=graduateCategoryIdBigInt!=null?graduateCategoryIdBigInt.longValue():null;
+        BigInteger mentorCategoryIdBigInt = (BigInteger) objects[4];
+        Long mentorCategoryId=mentorCategoryIdBigInt!=null?mentorCategoryIdBigInt.longValue():null;
+        String mentorName = (String) objects[5];
+        Integer mentorOder = (Integer) objects[6];
+        BigInteger publishDateBigInt = (BigInteger) objects[7];
+        Long publishDate=publishDateBigInt!=null?publishDateBigInt.longValue():null;
+        Integer publishStatus = (Integer) objects[8];
+        String title = (String) objects[9];
+        String category = (String) objects[10];
+
+        LabDetail labDetail = LabDetail.builder().id(id).categoryId(categoryId).context(context).graduateCategoryId(graduateCategoryId)
+                .mentorCategoryId(mentorCategoryId).mentorName(mentorName).mentorOrder(mentorOder).publishDate(publishDate)
+                .publishStatus(publishStatus).title(title).category(category).build();
+
+        return labDetail;
+    }
 }

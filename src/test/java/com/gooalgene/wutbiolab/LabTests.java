@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -29,7 +30,9 @@ public class LabTests {
 	@Transactional
 	@Test
 	public void testDAO() {
-		Integer integer = labDetailDAO.updatePublishStatusById(2l);
+//		Integer integer = labDetailDAO.updatePublishStatusById(2l);
+		List<Object[]> byIdAndPublishStatus =labDetailDAO.getByIdAndPublishStatus(4l, 1);
+
 		System.out.println(1);
 
 	}
@@ -43,7 +46,8 @@ public class LabTests {
 //				3l, 0, 2, CommonConstants.PUBLISHED,true);
 //		PageResponse<LabDetail> graduates = labService.getGraduates(1, 3);
 //		List<GraduateCategory> allCategory = labService.getGraduateCategorys();
-		Map<String, LabDetail> publishedById = labService.getPublishedById(27l);
+//		Map<String, LabDetail> publishedById = labService.getPublishedById(27l);
+		Map<String, LabDetail> publishedById = labService.getPublishedById(1l);
 		System.out.println(1);
 
 	}
