@@ -20,8 +20,8 @@ public interface NewsDetailDAO extends JpaRepository<NewsDetail, Long> {
             " from NewsDetail a where a.category = ?1 and a.publishStatus = ?2")
     List<NewsOverview> findByCategoryAndPublishStatus(String category, Integer publishStatus);
 
-    @Query("select a.title as title, a.publishDate as publishDate from NewsDetail a")
-    List<NewsOverview> findByCategoryEquals(String category);
+//    @Query("select a.title as title, a.publishDate as publishDate from NewsDetail a")
+    long countByCategoryIdEquals(Integer categoryId);
 
     @Query("select a.id as id, a.title as title, a.publishDate as publishDate, a.category as category from NewsDetail a")
     Page<NewsOverview> findByPublishStatusEquals(Integer published, Pageable pageable);
@@ -32,11 +32,11 @@ public interface NewsDetailDAO extends JpaRepository<NewsDetail, Long> {
 
     NewsDetail findByIdAndPublishStatus(Long id, Integer publishStatus);
 
-    @Query("select a.id as id, a.title as title from NewsDetail a where publishDate < ?1 " +
+    @Query("select a.id as id, a.title as title from NewsDetail a where publishDate > ?1 " +
             "and category = ?2 and publishStatus = ?3")
     Page<NewsOverview> findPreviousNewsDetail(long publishDate, String category, int publishStatus, Pageable pageable);
 
-    @Query("select a.id as id, a.title as title from NewsDetail a where publishDate > ?1 " +
-            "and category = ?2 and publishStatus = ?2")
+    @Query("select a.id as id, a.title as title from NewsDetail a where publishDate < ?1 " +
+            "and category = ?2 and publishStatus = ?3")
     Page<NewsOverview> findNextNewsDetail(long publishDate, String category, Integer publishStatus, Pageable pageable);
 }

@@ -1,10 +1,11 @@
 package com.gooalgene.wutbiolab.controller.front;
 
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
+import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
-import com.gooalgene.wutbiolab.response.front.NewsDetailResponse;
+import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class ApiNewsController {
     }
 
     @GetMapping("/{id}")
-    public CommonResponse<NewsDetailResponse> newsDetailById(@PathVariable long id) {
+    public CommonResponse<DetailResponse<NewsDetail, NewsOverview>> newsDetailById(@PathVariable long id) {
         return newsService.newsDetailPublishedById(id);
     }
 }

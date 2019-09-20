@@ -63,7 +63,7 @@ class EditNotice extends Component{
     this.props.form.validateFields( async (error, values) => {
       if(!error){
         //1. 收集数据,封装成notice对象
-        const {title, category,publishDate} = values;
+        const {title, categoryId,publishDate} = values;
 
         //获取富文本
         const context = this.editor.current.getContext();
@@ -71,7 +71,7 @@ class EditNotice extends Component{
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {title, category, context,publishDate:Date.parse( new Date(publishDate._d))};
+        let param = {title, categoryId, context,publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state;
@@ -139,14 +139,14 @@ class EditNotice extends Component{
           this.setState({
             noticeItem,
           })
-          const {category} = noticeItem;
-          category && this.props.form.setFieldsValue({'category':category})
+          const {categoryId} = noticeItem;
+          categoryId && this.props.form.setFieldsValue({'categoryId':categoryId})
         }else{
           message.error('获取通知失败，请稍后再试!');
         }
       }else{
         //select框赋值
-        this.props.form.setFieldsValue({'category':categoryList[0].category})
+        this.props.form.setFieldsValue({'categoryId':categoryList[0].category})
       }
     }else{
       message.error('获取通知类型失败，请稍后再试!');
@@ -177,7 +177,7 @@ class EditNotice extends Component{
           <Form>
             <Item label="编辑类型" {...formItemLayout}>
                 {
-                  getFieldDecorator('category', {
+                  getFieldDecorator('categoryId', {
                     rules: [
                       {required: true, message: '必须指定分类'},
                     ]
@@ -186,7 +186,7 @@ class EditNotice extends Component{
                       {
                         categoryList.map(item => {
                           return (
-                            <Option value={item.category} key={item.id}>{item.category}</Option>
+                            <Option value={item.id} key={item.id}>{item.category}</Option>
                           )
                         })
                       }

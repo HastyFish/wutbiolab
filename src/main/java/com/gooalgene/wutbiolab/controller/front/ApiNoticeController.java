@@ -1,10 +1,11 @@
 package com.gooalgene.wutbiolab.controller.front;
 
 import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
+import com.gooalgene.wutbiolab.entity.notice.NoticeDetail;
 import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
-import com.gooalgene.wutbiolab.response.front.NoticeResponse;
+import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import com.gooalgene.wutbiolab.service.NoticeService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class ApiNoticeController {
     }
 
     @GetMapping("/{id}")
-    public CommonResponse<NoticeResponse> newsDetailById(@PathVariable long id) {
+    public CommonResponse<DetailResponse<NoticeDetail, NoticeOverview>> newsDetailById(@PathVariable long id) {
         return noticeService.noticeDetailPublishedById(id);
     }
 

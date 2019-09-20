@@ -12,7 +12,7 @@ import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
-import com.gooalgene.wutbiolab.response.front.NewsDetailResponse;
+import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
@@ -73,6 +73,13 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public CommonResponse<Boolean> renewNews(NewsDetail newsDetail) {
+        /*新增或保存时，查询前端返回的categoryId对应的category*/
+        if (newsCategoryDAO.findById(newsDetail.getCategoryId().longValue()).isPresent()) {
+            NewsCategory newsCategory = newsCategoryDAO.findById(newsDetail.getCategoryId().longValue()).get();
+            newsDetail.setCategory(newsCategory.getCategory());
+        } else {
+            return ResponseUtil.error("Wrong category");
+        }
         if (null != newsDetail.getId()) {
             if (newsDetailDAO.findById(newsDetail.getId()).isPresent()) {
                 NewsDetail oldNewsDetail = newsDetailDAO.findById(newsDetail.getId()).get();
@@ -96,8 +103,9 @@ public class NewsServiceImpl implements NewsService {
             }
         } else {
             try {
-                if (newsDetailDAO.findByCategoryEquals(newsDetail.getCategory()).size() >= 5) {
-                    return ResponseUtil.error("more than 5 item");
+                if (newsDetail.getCategoryId().equals(CommonConstants.TOUTIAO)
+                        && newsDetailDAO.countByCategoryIdEquals(CommonConstants.TOUTIAO) >= 5) {
+                    return ResponseUtil.error("头条新闻已经有5条");
                 }
                 String newImage = pictureService.saveBase64(null, newsDetail.getImage());
                 if (null != newImage) {
@@ -142,16 +150,16 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<NewsDetailResponse> newsDetailPublishedById(long id) {
+    public CommonResponse<DetailResponse<NewsDetail, NewsOverview>> newsDetailPublishedById(long id) {
         NewsDetail newsDetail = newsDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         NewsOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
         NewsOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        return ResponseUtil.success(new NewsDetailResponse(newsDetail, previous, next));
+        return ResponseUtil.success(new DetailResponse<>(newsDetail, next, previous));
     }
 
     private NewsOverview nextPublishedNewsDetail(long publishDate, String category) {
         Page<NewsOverview> newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
+                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {
@@ -161,7 +169,7 @@ public class NewsServiceImpl implements NewsService {
 
     private NewsOverview previousPublishedNewsDetail(long publishDate, String category) {
         Page<NewsOverview> newsDetailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {

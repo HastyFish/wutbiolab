@@ -10,7 +10,7 @@ import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
-import com.gooalgene.wutbiolab.response.front.NoticeResponse;
+import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import com.gooalgene.wutbiolab.service.NoticeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,6 +56,13 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     @Transactional
     public CommonResponse<Boolean> renewNoticeDetail(NoticeDetail noticeDetail) {
+        /*新增或保存时，查询前端返回的categoryId对应的category*/
+        if (noticeCategoryDAO.findById(noticeDetail.getCategoryId().longValue()).isPresent()) {
+            NoticeCategory resourceCategory = noticeCategoryDAO.findById(noticeDetail.getCategoryId().longValue()).get();
+            noticeDetail.setCategory(resourceCategory.getCategory());
+        } else {
+            return ResponseUtil.error("Wrong category");
+        }
         noticeDetailDAO.save(noticeDetail);
         return ResponseUtil.success(true);
     }
@@ -87,16 +94,16 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public CommonResponse<NoticeResponse> noticeDetailPublishedById(long id) {
+    public CommonResponse<DetailResponse<NoticeDetail, NoticeOverview>> noticeDetailPublishedById(long id) {
         NoticeDetail newsDetail = noticeDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         NoticeOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
         NoticeOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        return ResponseUtil.success(new NoticeResponse(newsDetail, previous, next));
+        return ResponseUtil.success(new DetailResponse<>(newsDetail, previous, next));
     }
 
     private NoticeOverview nextPublishedNewsDetail(long publishDate, String category) {
         Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
+                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {
@@ -106,7 +113,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     private NoticeOverview previousPublishedNewsDetail(long publishDate, String category) {
         Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {

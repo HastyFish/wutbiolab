@@ -66,7 +66,7 @@ class EditNews extends Component{
     this.props.form.validateFields( async (error, values) => {
       if(!error){
         //1. 收集数据,封装成new对象
-        const {title, category,publishDate} = values;
+        const {title, categoryId,publishDate} = values;
 
         //获取封面图片及富文本
         //判断是否有图片,获取封面图片
@@ -82,7 +82,7 @@ class EditNews extends Component{
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {title, category, image, context,publishDate:Date.parse( new Date(publishDate._d))};
+        let param = {title, categoryId, image, context,publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state;
@@ -138,8 +138,11 @@ class EditNews extends Component{
 
   //选择框变化事件
   handleChange = (e) => {
+    //遍历categoryList找到对应的category
+    const {categoryList} = this.state;
+    let category = categoryList.find(item => item.id === e);
     this.setState({
-      categoryType:e
+      categoryType:category.category
     })
   }
 
@@ -158,19 +161,19 @@ class EditNews extends Component{
           if(result.code === 0){
             //携带新闻的参数跳入新闻编辑页面
             const newItem = result.result;
-            const {category} = newItem;
+            const {categoryId} = newItem;
             this.setState({
               newItem,
-              categoryType:category
+              categoryType:categoryId
             })
             //select框赋值
-            this.props.form.setFieldsValue({'category':category})
+            this.props.form.setFieldsValue({'categoryId':categoryId})
           }else{
             message.error('获取新闻失败，请稍后再试!');
           }
         }else{
           //select框赋值
-          this.props.form.setFieldsValue({'category':categoryList[0].category})
+          this.props.form.setFieldsValue({'categoryId':categoryList[0].id})
         }
       }else{
         message.error('获取新闻类型失败，请稍后再试!');
@@ -179,7 +182,7 @@ class EditNews extends Component{
 
   render(){
     const {newItem,categoryList,categoryType} = this.state;
-    const {title, category, image, context,publishDate} = newItem;
+    const {title, image, context,publishDate} = newItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
@@ -201,8 +204,7 @@ class EditNews extends Component{
           <Form>
             <Item label="编辑类型" {...formItemLayout}>
               {
-                getFieldDecorator('category', {
-                  initialValue: category || '头条新闻',
+                getFieldDecorator('categoryId', {
                   rules: [
                     {required: true, message: '必须指定分类'},
                   ]
@@ -211,7 +213,7 @@ class EditNews extends Component{
                     {
                       categoryList.map(item => {
                         return (
-                          <Option value={item.category} key={item.id}>{item.category}</Option>
+                          <Option value={item.id} key={item.id}>{item.category}</Option>
                         )
                       })
                     }
