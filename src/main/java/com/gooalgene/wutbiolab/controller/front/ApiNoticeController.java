@@ -7,10 +7,7 @@ import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.front.NoticeResponse;
 import com.gooalgene.wutbiolab.service.NoticeService;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,10 +27,10 @@ public class ApiNoticeController {
         return noticeService.allNoticeCategory();
     }
 
-    @GetMapping
-    public CommonResponse<PageResponse<NoticeOverview>> newsDetailByCategory(Integer categoryId,
-                                                                             Integer pageNum,
-                                                                             Integer pageSize) {
+    @GetMapping("/list/{categoryId}")
+    public CommonResponse<PageResponse<NoticeOverview>> newsDetailByCategory(@PathVariable("categoryId") Integer categoryId,
+                                                                             @RequestParam("pageNum") Integer pageNum,
+                                                                             @RequestParam("pageSize") Integer pageSize) {
         return noticeService.noticeDetailPageByCategory(categoryId, pageNum, pageSize);
     }
 
