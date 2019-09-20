@@ -4,7 +4,6 @@ import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.scientific.AcademicCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
-import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
@@ -136,6 +135,11 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
             map.put("next",next);
         }
         return map;
+    }
+
+    @Override
+    public ScientificResearchCategory getCategoryById(Long categoryId) {
+        return scientificResearchCategoryDAO.findById(categoryId).orElse(null);
     }
 
     private ScientificResearchDetail getOneByPublishDate(Long publishDate, String operation){

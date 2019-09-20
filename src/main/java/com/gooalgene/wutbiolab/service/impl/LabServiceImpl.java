@@ -248,6 +248,10 @@ public class LabServiceImpl implements LabService {
         return null;
     }
 
+    public LabCategory getCategoryById(Long labCategoryId){
+        return labCategoryDAO.findById(labCategoryId).orElse(null);
+    }
+
     private List<MentorResponse> formatObj2MentorResponse(List<Object[]> researchTeam) {
         Table<Long, String, List<LabDetail>> table = HashBasedTable.create();
         researchTeam.forEach(objects -> {
