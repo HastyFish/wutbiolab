@@ -25,3 +25,4 @@ public interface ResourceDetailDAO extends JpaRepository<ResourceDetail, Long> {
 
     ResourceDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
 }
+
