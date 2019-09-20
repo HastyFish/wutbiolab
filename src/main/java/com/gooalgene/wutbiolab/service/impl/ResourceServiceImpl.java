@@ -148,9 +148,10 @@ public class ResourceServiceImpl implements ResourceService {
         Map<String,ResourceDetail> map=new HashMap<>();
         ResourceDetail resourceDetail = resourceDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         if(resourceDetail!=null){
+            Long categoryId = resourceDetail.getCategoryId();
             Long publishDate = resourceDetail.getPublishDate();
-            ResourceDetail pre = getOneByPublishDate(publishDate, ">");
-            ResourceDetail next = getOneByPublishDate(publishDate, "<");
+            ResourceDetail pre = getOneByPublishDate(publishDate,categoryId, ">");
+            ResourceDetail next = getOneByPublishDate(publishDate,categoryId, "<");
             map.put("detail",resourceDetail);
             map.put("previous",pre);
             map.put("next",next);
@@ -158,11 +159,12 @@ public class ResourceServiceImpl implements ResourceService {
         return map;
     }
 
-    private ResourceDetail getOneByPublishDate(Long publishDate, String operation) {
+    private ResourceDetail getOneByPublishDate(Long publishDate,Long categoryId, String operation) {
         String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
-                " :publishDate and rd.publishStatus=1 ORDER BY publishDate limit 1";
+                " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId ORDER BY publishDate limit 1";
         Query nativeQuery = entityManager.createNativeQuery(sql);
         nativeQuery.setParameter("publishDate",publishDate);
+        nativeQuery.setParameter("categoryId",categoryId);
         Object object = null;
         try {
             object = nativeQuery.getSingleResult();
