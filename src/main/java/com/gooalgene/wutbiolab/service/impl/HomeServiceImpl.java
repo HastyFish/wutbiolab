@@ -30,6 +30,7 @@ import com.gooalgene.wutbiolab.response.admin.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.front.ImageResponse;
+import com.gooalgene.wutbiolab.response.front.OverviewWithImageResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
@@ -268,14 +269,19 @@ public class HomeServiceImpl implements HomeService {
         List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
                 CommonConstants.PUBLISHED, PageRequest.of(0, 4,
                         new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
-        List<ImageResponse> resourceImageUrlList = new ArrayList<>();
+        List<OverviewWithImageResponse> resourceImageUrlList = new ArrayList<>();
         resourceOverviewList.forEach(one -> {
             try {
                 String pictureListImage = pictureService.formImageUrl(one.getImage());
                 List<Picture> pictureList = objectMapper.readValue(pictureListImage,
                         objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                pictureList.forEach(onePicture -> resourceImageUrlList.add(new ImageResponse(one.getTitle(),
-                        onePicture.getUrl())));
+                if (pictureList.size() > 0) {
+                    pictureList.forEach(onePicture -> resourceImageUrlList.add(new OverviewWithImageResponse(
+                            one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(), onePicture.getUrl())));
+                } else {
+                    resourceImageUrlList.add(new OverviewWithImageResponse(
+                            one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(), new Picture().getUrl()));
+                }
             } catch (IOException e) {
                 logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
                 e.printStackTrace();
