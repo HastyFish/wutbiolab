@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import './introduction.less';
-import { Row, Col,Breadcrumb } from 'antd';
+import { Row, Col } from 'antd';
 import { Switch, Route } from 'react-router-dom';
-import LeftSide from '@components/leftSide';
-import RightSide from '@components/rightSide';
 import OnlyInfo from '@components/rightSide/onlyInfo';
 import ListPage from '@components/rightSide/listPage';
 import ListInfo from '@components/rightSide/listInfo';
 import TablePage from '@components/rightSide/tablePage';
 import TableInfo from '@components/rightSide/tableInfo';
-import NextPage from '@components/rightSide/nextPage';
 
 
-import {getLabAll,getLabOneById} from '@/api'
+import {getLabAll} from '@/api'
 import { Number } from 'core-js';
 
 

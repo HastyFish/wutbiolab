@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './index.less'
 import { Breadcrumb } from 'antd';
 
@@ -37,9 +37,10 @@ class TablePage extends React.PureComponent {
                 })
             }
             let data = await getLabResearchTeam(this.state.navId);
-            if (data.result && data.result.length) {
+            if (data.result) {
                 this.setState({
-                    dataList: data.result
+                    dataList: data.result.list,
+                    navName:data.result.category
                 })
             }else {
                 this.setState({
@@ -67,9 +68,10 @@ class TablePage extends React.PureComponent {
          let arr = Array(num).fill(0);
          return arr.map((item,index)=>{
              return(
-                <tr>
-                     {this.tableTd(data.slice(index,8))}
-                </tr>
+                    <tr key={index}>
+                        {this.tableTd(data.slice(index,8))}
+                    </tr>
+                
              )
                
          })
@@ -91,12 +93,17 @@ class TablePage extends React.PureComponent {
     }
     tableChild = (data) => data.map((item, index) => {
         return (
-            <div>
-                <table key={index}>
-                    <tr >
-                        <th colSpan={8}>{item.mentorCategoryName}</th>
-                    </tr>
-                    {this.tableTr(item.labDetails)}
+            <div key={index}>
+                <table >
+                    <thead>
+                        <tr >
+                            <th colSpan={8}>{item.mentorCategoryName}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.tableTr(item.labDetails)}
+                    </tbody>
+                    
                 </table>
             </div>
 

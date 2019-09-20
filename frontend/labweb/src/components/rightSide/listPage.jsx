@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './index.less'
 import { Breadcrumb,Pagination, Row,Col  } from 'antd';
 import {getLabLabCategoryId} from '@/api'
