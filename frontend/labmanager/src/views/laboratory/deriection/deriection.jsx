@@ -32,10 +32,10 @@ class Deriection extends Component {
   this.props.form.validateFields(async (err, values) => {
     if(!err){
       const id = this.id || null;
-      const labCategoryId = this.labCategoryId || null;
+      const categoryId = 2;
       const {title} = values;
       const context = this.editor.current.getContext();
-      const param = {id,labCategoryId,title, context}
+      const param = {id,categoryId,title, context}
       //判断是保存还是发布
       let result;
       if(type==='save'){
@@ -66,10 +66,9 @@ async componentDidMount(){
   //获取机构概况
   const result = await reqDeriection();
   if(result.code === 0){
-    let id = null,title = null ,labCategoryId = 2,context = null;
-    result.result && ({id,title,context,labCategoryId} = result.result);
+    let id = null,title = null ,context = null;
+    result.result && ({id,title,context} = result.result);
     this.id = id;
-    this.labCategoryId = labCategoryId;
     this.setState({
       title,
       context

@@ -71,7 +71,7 @@ class GraduatesEdit extends Component{
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {title, graduateCategoryId, labCategoryId : 4, context, publishDate:Date.parse( new Date(publishDate._d))};
+        let param = {title, graduateCategoryId, categoryId : 4, context, publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state;

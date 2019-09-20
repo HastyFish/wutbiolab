@@ -41,7 +41,7 @@ class PersonEdit extends Component {
         const {person} = this.state;
         person.context = context;
         person.mentorName = mentorName;
-        person.labCategoryId = 3;
+        person.categoryId = 3;
         const result = await reqSavePerson(person);
         if (result.code === 0) {
           //说明更新成功
@@ -64,7 +64,7 @@ class PersonEdit extends Component {
         const {person} = this.state;
         person.context = context;
         person.mentorName = mentorName;
-        person.labCategoryId = 3;
+        person.categoryId = 3;
         const result = await reqPublishPerson(person);
         if (result.code === 0) {
           //说明更新成功

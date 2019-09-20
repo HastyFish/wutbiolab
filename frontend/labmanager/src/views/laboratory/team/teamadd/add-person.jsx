@@ -48,7 +48,7 @@ class AddPerson extends Component{
           mentorCategoryId,     //一级ID
           mentorName,  //二级
           mentorOrder,         //二级排序
-          labCategoryId:3
+          categoryId:3
         }
         const result = await reqAddPerson(params);
         if(result.code === 0){
