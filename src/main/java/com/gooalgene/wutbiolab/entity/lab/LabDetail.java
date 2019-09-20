@@ -41,9 +41,8 @@ public class LabDetail implements Serializable {
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus = 0;
 
-    @JsonProperty("categoryId")
     @ApiModelProperty(value = "一级分类id", example = "1", required = true)
-    private Long labCategoryId;
+    private Long categoryId;
 
     @ApiModelProperty(value = "富文本内容", example = "内容")
     @Column(columnDefinition = "MEDIUMTEXT")

@@ -12,8 +12,8 @@ import java.util.List;
 
 public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
 
-    List<LabDetail> getByLabCategoryId(Long labCategoryId);
-    Page<LabDetail> getByLabCategoryId(Long labCategoryId, Pageable pageable);
+    List<LabDetail> getByCategoryId(Long labCategoryId);
+    Page<LabDetail> getByCategoryId(Long labCategoryId, Pageable pageable);
 
     @Query(value = "SELECT ld.id,gc.category,ld.title,ld.publishDate,ld.publishStatus " +
             " FROM lab_detail ld JOIN all_category gc ON ld.graduateCategoryId=gc.id " +
@@ -25,13 +25,13 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
             " where gc.discriminator='graduate'",nativeQuery = true)
     Long getGraduatesCount();
 
-    List<LabDetail> getByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer publishStatus);
-    Page<LabDetail> getByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer publishStatus, Pageable pageable);
+    List<LabDetail> getByCategoryIdAndPublishStatus(Long labCategoryId,Integer publishStatus);
+    Page<LabDetail> getByCategoryIdAndPublishStatus(Long labCategoryId,Integer publishStatus, Pageable pageable);
 
     @Query("select new LabDetail(labDetail.id,labDetail.title,labDetail.publishDate) from LabDetail labDetail " +
-            "where labDetail.labCategoryId=:labCategoryId and labDetail.publishStatus=:publishStatus" +
+            "where labDetail.categoryId=:categoryId and labDetail.publishStatus=:publishStatus" +
             " order by labDetail.publishDate desc ")
-    Page<LabDetail> getListByLabCategoryIdAndPublishStatus(@Param("labCategoryId") Long labCategoryId,
+    Page<LabDetail> getListByCategoryIdAndPublishStatus(@Param("categoryId") Long categoryId,
                                                            @Param("publishStatus") Integer publishStatus, Pageable pageable);
 
     @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category,ld.publishStatus FROM lab_detail ld " +

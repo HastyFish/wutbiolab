@@ -35,8 +35,8 @@ public class ApiLabController {
 
     @ApiOperation(value="通过一级分类的id查询列表", notes="通过一级分类的id查询列表")
     //查询列表（分页）
-    @GetMapping("/list/{labCategoryId}")
-    public CommonResponse<PageResponse<LabDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
+    @GetMapping("/list/{categoryId}")
+    public CommonResponse<PageResponse<LabDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("categoryId")Long labCategoryId,
                                                                                                @RequestParam("pageNum")Integer pageNum,
                                                                                                @RequestParam("pageSize")Integer pageSize){
         DetailPageResponse<LabDetail> labDetailPage =
@@ -52,8 +52,8 @@ public class ApiLabController {
 
     @ApiOperation(value="通过一级分类的id查询一条数据", notes="通过一级分类的id查询一条数据（目前针对机构概况和研究方向）")
     //通过分类id查询子模块（只包含一条数据的子模块）
-    @GetMapping("/one/{labCategoryId}")
-    public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("labCategoryId")Long labCategoryId){
+    @GetMapping("/one/{categoryId}")
+    public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("categoryId")Long labCategoryId){
         PageResponse<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryIdAndPublishStatus(labCategoryId,
                         null, null, CommonConstants.PUBLISHED,false);

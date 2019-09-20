@@ -41,7 +41,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     @Override
     public PageResponse<ScientificResearchDetail> getSRDetialByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByScientificResearchCategoryId(scientificResearchCategoryId, pageable);
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByCategoryId(scientificResearchCategoryId, pageable);
         long total = scientificResearchDetailPage.getTotalElements();
         List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
         PageResponse<ScientificResearchDetail> pageResponse=new PageResponse();
@@ -115,7 +115,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     @Override
     public PageResponse<ScientificResearchDetail> getPublishedByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize){
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByScientificResearchCategoryIdAndPublishStatus(scientificResearchCategoryId,
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByCategoryIdAndPublishStatus(scientificResearchCategoryId,
                 CommonConstants.PUBLISHED, pageable);
         long totalElements = scientificResearchDetailPage.getTotalElements();
         List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();

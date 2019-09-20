@@ -37,8 +37,8 @@ public class LabController {
 //    }
 
     @ApiOperation(value="通过一级分类的id查询一条数据（只包含一条数据的子模块）", notes="通过一级分类的id查询一条数据（目前针对机构概况和研究方向）")
-    @GetMapping("/one/{labCategoryId}")
-    public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("labCategoryId")Long labCategoryId){
+    @GetMapping("/one/{categoryId}")
+    public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("categoryId")Long labCategoryId){
         PageResponse<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryId(labCategoryId,
                         null, null,false);
@@ -102,8 +102,8 @@ public class LabController {
 //        return ResponseUtil.success();
 //    }
     @ApiOperation(value="通过一级分类id发布多条数据", notes="通过一级分类id发布多条数据")
-    @PostMapping("/publish/{labCategoryId}")
-    public CommonResponse publishList(@PathVariable("labCategoryId") Long labCategoryId){
+    @PostMapping("/publish/{categoryId}")
+    public CommonResponse publishList(@PathVariable("categoryId") Long labCategoryId){
         labService.publishByLabCategoryId(labCategoryId);
         return ResponseUtil.success();
     }

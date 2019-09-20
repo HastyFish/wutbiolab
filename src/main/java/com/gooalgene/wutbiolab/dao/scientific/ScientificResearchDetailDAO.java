@@ -15,8 +15,8 @@ public interface ScientificResearchDetailDAO extends JpaRepository<ScientificRes
     //针对列表查询，不查context这样的大字段
     @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +
             "s.author,s.publishYear ) from ScientificResearchDetail s " +
-            " where s.scientificResearchCategoryId=:scientificResearchCategoryId")
-    Page<ScientificResearchDetail> getByScientificResearchCategoryId(@Param("scientificResearchCategoryId") Long scientificResearchCategoryId,
+            " where s.categoryId=:categoryId")
+    Page<ScientificResearchDetail> getByCategoryId(@Param("categoryId") Long categoryId,
                                                                      Pageable pageable);
 
     @Query(value = "select s.id as id,s.title as title,s.publishDate as publishDate ," +
@@ -36,9 +36,9 @@ public interface ScientificResearchDetailDAO extends JpaRepository<ScientificRes
 
     @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +
             "s.author,s.publishYear ) from ScientificResearchDetail s " +
-            " where s.scientificResearchCategoryId=:scientificResearchCategoryId and " +
+            " where s.categoryId=:categoryId and " +
             "s.publishStatus=:publishStatus")
-    Page<ScientificResearchDetail> getByScientificResearchCategoryIdAndPublishStatus(@Param("scientificResearchCategoryId") Long scientificResearchCategoryId,
+    Page<ScientificResearchDetail> getByCategoryIdAndPublishStatus(@Param("categoryId") Long categoryId,
                                                                                      @Param("publishStatus") Integer publishStatus, Pageable pageable);
 
     ScientificResearchDetail getByIdAndPublishStatus(Long id,Integer publishStatus);

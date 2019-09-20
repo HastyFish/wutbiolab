@@ -50,11 +50,11 @@ public class LabServiceImpl implements LabService {
     @Override
     public PageResponse<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize, Boolean isList) {
         if (pageNum == null && pageSize == null) {
-            List<LabDetail> labDetails = labDetailDAO.getByLabCategoryId(labCategoryId);
+            List<LabDetail> labDetails = labDetailDAO.getByCategoryId(labCategoryId);
             return new PageResponse<LabDetail>(labDetails);
         }
         Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-        Page<LabDetail> labDetailPage = labDetailDAO.getByLabCategoryId(labCategoryId, pageable);
+        Page<LabDetail> labDetailPage = labDetailDAO.getByCategoryId(labCategoryId, pageable);
         long totalElements = labDetailPage.getTotalElements();
         List<LabDetail> content = labDetailPage.getContent();
         PageResponse<LabDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);
@@ -128,7 +128,7 @@ public class LabServiceImpl implements LabService {
     @Override
     @Transactional
     public void publishByLabCategoryId(Long labCategoryId) {
-        List<LabDetail> labDetails = labDetailDAO.getByLabCategoryId(labCategoryId);
+        List<LabDetail> labDetails = labDetailDAO.getByCategoryId(labCategoryId);
         labDetails.forEach(labDetail -> {
             labDetail.setPublishStatus(CommonConstants.PUBLISHED);
         });
@@ -228,16 +228,16 @@ public class LabServiceImpl implements LabService {
                 //暂时没有是列表还不分页的情况！
             } else {
                 Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-                labDetailPage = labDetailDAO.getListByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
+                labDetailPage = labDetailDAO.getListByCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
             }
         } else {
             //非list情况，针对机构概况和研究方向
             if (pageNum == null && pageSize == null) {
-                List<LabDetail> labDetails = labDetailDAO.getByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus);
+                List<LabDetail> labDetails = labDetailDAO.getByCategoryIdAndPublishStatus(labCategoryId, publishStatus);
                 labDetailPage = new PageImpl<>(labDetails);
             }else {
                 Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-                labDetailPage = labDetailDAO.getByLabCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
+                labDetailPage = labDetailDAO.getByCategoryIdAndPublishStatus(labCategoryId, publishStatus, pageable);
             }
         }
         if(labDetailPage!=null){
