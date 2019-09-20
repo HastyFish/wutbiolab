@@ -1,7 +1,5 @@
 package com.gooalgene.wutbiolab.response.front;
 
-import com.gooalgene.wutbiolab.entity.notice.NoticeDetail;
-import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import lombok.Getter;
 import lombok.Setter;
 

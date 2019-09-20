@@ -96,7 +96,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     private NoticeOverview nextPublishedNewsDetail(long publishDate, String category) {
         Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
+                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {
@@ -106,7 +106,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     private NoticeOverview previousPublishedNewsDetail(long publishDate, String category) {
         Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {
