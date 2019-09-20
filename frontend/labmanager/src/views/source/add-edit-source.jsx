@@ -244,8 +244,8 @@ class EditSource extends Component{
             </Item>
             <Item>
               <Button type='primary' style={{width:180,height:40}} onClick={() => this.saveOrPublishSource('save')}>保存</Button>
-              <Button style={{margin:'0 20px',width:180,height:40}} onClick={() => this.props.history.goBack()}>取消</Button>
-              <Button style={{width:180,height:40}} onClick={() => this.saveOrPublishSource('publish')}>发布</Button>
+              <Button type='primary' style={{margin:'0 20px',width:180,height:40}} onClick={() => this.saveOrPublishSource('publish')}>发布</Button>
+              <Button type='danger' style={{width:180,height:40}} onClick={() => this.props.history.goBack()}>取消</Button>
             </Item>
           </Form>
         </div>
