@@ -7,18 +7,18 @@ class Footer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            footerList:["111","222","333"]
+            footerList:[]
         }
     }
     getNode = (data)=>
         data.map((item,index) => {
             return(
-                <p  key={index}>{item}</p>
+                <p  key={index}>{item.context ? JSON.parse(item.context).context : ""} </p>
             )
         })
     async componentDidMount(){
         let data = await getFooter();
-        if(data.code === 0 && data.result.length){
+        if(data.result && data.result.length){
            this.setState({
             footerList :data.result
            })

@@ -5,7 +5,6 @@ import { Link, withRouter } from 'react-router-dom'
 import './index.less'
 import LogoPic from './image/logo-pic.png'
 import LogoInfo from './image/logo-info.png'
-import { getHeader } from '@api'
 
 class Header extends Component {
   render() {
@@ -46,22 +45,22 @@ class Header extends Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="/news">
-                <Link to="/news">
+                <Link to="/news/30">
                   <span>新闻动态</span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="/notices">
-                <Link to="/notices">
+                <Link to="/notices/34">
                   <span>通知公告</span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="/scientific">
-                <Link to="/scientific">
+                <Link to="/scientific/10">
                   <span>科研工作</span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="/resources">
-                <Link to="/resources">
+                <Link to="/resources/37">
                   <span>资源发布</span>
                 </Link>
               </Menu.Item>

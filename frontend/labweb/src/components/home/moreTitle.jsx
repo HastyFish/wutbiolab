@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { Typography, Col, Row } from 'antd';
+import { withRouter  } from 'react-router-dom';
+
 import './index.less'
-import MoreBg from './images/more-bg.jpg'
+import {getNewsDay} from '../../utils/dateUtils'
+
+
 const { Paragraph } = Typography;
 class MoreTitle extends Component {
     constructor(props) {
@@ -9,9 +13,57 @@ class MoreTitle extends Component {
         this.state = {
             type: props.type, //用于区分首页的more样式 现有1~5种
             titleinfo: props.titleinfo,
-            dataList: [{ name: "11111111111111111111111111111111111111111111111111111111111111", data: "2019-5-12" }, { name: "11111111111111111111111111111111111111111111111111111111111111", data: "2019-5-12" }, { name: "11111111111111111111111111111111111111111111111111111111111111", data: "2019-5-12" }, { name: "11111111111111111111111111111111111111111111111111111111111111", data: "2019-5-12" }]
+            dataList:  [],
+            imgList:""
         }
     }
+    jumpAll(){
+        switch(this.state.titleinfo){
+            case "新闻动态": 
+            this.props.history.push("news/30");
+            break;
+            case "学术活动": 
+            this.props.history.push("news/33");
+            break;
+            case "通知公告": 
+            this.props.history.push("notices/1");
+            break;
+            case "招聘招生": 
+            this.props.history.push("notices/1");
+            break;
+            case "科研动态": 
+            this.props.history.push("news/32");
+            break;
+            case "资源发布": 
+            this.props.history.push("resources/1");
+            break;
+            default:;
+        }
+    }
+    jump=(data)=>{
+        let url = "";
+        switch(this.state.titleinfo){
+            case "新闻动态": 
+            url = `/news/${data.categoryId}/info`
+            break;
+            case "学术活动": url = "/news/33/info"
+            break;
+            case "通知公告": url = `/notices/${data.categoryId}/info`
+            break;
+            case "招聘招生": url = "/notices/36/info"
+            break;
+            case "科研动态": url = "/news/32/info"
+            break;
+            case "资源发布": url = `/resources/${data.categoryId}/info`
+            break;
+            default:;
+        }
+        let childList = {
+            navId:data.id,
+            titleinfo:this.state.titleinfo
+        }
+            this.props.history.push(`${url}`,childList);
+        }
     /**
      * 获取首页more数据 type 1，2，3的情况
      */
@@ -20,10 +72,10 @@ class MoreTitle extends Component {
             return (
                 <Row type="flex" className="more-container" key={index}>
                     <Col span={16} className="more-container-left">
-                        <Paragraph ellipsis>{item.name}</Paragraph>
+                        <Paragraph ellipsis className="curp" onClick={this.jump.bind(this,item)}>{item.title}</Paragraph>
                     </Col>
                     <Col span={8} className="more-container-right">
-                        {item.data}
+                        {getNewsDay(item.publishDate)}
                     </Col>
                 </Row>
             )
@@ -35,21 +87,28 @@ class MoreTitle extends Component {
         data.map((item, index) => {
             return (
                 <Col span={6} className="more-container-left"  key={index}>
-                    {index}
+                    <div className="resources-conent" onClick={this.jump.bind(this,item)}>
+                        <img src={item.imageurl} alt=""/>
+                        <p>{item.title}</p>
+                    </div>
                 </Col>
             )
         })
     render() {
-        const { titleinfo, type, dataList } = this.state;
+        let { titleinfo, type, dataList=[] ,imgList="" } = this.state;
+        if(this.props.datalist && this.props.datalist.length){
+            dataList = this.props.datalist;
+            imgList = this.props.imglist;
+        }
         return (
-            <div className="more-info" {...this.props}>
+            <div className="more-info">
                 <Row type="flex" className="more-header" style={{ marginBottom: (["4", "5"].includes(type)) ? "32px" : "50px" }}>
                     <Col span={12} className="more-header-left">
                         <span>{titleinfo}</span>
                     </Col>
                     {
                         type !== "5" && <Col span={12} className="more-header-right">
-                            more →
+                            <span className="curp"  onClick={this.jumpAll.bind(this)}>more →</span>
                         </Col>
                     }
                 </Row>
@@ -60,7 +119,7 @@ class MoreTitle extends Component {
                     {
                         ["2"].includes(type) && <Row type="flex" justify="space-between">
                             <Col span={11}>
-                                <img src={MoreBg} width="280" alt="实验室" />
+                                <img className="news-img" src={imgList} width="280" alt="实验室" />
                             </Col>
                             <Col span={13} className="more-pic-info">
                                 {
@@ -70,7 +129,7 @@ class MoreTitle extends Component {
                         </Row>
                     }
                     {
-                        type === "4" && <Row type="flex" justify="center" className="more-container">
+                        type === "4" && <Row type="flex" justify="space-around" className="more-container">
                             {this.nodeList2(dataList)}
                         </Row>
 
@@ -78,10 +137,10 @@ class MoreTitle extends Component {
                     {
                         type === "5" && <ul className="FriendLink">
                             {
-                                ["中科院xxxxxx所中科院xxxxxx所", "中科院xxxxxx12312所", "中科院xx11xxxx所", "中科院xxxxxx21333333所", "中科院xxxxxx所", "中科院xxxxxx所", "中科院xxxxxx所", "中科院xxxxxx所", "中科院xxxxxx所", "中科院xxxxxx所", "中科院xxxxxx所", "中科院xxxxxx所", "中科院xxxxxx所", "中科院xxxxxx所"].map((item,index) => {
+                               dataList.map((item,index) => {
                                     return (
                                         <li key={index}>
-                                            <a href="/" target="_blank" rel="noopener noreferrer">{item}</a>
+                                            <a href={JSON.parse(item.context).url} target="_blank" rel="noopener noreferrer">{JSON.parse(item.context).name}</a>
                                         </li>
                                     )
                                 })
@@ -95,4 +154,4 @@ class MoreTitle extends Component {
     }
 }
 
-export default MoreTitle;
+export default withRouter(MoreTitle);
