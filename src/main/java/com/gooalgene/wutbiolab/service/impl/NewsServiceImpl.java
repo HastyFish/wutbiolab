@@ -126,13 +126,18 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category,
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(Integer categoryId,
                                                                                int pageNum,
                                                                                int pageSize) {
-        Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(category,
-                CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
-        return ResponseUtil.success(new PageResponse<>(newsOverviewPage.getContent(), pageNum,
-                pageSize, newsOverviewPage.getTotalElements()));
+        if (newsCategoryDAO.findById(categoryId.longValue()).isPresent()) {
+            NewsCategory newsCategory = newsCategoryDAO.findById(categoryId.longValue()).get();
+            Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(newsCategory.getCategory(),
+                    CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
+            return ResponseUtil.success(new PageResponse<>(newsOverviewPage.getContent(), pageNum,
+                    pageSize, newsOverviewPage.getTotalElements()));
+        } else {
+            return ResponseUtil.error("Wrong id");
+        }
     }
 
     @Override
