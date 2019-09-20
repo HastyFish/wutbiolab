@@ -219,9 +219,9 @@ class EditAcademic extends Component{
               {/* <RichTextEdit ref={this.editor} context={context} changeRichText = {(context) => this.setState({context})}/> */}
             </Item>
             <Item>
-              <Button type='primary' style={{width:180,height:40}} onClick={() => this.saveOrPublishNews('save')}>保存</Button>
-              <Button style={{margin:'0 20px',width:180,height:40}} onClick={() => this.props.history.goBack()}>取消</Button>
-              <Button style={{width:180,height:40}} onClick={() => this.saveOrPublishNews('publish')}>发布</Button>
+              <Button type='primary' style={{width:180,height:40,cursor:'pointer'}} onClick={() => this.saveOrPublishNews('save')}>保存</Button>
+              <Button type='primary' style={{margin:'0 20px',width:180,height:40,cursor:'pointer'}} onClick={() => this.saveOrPublishNews('publish')}>发布</Button>
+              <Button type='danger' style={{width:180,height:40,cursor:'pointer'}} onClick={() => this.props.history.goBack()}>取消</Button>
             </Item>
           </Form>
         </div>

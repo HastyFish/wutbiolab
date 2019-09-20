@@ -160,8 +160,8 @@ changeText = (index, type, e) => {
           </Row>
           <Row type="flex" justify="end">
             <Col>
-              <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={() => this.saveOrPublishData('save')}>保存</Button>
-              <Button type='primary' style={{width:180,height:40,marginRight:20,cursor:'pointer'}} onClick={() => this.saveOrPublishData('publish')}>发布</Button>
+              <Button type='primary' style={{width:180,height:40,cursor:'pointer'}} onClick={() => this.saveOrPublishData('save')}>保存</Button>
+              <Button type='primary' style={{margin:'0 20px',width:180,height:40,cursor:'pointer'}} onClick={() => this.saveOrPublishData('publish')}>发布</Button>
               <Button type='danger' style={{width:180,height:40,cursor:'pointer'}} onClick={this.uploadImg}>取消</Button>
             </Col>
           </Row>
