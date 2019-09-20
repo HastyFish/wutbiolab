@@ -13,12 +13,14 @@ import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.PictureService;
 import com.gooalgene.wutbiolab.service.ResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -187,6 +189,11 @@ public class ResourceServiceImpl implements ResourceService {
                                                              Integer pageNum, Integer pageSize){
         Page<ResourceOverview> resourceOverviewPage =
                 resourceDetailDAO.findNewsDetailByPublishStatus(categoryId,publishStatus, PageRequest.of(pageNum - 1, pageSize));
-        return new PageResponse<>(resourceOverviewPage.getContent(),pageNum,pageSize,resourceOverviewPage.getTotalElements());
+        List<ResourceOverview> content = resourceOverviewPage.getContent();
+        String category=null;
+        if(content!=null&&!content.isEmpty()){
+            category=content.get(0).getCategory();
+        }
+        return new DetailPageResponse<>(content,pageNum,pageSize,resourceOverviewPage.getTotalElements(),category);
     }
 }
