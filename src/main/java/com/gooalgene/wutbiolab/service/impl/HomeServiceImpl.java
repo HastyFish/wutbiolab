@@ -21,10 +21,8 @@ import com.gooalgene.wutbiolab.entity.home.Footer;
 import com.gooalgene.wutbiolab.entity.home.NewsImage;
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
-import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
 import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
-import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchOverview;
 import com.gooalgene.wutbiolab.request.HomeImageRequest;
 import com.gooalgene.wutbiolab.response.admin.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
@@ -65,10 +63,6 @@ public class HomeServiceImpl implements HomeService {
 
     private NoticeDetailDAO noticeDetailDAO;
 
-    private NoticeCategoryDAO noticeCategoryDAO;
-
-    private ScientificResearchDetailDAO scientificResearchDetailDAO;
-
     private ResourceDetailDAO resourceDetailDAO;
 
     private AllCategroryDAO allCategroryDAO;
@@ -79,13 +73,10 @@ public class HomeServiceImpl implements HomeService {
                            CooperationLinkDAO cooperationLinkDAO, FooterDAO footerDAO,
                            PictureService pictureService, NewsCategoryDAO newsCategoryDAO,
                            NewsDetailDAO newsDetailDAO, ObjectMapper objectMapper,
-                           ScientificResearchDetailDAO scientificResearchDetailDAO,
-                           NoticeDetailDAO noticeDetailDAO, NoticeCategoryDAO noticeCategoryDAO,
+                           NoticeDetailDAO noticeDetailDAO,
                            ResourceDetailDAO resourceDetailDAO, AllCategroryDAO allCategroryDAO) {
         this.resourceDetailDAO = resourceDetailDAO;
-        this.noticeCategoryDAO = noticeCategoryDAO;
         this.noticeDetailDAO = noticeDetailDAO;
-        this.scientificResearchDetailDAO = scientificResearchDetailDAO;
         this.objectMapper = objectMapper;
         this.newsDetailDAO = newsDetailDAO;
         this.newsCategoryDAO = newsCategoryDAO;

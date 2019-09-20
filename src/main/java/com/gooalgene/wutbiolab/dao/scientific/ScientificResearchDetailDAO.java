@@ -1,7 +1,6 @@
 package com.gooalgene.wutbiolab.dao.scientific;
 
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
-import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchOverview;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,8 +41,4 @@ public interface ScientificResearchDetailDAO extends JpaRepository<ScientificRes
                                                                                      @Param("publishStatus") Integer publishStatus, Pageable pageable);
 
     ScientificResearchDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
-
-    @Query("select a.id as id, a.title as title, a.publishDate as publishDate, a.academicCategoryId as categoryId " +
-            "from ScientificResearchDetail a")
-    Page<ScientificResearchOverview> findByPublishStatusEquals(Integer publishStatus, Pageable pageable);
 }
