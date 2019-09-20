@@ -12,6 +12,7 @@ import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
+import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import com.gooalgene.wutbiolab.response.front.NewsDetailResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import com.gooalgene.wutbiolab.service.PictureService;
@@ -142,11 +143,11 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<NewsDetailResponse> newsDetailPublishedById(long id) {
+    public CommonResponse<DetailResponse<NewsDetail, NewsOverview>> newsDetailPublishedById(long id) {
         NewsDetail newsDetail = newsDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         NewsOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
         NewsOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        return ResponseUtil.success(new NewsDetailResponse(newsDetail, previous, next));
+        return ResponseUtil.success(new DetailResponse<>(newsDetail, previous, next));
     }
 
     private NewsOverview nextPublishedNewsDetail(long publishDate, String category) {

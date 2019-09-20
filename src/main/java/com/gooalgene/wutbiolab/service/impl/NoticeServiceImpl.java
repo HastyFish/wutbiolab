@@ -10,7 +10,7 @@ import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
-import com.gooalgene.wutbiolab.response.front.NoticeResponse;
+import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import com.gooalgene.wutbiolab.service.NoticeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -87,11 +87,11 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public CommonResponse<NoticeResponse> noticeDetailPublishedById(long id) {
+    public CommonResponse<DetailResponse<NoticeDetail, NoticeOverview>> noticeDetailPublishedById(long id) {
         NoticeDetail newsDetail = noticeDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         NoticeOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
         NoticeOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        return ResponseUtil.success(new NoticeResponse(newsDetail, previous, next));
+        return ResponseUtil.success(new DetailResponse<>(newsDetail, previous, next));
     }
 
     private NoticeOverview nextPublishedNewsDetail(long publishDate, String category) {

@@ -12,13 +12,13 @@ public class NewsDetailResponse {
     public NewsDetailResponse() {
     }
 
-    public NewsDetailResponse(NewsDetail newsDetail, NewsOverview previous, NewsOverview next) {
-        this.newsDetail = newsDetail;
+    public NewsDetailResponse(NewsDetail detail, NewsOverview previous, NewsOverview next) {
+        this.detail = detail;
         this.previous = previous;
         this.next = next;
     }
 
-    NewsDetail newsDetail;
+    NewsDetail detail;
 
     NewsOverview previous;
 

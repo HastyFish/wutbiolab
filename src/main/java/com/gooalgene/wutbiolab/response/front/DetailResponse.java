@@ -7,21 +7,21 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NoticeResponse {
+public class DetailResponse<T1,T2> {
 
-    public NoticeResponse() {
+    public DetailResponse() {
     }
 
-    public NoticeResponse(NoticeDetail noticeDetail, NoticeOverview next, NoticeOverview previous) {
-        this.noticeDetail = noticeDetail;
+    public DetailResponse(T1 detail, T2 next, T2 previous) {
+        this.detail = detail;
         this.next = next;
         this.previous = previous;
     }
 
-    NoticeDetail noticeDetail;
+    T1 detail;
 
-    NoticeOverview next;
+    T2 next;
 
-    NoticeOverview previous;
+    T2 previous;
 
 }
