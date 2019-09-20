@@ -4,6 +4,7 @@ import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.scientific.AcademicCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
+import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
@@ -127,12 +128,17 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     @Override
     public Map<String,ScientificResearchDetail> getPublishedById(Long id){
         Map<String,ScientificResearchDetail> map=new HashMap<>();
-        ScientificResearchDetail one = scientificResearchDetailDAO.getByIdAndPublishStatus(id,CommonConstants.PUBLISHED);
-        if(one!=null){
-            Long publishDate = one.getPublishDate();
+//        ScientificResearchDetail one = scientificResearchDetailDAO.getByIdAndPublishStatus(id,CommonConstants.PUBLISHED);
+        List<Object[]> objects = scientificResearchDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        ScientificResearchDetail scientificResearchDetail=null;
+        if(objects!=null&&!objects.isEmpty()){
+            scientificResearchDetail= formatObj2Detail(objects.get(0));
+        }
+        if(scientificResearchDetail!=null){
+            Long publishDate = scientificResearchDetail.getPublishDate();
             ScientificResearchDetail pre = getOneByPublishDate(publishDate, ">");
             ScientificResearchDetail next = getOneByPublishDate(publishDate, "<");
-            map.put("detail",one);
+            map.put("detail",scientificResearchDetail);
             map.put("previous",pre);
             map.put("next",next);
         }
@@ -167,4 +173,27 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         return scientificResearchDetail;
     }
 
+
+    private ScientificResearchDetail formatObj2Detail(Object[] objects){
+        BigInteger idBigInt = (BigInteger) objects[0];
+        Long id=idBigInt!=null?idBigInt.longValue():null;
+        BigInteger academicCategoryIdBigInt = (BigInteger) objects[1];
+        Long academicCategoryId=academicCategoryIdBigInt!=null?academicCategoryIdBigInt.longValue():null;
+        String author = (String) objects[2];
+        BigInteger categoryIdBigInt = (BigInteger) objects[3];
+        Long categoryId=categoryIdBigInt!=null?categoryIdBigInt.longValue():null;
+        String context = (String) objects[4];
+        String periodicalName = (String) objects[5];
+        BigInteger publishDateBigInt = (BigInteger) objects[6];
+        Long publishDate=publishDateBigInt!=null?publishDateBigInt.longValue():null;
+        Integer publishStatus = (Integer) objects[7];
+        String publishYear = (String) objects[8];
+        String title = (String) objects[9];
+        String category = (String) objects[10];
+
+        ScientificResearchDetail scientificResearchDetail = ScientificResearchDetail.builder().id(id).academicCategoryId(academicCategoryId).author(author).categoryId(categoryId)
+                .context(context).periodicalName(periodicalName).publishDate(publishDate).publishStatus(publishStatus).publishYear(publishYear)
+                .title(title).category(category).build();
+        return scientificResearchDetail;
+    }
 }
