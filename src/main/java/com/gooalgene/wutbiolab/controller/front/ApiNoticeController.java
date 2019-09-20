@@ -3,7 +3,7 @@ package com.gooalgene.wutbiolab.controller.front;
 import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
 import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
-import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.response.front.NoticeResponse;
 import com.gooalgene.wutbiolab.service.NoticeService;
 import io.swagger.annotations.Api;
@@ -28,9 +28,9 @@ public class ApiNoticeController {
     }
 
     @GetMapping("/list/{categoryId}")
-    public CommonResponse<PageResponse<NoticeOverview>> newsDetailByCategory(@PathVariable("categoryId") Integer categoryId,
-                                                                             @RequestParam("pageNum") Integer pageNum,
-                                                                             @RequestParam("pageSize") Integer pageSize) {
+    public CommonResponse<DetailPageResponse<NoticeOverview>> newsDetailByCategory(@PathVariable("categoryId") Integer categoryId,
+                                                                                   @RequestParam("pageNum") Integer pageNum,
+                                                                                   @RequestParam("pageSize") Integer pageSize) {
         return noticeService.noticeDetailPageByCategory(categoryId, pageNum, pageSize);
     }
 

@@ -3,8 +3,8 @@ package com.gooalgene.wutbiolab.controller.front;
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
-import com.gooalgene.wutbiolab.response.common.PageResponse;
-import com.gooalgene.wutbiolab.response.front.NewsResponse;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
+import com.gooalgene.wutbiolab.response.front.NewsDetailResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +28,14 @@ public class ApiNewsController {
     }
 
     @GetMapping("/list/{categoryId}")
-    public CommonResponse<PageResponse<NewsOverview>> newsDetailByCategory(@PathVariable("categoryId") Integer categoryId,
-                                                                           @RequestParam("pageNum") Integer pageNum,
-                                                                           @RequestParam("pageSize") Integer pageSize) {
+    public CommonResponse<DetailPageResponse<NewsOverview>> newsDetailByCategory(@PathVariable("categoryId") Integer categoryId,
+                                                                                 @RequestParam("pageNum") Integer pageNum,
+                                                                                 @RequestParam("pageSize") Integer pageSize) {
         return newsService.newsDetailPageByCategory(categoryId, pageNum, pageSize);
     }
 
     @GetMapping("/{id}")
-    public CommonResponse<NewsResponse> newsDetailById(@PathVariable long id) {
+    public CommonResponse<NewsDetailResponse> newsDetailById(@PathVariable long id) {
         return newsService.newsDetailPublishedById(id);
     }
 }

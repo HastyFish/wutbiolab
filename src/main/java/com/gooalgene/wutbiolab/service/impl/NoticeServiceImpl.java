@@ -9,6 +9,7 @@ import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.response.front.NoticeResponse;
 import com.gooalgene.wutbiolab.service.NoticeService;
 import org.springframework.data.domain.Page;
@@ -71,15 +72,15 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NoticeOverview>> noticeDetailPageByCategory(Integer categoryId, Integer pageNum, Integer pageSize) {
+    public CommonResponse<DetailPageResponse<NoticeOverview>> noticeDetailPageByCategory(Integer categoryId, Integer pageNum, Integer pageSize) {
         if (noticeCategoryDAO.findById(categoryId.longValue()).isPresent()) {
             NoticeCategory noticeCategory = noticeCategoryDAO.findById(categoryId.longValue()).get();
             Page<NoticeOverview> noticeOverviewPage = noticeDetailDAO.findByCategoryAndPublishStatusPage(
                     noticeCategory.getCategory(),
                     CommonConstants.PUBLISHED,
                     PageRequest.of(pageNum - 1, pageSize));
-            return ResponseUtil.success(new PageResponse<>(noticeOverviewPage.getContent(), pageNum,
-                    pageSize, noticeOverviewPage.getTotalElements()));
+            return ResponseUtil.success(new DetailPageResponse<>(noticeOverviewPage.getContent(), pageNum,
+                    pageSize, noticeOverviewPage.getTotalElements(), noticeCategory.getCategory()));
         } else {
             return ResponseUtil.error("wrong id");
         }

@@ -7,12 +7,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NewsResponse {
+public class NewsDetailResponse {
 
-    public NewsResponse() {
+    public NewsDetailResponse() {
     }
 
-    public NewsResponse(NewsDetail newsDetail, NewsOverview previous, NewsOverview next) {
+    public NewsDetailResponse(NewsDetail newsDetail, NewsOverview previous, NewsOverview next) {
         this.newsDetail = newsDetail;
         this.previous = previous;
         this.next = next;

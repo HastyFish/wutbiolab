@@ -11,7 +11,8 @@ import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
-import com.gooalgene.wutbiolab.response.front.NewsResponse;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
+import com.gooalgene.wutbiolab.response.front.NewsDetailResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
@@ -126,26 +127,26 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(Integer categoryId,
-                                                                               int pageNum,
-                                                                               int pageSize) {
+    public CommonResponse<DetailPageResponse<NewsOverview>> newsDetailPageByCategory(Integer categoryId,
+                                                                                     int pageNum,
+                                                                                     int pageSize) {
         if (newsCategoryDAO.findById(categoryId.longValue()).isPresent()) {
             NewsCategory newsCategory = newsCategoryDAO.findById(categoryId.longValue()).get();
             Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(newsCategory.getCategory(),
                     CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
-            return ResponseUtil.success(new PageResponse<>(newsOverviewPage.getContent(), pageNum,
-                    pageSize, newsOverviewPage.getTotalElements()));
+            return ResponseUtil.success(new DetailPageResponse<>(newsOverviewPage.getContent(), pageNum,
+                    pageSize, newsOverviewPage.getTotalElements(), newsCategory.getCategory()));
         } else {
             return ResponseUtil.error("Wrong id");
         }
     }
 
     @Override
-    public CommonResponse<NewsResponse> newsDetailPublishedById(long id) {
+    public CommonResponse<NewsDetailResponse> newsDetailPublishedById(long id) {
         NewsDetail newsDetail = newsDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         NewsOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
         NewsOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        return ResponseUtil.success(new NewsResponse(newsDetail, previous, next));
+        return ResponseUtil.success(new NewsDetailResponse(newsDetail, previous, next));
     }
 
     private NewsOverview nextPublishedNewsDetail(long publishDate, String category) {
