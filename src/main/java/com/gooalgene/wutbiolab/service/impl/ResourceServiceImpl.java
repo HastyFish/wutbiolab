@@ -40,13 +40,16 @@ public class ResourceServiceImpl implements ResourceService {
 
     private PictureService pictureService;
 
+    private ObjectMapper objectMapper;
+
     @PersistenceContext
     private EntityManager entityManager;
 
     private Logger logger = LoggerFactory.getLogger(ResourceServiceImpl.class);
 
     public ResourceServiceImpl(ResourceDetailDAO resourceDetailDAO, ResourceCategoryDAO resourceCategoryDAO,
-                               PictureService pictureService) {
+                               PictureService pictureService, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         this.pictureService = pictureService;
         this.resourceCategoryDAO = resourceCategoryDAO;
         this.resourceDetailDAO = resourceDetailDAO;
@@ -80,7 +83,14 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public CommonResponse<Boolean> renewResourceDetail(ResourceDetail resourceDetail) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        /*新增或保存时，查询前端返回的categoryId对应的category*/
+        if (resourceCategoryDAO.findById(resourceDetail.getCategoryId()).isPresent()) {
+            ResourceCategory resourceCategory = resourceCategoryDAO.findById(
+                    resourceDetail.getCategoryId()).get();
+            resourceDetail.setCategory(resourceCategory.getCategory());
+        } else {
+            return ResponseUtil.error("Wrong category");
+        }
         if (null != resourceDetail.getId()) {
             if (resourceDetailDAO.findById(resourceDetail.getId()).isPresent()) {
                 ResourceDetail oldResourceDetail = resourceDetailDAO.findById(resourceDetail.getId()).get();
@@ -171,8 +181,10 @@ public class ResourceServiceImpl implements ResourceService {
         return resourceDetail;
     }
     @Override
-    public PageResponse<ResourceOverview> getByPublishStatus(Integer publishStatus,Integer pageNum, Integer pageSize){
-        Page<ResourceOverview> resourceOverviewPage = resourceDetailDAO.findNewsDetailByPublishStatus(publishStatus, PageRequest.of(pageNum - 1, pageSize));
+    public PageResponse<ResourceOverview> getByPublishStatus(Long categoryId,Integer publishStatus,
+                                                             Integer pageNum, Integer pageSize){
+        Page<ResourceOverview> resourceOverviewPage =
+                resourceDetailDAO.findNewsDetailByPublishStatus(categoryId,publishStatus, PageRequest.of(pageNum - 1, pageSize));
         return new PageResponse<>(resourceOverviewPage.getContent(),pageNum,pageSize,resourceOverviewPage.getTotalElements());
     }
 }

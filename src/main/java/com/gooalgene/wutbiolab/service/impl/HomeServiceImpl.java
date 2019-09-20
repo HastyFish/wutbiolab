@@ -2,6 +2,7 @@ package com.gooalgene.wutbiolab.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooalgene.wutbiolab.constant.CommonConstants;
+import com.gooalgene.wutbiolab.dao.AllCategroryDAO;
 import com.gooalgene.wutbiolab.dao.home.AcademicImageDAO;
 import com.gooalgene.wutbiolab.dao.home.CooperationLinkDAO;
 import com.gooalgene.wutbiolab.dao.home.FooterDAO;
@@ -13,6 +14,7 @@ import com.gooalgene.wutbiolab.dao.notice.NoticeDetailDAO;
 import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import com.gooalgene.wutbiolab.entity.home.AcademicImage;
 import com.gooalgene.wutbiolab.entity.home.CooperationLink;
 import com.gooalgene.wutbiolab.entity.home.Footer;
@@ -68,6 +70,8 @@ public class HomeServiceImpl implements HomeService {
 
     private ResourceDetailDAO resourceDetailDAO;
 
+    private AllCategroryDAO allCategroryDAO;
+
     private Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);
 
     public HomeServiceImpl(AcademicImageDAO academicImageDAO, NewsImageDAO newsImageDAO,
@@ -76,7 +80,7 @@ public class HomeServiceImpl implements HomeService {
                            NewsDetailDAO newsDetailDAO, ObjectMapper objectMapper,
                            ScientificResearchDetailDAO scientificResearchDetailDAO,
                            NoticeDetailDAO noticeDetailDAO, NoticeCategoryDAO noticeCategoryDAO,
-                           ResourceDetailDAO resourceDetailDAO) {
+                           ResourceDetailDAO resourceDetailDAO, AllCategroryDAO allCategroryDAO) {
         this.resourceDetailDAO = resourceDetailDAO;
         this.noticeCategoryDAO = noticeCategoryDAO;
         this.noticeDetailDAO = noticeDetailDAO;
@@ -89,6 +93,7 @@ public class HomeServiceImpl implements HomeService {
         this.newsImageDAO = newsImageDAO;
         this.cooperationLinkDAO = cooperationLinkDAO;
         this.footerDAO = footerDAO;
+        this.allCategroryDAO = allCategroryDAO;
     }
 
     @Override
@@ -172,22 +177,23 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public CommonResponse<List<ImageResponse>> displayNewsSlideShow() {
-        if (newsCategoryDAO.findById(CommonConstants.TOUTIAO.longValue()).isPresent()) {
-            NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO.longValue()).get();
+        if (newsCategoryDAO.findById(CommonConstants.TOUTIAO).isPresent()) {
+            NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO).get();
             List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryAndPublishStatus(
                     headline.getCategory(), CommonConstants.PUBLISHED);
             List<ImageResponse> imageUrlList = new ArrayList<>();
             newsDetailList.forEach(one -> {
-                    try {
-                        String pictureListImage = pictureService.formImageUrl(one.getImage());
-                        List<Picture> pictureList = objectMapper.readValue(
-                                pictureListImage,
-                                objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                        imageUrlList.add(new ImageResponse(one.getTitle(), pictureList.get(0).getUrl()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
-                    }
+                try {
+                    String pictureListImage = pictureService.formImageUrl(one.getImage());
+                    List<Picture> pictureList = objectMapper.readValue(
+                            pictureListImage,
+                            objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+                    pictureList.forEach(onePicture -> imageUrlList.add(new ImageResponse(one.getTitle(),
+                            onePicture.getUrl())));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
+                }
             });
             return ResponseUtil.success(imageUrlList);
         } else {
@@ -205,14 +211,14 @@ public class HomeServiceImpl implements HomeService {
 //        Map<String, Object> result = new HashMap<>();
         List<Object> result = new ArrayList<>();
 
-        /*科研动态*/
+        /*按发布时间降序排序*/
         Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
-        List<ScientificResearchOverview> scientificResearchOverviewList =
-                scientificResearchDetailDAO
-                        .findByPublishStatusEquals(
-                                CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
-//        result.put(ScientificResearchDetail.class.getSimpleName(), scientificResearchOverviewList);
-        result.add(scientificResearchOverviewList);
+
+        /*科研动态*/
+        List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD))).getContent();
+        result.add(scientificNewsList);
 
         /*新闻动态*/
         List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByPublishStatusEquals(
@@ -237,12 +243,10 @@ public class HomeServiceImpl implements HomeService {
         result.add(noticeDetailList);
 
         /*学术活动*/
-        if (newsCategoryDAO.findById(CommonConstants.XUESHU.longValue()).isPresent()) {
-            NewsCategory academicNewsCategory = newsCategoryDAO.findById(CommonConstants.XUESHU.longValue()).get();
-            List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryAndPublishStatus(
-                    academicNewsCategory.getCategory(), CommonConstants.PUBLISHED);
-            result.add(acadeimcNewsList);
-        }
+        List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD))).getContent();
+        result.add(acadeimcNewsList);
 
         /*学术活动图片*/
         try {
@@ -255,12 +259,10 @@ public class HomeServiceImpl implements HomeService {
         }
 
         /*招聘招生*/
-        if (noticeCategoryDAO.findById(CommonConstants.ZHAOPIN.longValue()).isPresent()) {
-            NoticeCategory noticeCategory = noticeCategoryDAO.findById(CommonConstants.ZHAOPIN.longValue()).get();
-            List<NoticeOverview> acadeimcNewsList = noticeDetailDAO.findByCategoryAndPublishStatus(
-                    noticeCategory.getCategory(), CommonConstants.PUBLISHED);
-            result.add(acadeimcNewsList);
-        }
+        List<NoticeOverview> noticeList = noticeDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.ZHAOPIN, CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort))
+                .getContent();
+        result.add(noticeList);
 
         /*资源发布*/
         List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
@@ -272,7 +274,8 @@ public class HomeServiceImpl implements HomeService {
                 String pictureListImage = pictureService.formImageUrl(one.getImage());
                 List<Picture> pictureList = objectMapper.readValue(pictureListImage,
                         objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                resourceImageUrlList.add(new ImageResponse(one.getTitle(), pictureList.get(0).getUrl()));
+                pictureList.forEach(onePicture -> resourceImageUrlList.add(new ImageResponse(one.getTitle(),
+                        onePicture.getUrl())));
             } catch (IOException e) {
                 logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
                 e.printStackTrace();
@@ -287,5 +290,10 @@ public class HomeServiceImpl implements HomeService {
 
 
         return ResponseUtil.success(result);
+    }
+
+    @Override
+    public List<AllCategory> getAllCategorys() {
+        return allCategroryDAO.findAll();
     }
 }

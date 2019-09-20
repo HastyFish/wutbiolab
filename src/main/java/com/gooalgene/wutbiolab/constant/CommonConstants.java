@@ -2,17 +2,17 @@ package com.gooalgene.wutbiolab.constant;
 
 public interface CommonConstants {
     //头条新闻
-    Integer TOUTIAO=30;
+    long TOUTIAO= 30L;
     //综合新闻
-    Integer ZONGHE=2;
+    long ZONGHE=2L;
     //科研动态
-    Integer KEYAN=3;
+    long KEYAN=32;
     //通知公告
-    Integer TONGZHI=4;
+    long TONGZHI=4;
     //招聘招生
-    Integer ZHAOPIN = 36;
+    long ZHAOPIN = 36;
     //学术活动
-    Integer XUESHU=33;
+    long XUESHU=33;
 
     /**
      * 发布
@@ -22,6 +22,9 @@ public interface CommonConstants {
      * 草稿（未发布）
      */
     Integer UNPUBLISHED=0;
+    /**
+     * 发布时间的字段名
+     */
     String PUBLISHDATEFIELD = "publishDate";
 
     /**

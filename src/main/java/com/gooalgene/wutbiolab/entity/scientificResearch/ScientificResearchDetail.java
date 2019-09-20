@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.scientificResearch;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class ScientificResearchDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("categoryId")
     @ApiModelProperty(value = "一级分类id", example = "10")
     private Long scientificResearchCategoryId;
 

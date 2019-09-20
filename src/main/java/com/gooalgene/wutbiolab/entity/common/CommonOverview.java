@@ -12,5 +12,5 @@ public interface CommonOverview {
 
     String getCategory();
 
-    Integer getCategoryId();
+    Long getCategoryId();
 }

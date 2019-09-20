@@ -30,6 +30,9 @@ public class NoticeDetail implements Serializable {
     private Integer publishStatus = 0;
 
     @Column
+    private Long categoryId;
+
+    @Column
     private String category;
 
     @Column(columnDefinition = "MEDIUMTEXT")

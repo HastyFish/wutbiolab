@@ -30,6 +30,9 @@ public class ResourceDetail {
     @Column
     private String category;
 
+    @Column
+    private Long categoryId;
+
     @Column(columnDefinition = "MEDIUMTEXT")
     private String image;
 

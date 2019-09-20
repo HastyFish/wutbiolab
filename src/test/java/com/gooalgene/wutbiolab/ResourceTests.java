@@ -25,12 +25,13 @@ public class ResourceTests {
 
 	@Test
 	public void testDAO() {
-		Page<ResourceOverview> newsDetailByPublishStatus = resourceDetailDAO.findNewsDetailByPublishStatus(1, PageRequest.of(0, 11));
+		Page<ResourceOverview> newsDetailByPublishStatus = resourceDetailDAO.findNewsDetailByPublishStatus(37l,1, PageRequest.of(0, 11));
 
 		newsDetailByPublishStatus.forEach(resourceOverview -> {
 			Long id = resourceOverview.getId();
 			Long publishDate = resourceOverview.getPublishDate();
 			String title = resourceOverview.getTitle();
+			Long categoryId = resourceOverview.getCategoryId();
 			System.out.println(id+":"+title+":"+publishDate);
 		});
 		System.out.println(1);

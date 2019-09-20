@@ -56,6 +56,13 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     @Transactional
     public CommonResponse<Boolean> renewNoticeDetail(NoticeDetail noticeDetail) {
+        /*新增或保存时，查询前端返回的categoryId对应的category*/
+        if (noticeCategoryDAO.findById(noticeDetail.getCategoryId()).isPresent()) {
+            NoticeCategory resourceCategory = noticeCategoryDAO.findById(noticeDetail.getCategoryId()).get();
+            noticeDetail.setCategory(resourceCategory.getCategory());
+        } else {
+            return ResponseUtil.error("Wrong category");
+        }
         noticeDetailDAO.save(noticeDetail);
         return ResponseUtil.success(true);
     }

@@ -73,6 +73,13 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public CommonResponse<Boolean> renewNews(NewsDetail newsDetail) {
+        /*新增或保存时，查询前端返回的categoryId对应的category*/
+        if (newsCategoryDAO.findById(newsDetail.getCategoryId()).isPresent()) {
+            NewsCategory newsCategory = newsCategoryDAO.findById(newsDetail.getCategoryId()).get();
+            newsDetail.setCategory(newsCategory.getCategory());
+        } else {
+            return ResponseUtil.error("Wrong category");
+        }
         if (null != newsDetail.getId()) {
             if (newsDetailDAO.findById(newsDetail.getId()).isPresent()) {
                 NewsDetail oldNewsDetail = newsDetailDAO.findById(newsDetail.getId()).get();
@@ -96,8 +103,9 @@ public class NewsServiceImpl implements NewsService {
             }
         } else {
             try {
-                if (newsDetailDAO.findByCategoryEquals(newsDetail.getCategory()).size() >= 5) {
-                    return ResponseUtil.error("more than 5 item");
+                if (newsDetail.getCategoryId().equals(CommonConstants.TOUTIAO)
+                        && newsDetailDAO.countByCategoryIdEquals(CommonConstants.TOUTIAO) >= 5) {
+                    return ResponseUtil.error("头条新闻已经有5条");
                 }
                 String newImage = pictureService.saveBase64(null, newsDetail.getImage());
                 if (null != newImage) {

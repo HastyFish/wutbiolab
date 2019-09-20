@@ -1,6 +1,8 @@
 package com.gooalgene.wutbiolab.controller.front;
 
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
+import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.front.ImageResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
 import io.swagger.annotations.Api;
@@ -31,4 +33,8 @@ public class ApiHomeController {
         return homeService.displayHomeInfo();
     }
 
+    @GetMapping("/all/category")
+    public CommonResponse<List<AllCategory>> getAllCategorys(){
+        return ResponseUtil.success(homeService.getAllCategorys());
+    }
 }

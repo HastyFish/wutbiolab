@@ -12,6 +12,7 @@ import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -216,7 +217,7 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
-    public PageResponse<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,
+    public DetailPageResponse<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,
                                                                        Integer pageNum, Integer pageSize,
                                                                        Integer publishStatus, Boolean isList) {
         //如果isList为true，只查几个字段（主要是不查context这样的大字段），
@@ -242,7 +243,7 @@ public class LabServiceImpl implements LabService {
         if(labDetailPage!=null){
             List<LabDetail> content = labDetailPage.getContent();
             long totalElements = labDetailPage.getTotalElements();
-            PageResponse<LabDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);
+            DetailPageResponse<LabDetail> pageResponse=new DetailPageResponse<>(content,pageNum,pageSize,totalElements);
             return pageResponse;
         }
         return null;
