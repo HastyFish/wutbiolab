@@ -20,7 +20,7 @@ public interface NoticeService {
 
     CommonResponse<Boolean> deleteById(Integer id);
 
-    CommonResponse<PageResponse<NoticeOverview>> noticeDetailPageByCategory(String category, Integer pageNum, Integer pageSize);
+    CommonResponse<PageResponse<NoticeOverview>> noticeDetailPageByCategory(Integer categoryId, Integer pageNum, Integer pageSize);
 
     CommonResponse<NoticeResponse> noticeDetailPublishedById(long id);
 }

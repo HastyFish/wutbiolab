@@ -71,11 +71,18 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NoticeOverview>> noticeDetailPageByCategory(String category, Integer pageNum, Integer pageSize) {
-        Page<NoticeOverview> noticeOverviewPage = noticeDetailDAO.findByCategoryAndPublishStatusPage(category,
-                CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
-        return ResponseUtil.success(new PageResponse<>(noticeOverviewPage.getContent(), pageNum,
-                pageSize, noticeOverviewPage.getTotalElements()));
+    public CommonResponse<PageResponse<NoticeOverview>> noticeDetailPageByCategory(Integer categoryId, Integer pageNum, Integer pageSize) {
+        if (noticeCategoryDAO.findById(categoryId.longValue()).isPresent()) {
+            NoticeCategory noticeCategory = noticeCategoryDAO.findById(categoryId.longValue()).get();
+            Page<NoticeOverview> noticeOverviewPage = noticeDetailDAO.findByCategoryAndPublishStatusPage(
+                    noticeCategory.getCategory(),
+                    CommonConstants.PUBLISHED,
+                    PageRequest.of(pageNum - 1, pageSize));
+            return ResponseUtil.success(new PageResponse<>(noticeOverviewPage.getContent(), pageNum,
+                    pageSize, noticeOverviewPage.getTotalElements()));
+        } else {
+            return ResponseUtil.error("wrong id");
+        }
     }
 
     @Override

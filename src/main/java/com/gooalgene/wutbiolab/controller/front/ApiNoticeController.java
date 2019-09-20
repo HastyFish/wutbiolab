@@ -31,10 +31,10 @@ public class ApiNoticeController {
     }
 
     @GetMapping
-    public CommonResponse<PageResponse<NoticeOverview>> newsDetailByCategory(String category,
+    public CommonResponse<PageResponse<NoticeOverview>> newsDetailByCategory(Integer categoryId,
                                                                              Integer pageNum,
                                                                              Integer pageSize) {
-        return noticeService.noticeDetailPageByCategory(category, pageNum, pageSize);
+        return noticeService.noticeDetailPageByCategory(categoryId, pageNum, pageSize);
     }
 
     @GetMapping("/{id}")
