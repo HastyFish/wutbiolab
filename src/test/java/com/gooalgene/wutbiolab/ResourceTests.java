@@ -31,6 +31,7 @@ public class ResourceTests {
 			Long id = resourceOverview.getId();
 			Long publishDate = resourceOverview.getPublishDate();
 			String title = resourceOverview.getTitle();
+			Long categoryId = resourceOverview.getCategoryId();
 			System.out.println(id+":"+title+":"+publishDate);
 		});
 		System.out.println(1);
