@@ -31,7 +31,7 @@ public class ResourceDetail {
     private String category;
 
     @Column
-    private Integer categoryId;
+    private Long categoryId;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String image;

@@ -30,7 +30,7 @@ public class NoticeDetail implements Serializable {
     private Integer publishStatus = 0;
 
     @Column
-    private Integer categoryId;
+    private Long categoryId;
 
     @Column
     private String category;

@@ -74,8 +74,8 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     public CommonResponse<Boolean> renewNews(NewsDetail newsDetail) {
         /*新增或保存时，查询前端返回的categoryId对应的category*/
-        if (newsCategoryDAO.findById(newsDetail.getCategoryId().longValue()).isPresent()) {
-            NewsCategory newsCategory = newsCategoryDAO.findById(newsDetail.getCategoryId().longValue()).get();
+        if (newsCategoryDAO.findById(newsDetail.getCategoryId()).isPresent()) {
+            NewsCategory newsCategory = newsCategoryDAO.findById(newsDetail.getCategoryId()).get();
             newsDetail.setCategory(newsCategory.getCategory());
         } else {
             return ResponseUtil.error("Wrong category");
