@@ -65,7 +65,7 @@ class EditSource extends Component{
     this.props.form.validateFields( async (error, values) => {
       if(!error){
         //1. 收集数据,封装成source对象
-        const {title, category,publishDate} = values;
+        const {title, categoryId,publishDate} = values;
 
         //获取封面图片及富文本
         //判断是否有图片,获取封面图片
@@ -75,7 +75,7 @@ class EditSource extends Component{
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {title, category, image, context,publishDate:Date.parse( new Date(publishDate._d))};
+        let param = {title, categoryId, image, context,publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state;
@@ -146,14 +146,14 @@ class EditSource extends Component{
             this.setState({
               sourceItem
             })
-            const {category} = sourceItem;
-            category && this.props.form.setFieldsValue({'category':category})
+            const {categoryId} = sourceItem;
+            categoryId && this.props.form.setFieldsValue({'categoryId':categoryId})
           }else{
             message.error('获取资源失败，请稍后再试!');
           }
         }else{
           //select框赋值
-          this.props.form.setFieldsValue({'category':categoryList[0].id})
+          this.props.form.setFieldsValue({'categoryId':categoryList[0].id})
         }
       }else{
         message.error('获取资源类型失败，请稍后再试!');
@@ -184,7 +184,7 @@ class EditSource extends Component{
           <Form>
             <Item label="编辑类型" {...formItemLayout}>
               {
-                getFieldDecorator('category', {
+                getFieldDecorator('categoryId', {
                   rules: [
                     {required: true, message: '必须指定分类'},
                   ]
