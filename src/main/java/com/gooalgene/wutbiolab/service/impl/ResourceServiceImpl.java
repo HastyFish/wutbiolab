@@ -184,7 +184,7 @@ public class ResourceServiceImpl implements ResourceService {
     public PageResponse<ResourceOverview> getByPublishStatus(Long categoryId,Integer publishStatus,
                                                              Integer pageNum, Integer pageSize){
         Page<ResourceOverview> resourceOverviewPage =
-                resourceDetailDAO.findNewsDetailByPublishStatus(publishStatus, PageRequest.of(pageNum - 1, pageSize));
+                resourceDetailDAO.findNewsDetailByPublishStatus(categoryId,publishStatus, PageRequest.of(pageNum - 1, pageSize));
         return new PageResponse<>(resourceOverviewPage.getContent(),pageNum,pageSize,resourceOverviewPage.getTotalElements());
     }
 }

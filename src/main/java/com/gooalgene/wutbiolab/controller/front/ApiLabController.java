@@ -70,8 +70,8 @@ public class ApiLabController {
     }
 
     @ApiOperation(value="查询研究团队所有已发布数据", notes="查询研究团队所有已发布数据")
-    @GetMapping("/researchTeam")
-    public CommonResponse<List<MentorResponse>> getPublishedResearchTeam(){
+    @GetMapping("/researchTeam/{categoryId}")
+    public CommonResponse<List<MentorResponse>> getPublishedResearchTeam(@PathVariable("categoryId")Long categoryId){
         List<MentorResponse> researchTeam = labService.getPublishedResearchTeam();
         return ResponseUtil.success(researchTeam);
     }
