@@ -80,7 +80,7 @@ public class HomeServiceImpl implements HomeService {
                            NewsDetailDAO newsDetailDAO, ObjectMapper objectMapper,
                            ScientificResearchDetailDAO scientificResearchDetailDAO,
                            NoticeDetailDAO noticeDetailDAO, NoticeCategoryDAO noticeCategoryDAO,
-                           ResourceDetailDAO resourceDetailDAO,AllCategroryDAO allCategroryDAO) {
+                           ResourceDetailDAO resourceDetailDAO, AllCategroryDAO allCategroryDAO) {
         this.resourceDetailDAO = resourceDetailDAO;
         this.noticeCategoryDAO = noticeCategoryDAO;
         this.noticeDetailDAO = noticeDetailDAO;
@@ -93,7 +93,7 @@ public class HomeServiceImpl implements HomeService {
         this.newsImageDAO = newsImageDAO;
         this.cooperationLinkDAO = cooperationLinkDAO;
         this.footerDAO = footerDAO;
-        this.allCategroryDAO=allCategroryDAO;
+        this.allCategroryDAO = allCategroryDAO;
     }
 
     @Override
@@ -183,16 +183,17 @@ public class HomeServiceImpl implements HomeService {
                     headline.getCategory(), CommonConstants.PUBLISHED);
             List<ImageResponse> imageUrlList = new ArrayList<>();
             newsDetailList.forEach(one -> {
-                    try {
-                        String pictureListImage = pictureService.formImageUrl(one.getImage());
-                        List<Picture> pictureList = objectMapper.readValue(
-                                pictureListImage,
-                                objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                        imageUrlList.add(new ImageResponse(one.getTitle(), pictureList.get(0).getUrl()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
-                    }
+                try {
+                    String pictureListImage = pictureService.formImageUrl(one.getImage());
+                    List<Picture> pictureList = objectMapper.readValue(
+                            pictureListImage,
+                            objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+                    pictureList.forEach(onePicture -> imageUrlList.add(new ImageResponse(one.getTitle(),
+                            onePicture.getUrl())));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
+                }
             });
             return ResponseUtil.success(imageUrlList);
         } else {
@@ -214,15 +215,10 @@ public class HomeServiceImpl implements HomeService {
         Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
 
         /*科研动态*/
-//        List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
-//                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
-//                        new Sort(Sort.Direction.DESC)));
-//        List<ScientificResearchOverview> scientificResearchOverviewList =
-//                scientificResearchDetailDAO
-//                        .findByPublishStatusEquals(
-//                                CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
-////        result.put(ScientificResearchDetail.class.getSimpleName(), scientificResearchOverviewList);
-//        result.add(scientificResearchOverviewList);
+        List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD))).getContent();
+        result.add(scientificNewsList);
 
         /*新闻动态*/
         List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByPublishStatusEquals(
@@ -247,12 +243,10 @@ public class HomeServiceImpl implements HomeService {
         result.add(noticeDetailList);
 
         /*学术活动*/
-        if (newsCategoryDAO.findById(CommonConstants.XUESHU).isPresent()) {
-            NewsCategory academicNewsCategory = newsCategoryDAO.findById(CommonConstants.XUESHU).get();
-            List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryAndPublishStatus(
-                    academicNewsCategory.getCategory(), CommonConstants.PUBLISHED);
-            result.add(acadeimcNewsList);
-        }
+        List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD))).getContent();
+        result.add(acadeimcNewsList);
 
         /*学术活动图片*/
         try {
@@ -265,12 +259,10 @@ public class HomeServiceImpl implements HomeService {
         }
 
         /*招聘招生*/
-        if (noticeCategoryDAO.findById(CommonConstants.ZHAOPIN).isPresent()) {
-            NoticeCategory noticeCategory = noticeCategoryDAO.findById(CommonConstants.ZHAOPIN).get();
-            List<NoticeOverview> acadeimcNewsList = noticeDetailDAO.findByCategoryAndPublishStatus(
-                    noticeCategory.getCategory(), CommonConstants.PUBLISHED);
-            result.add(acadeimcNewsList);
-        }
+        List<NoticeOverview> noticeList = noticeDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.ZHAOPIN, CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort))
+                .getContent();
+        result.add(noticeList);
 
         /*资源发布*/
         List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
@@ -282,7 +274,8 @@ public class HomeServiceImpl implements HomeService {
                 String pictureListImage = pictureService.formImageUrl(one.getImage());
                 List<Picture> pictureList = objectMapper.readValue(pictureListImage,
                         objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                resourceImageUrlList.add(new ImageResponse(one.getTitle(), pictureList.get(0).getUrl()));
+                pictureList.forEach(onePicture -> resourceImageUrlList.add(new ImageResponse(one.getTitle(),
+                        onePicture.getUrl())));
             } catch (IOException e) {
                 logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
                 e.printStackTrace();

@@ -22,6 +22,9 @@ public interface CommonConstants {
      * 草稿（未发布）
      */
     Integer UNPUBLISHED=0;
+    /**
+     * 发布时间的字段名
+     */
     String PUBLISHDATEFIELD = "publishDate";
 
     /**
