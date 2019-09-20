@@ -7,6 +7,7 @@ import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Api(value = "前端实验室模块", tags = {"前端实验室模块接口"})
 @RestController
@@ -35,11 +37,17 @@ public class ApiLabController {
     //查询列表（分页）
     @GetMapping("/list/{labCategoryId}")
     public CommonResponse<PageResponse<LabDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
-                                                                                               @RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize){
-        PageResponse<LabDetail> labDetails =
+                                                                                               @RequestParam("pageNum")Integer pageNum,
+                                                                                               @RequestParam("pageSize")Integer pageSize){
+        DetailPageResponse<LabDetail> labDetailPage =
                 labService.getLabDetailByLabCategoryIdAndPublishStatus(labCategoryId, pageNum, pageSize,
                         CommonConstants.PUBLISHED,true);
-        return ResponseUtil.success(labDetails);
+        LabCategory labCategory = labService.getCategoryById(labCategoryId);
+        String category = labCategory!=null ? labCategory.getCategory() : null;
+        if (labDetailPage != null) {
+            labDetailPage.setCategory(category);
+        }
+        return ResponseUtil.success(labDetailPage);
     }
 
     @ApiOperation(value="通过一级分类的id查询一条数据", notes="通过一级分类的id查询一条数据（目前针对机构概况和研究方向）")
@@ -57,7 +65,7 @@ public class ApiLabController {
             }
         }
         LabCategory category = labService.getCategoryById(labCategoryId);
-        labDetail.setCategory(category.getCategory());
+        labDetail.setCategory(category!=null?category.getCategory():null);
         return ResponseUtil.success(labDetail);
     }
 

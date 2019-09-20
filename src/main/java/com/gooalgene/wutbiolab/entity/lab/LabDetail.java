@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab.entity.lab;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -40,6 +41,7 @@ public class LabDetail implements Serializable {
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus = 0;
 
+    @JsonProperty("categoryId")
     @ApiModelProperty(value = "一级分类id", example = "1", required = true)
     private Long labCategoryId;
 

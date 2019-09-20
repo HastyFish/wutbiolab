@@ -8,6 +8,7 @@ import com.gooalgene.wutbiolab.request.MentorRequest;
 import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -133,6 +134,6 @@ public interface LabService {
      * @param publishStatus
      * @return
      */
-    PageResponse<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId,Integer pageNum,
-                                                                Integer pageSize,Integer publishStatus,Boolean isList);
+    DetailPageResponse<LabDetail> getLabDetailByLabCategoryIdAndPublishStatus(Long labCategoryId, Integer pageNum,
+                                                                              Integer pageSize, Integer publishStatus, Boolean isList);
 }
