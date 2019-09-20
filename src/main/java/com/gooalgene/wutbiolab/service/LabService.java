@@ -118,6 +118,13 @@ public interface LabService {
      */
     List<MentorResponse> getPublishedResearchTeam();
 
+
+    /**
+     * 通过分类id查找分类
+     * @param labCategoryId
+     * @return
+     */
+    LabCategory getCategoryById(Long labCategoryId);
     /**
      * 通过模块分类id及发布状态查询数据
      * @param labCategoryId

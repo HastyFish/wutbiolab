@@ -73,4 +73,6 @@ public interface ScientificResearchService {
      * @return
      */
     Map<String,ScientificResearchDetail> getPublishedById(Long id);
+
+    ScientificResearchCategory getCategoryById(Long categoryId);
 }
