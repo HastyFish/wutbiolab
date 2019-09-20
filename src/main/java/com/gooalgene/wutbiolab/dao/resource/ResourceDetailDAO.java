@@ -22,7 +22,8 @@ public interface ResourceDetailDAO extends JpaRepository<ResourceDetail, Long> {
     Page<ResourceOverview> findNewsDetailByPublishStatus(@Param("categoryId")Long categoryId,
                                                          @Param("publishStatus") Integer publishStatus, Pageable pageable);
 
-    @Query("select a.image as image, a.title as title, a.id as id, a.category as category from ResourceDetail a")
+    @Query("select a.image as image, a.title as title, a.id as id, " +
+            "a.category as category, a.categoryId as categoryId from ResourceDetail a where a.publishStatus = ?1")
     List<ResourceOverview> findByPublishStatusEquals(Integer publishStatus, Pageable pageable);
 
     ResourceDetail getByIdAndPublishStatus(Long id,Integer publishStatus);

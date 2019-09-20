@@ -21,7 +21,7 @@ public class Picture {
     /**
      * 前端上传图片的时候存为base64，后端处理后存为url
      */
-    private String url;
+    private String url="[]";
 
     @JsonIgnore
     //物理文件路径

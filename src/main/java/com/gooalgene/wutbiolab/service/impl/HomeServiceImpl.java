@@ -21,15 +21,14 @@ import com.gooalgene.wutbiolab.entity.home.Footer;
 import com.gooalgene.wutbiolab.entity.home.NewsImage;
 import com.gooalgene.wutbiolab.entity.news.NewsCategory;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
-import com.gooalgene.wutbiolab.entity.notice.NoticeCategory;
 import com.gooalgene.wutbiolab.entity.notice.NoticeOverview;
 import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
-import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchOverview;
 import com.gooalgene.wutbiolab.request.HomeImageRequest;
 import com.gooalgene.wutbiolab.response.admin.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.front.ImageResponse;
+import com.gooalgene.wutbiolab.response.front.OverviewWithImageResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
@@ -64,10 +63,6 @@ public class HomeServiceImpl implements HomeService {
 
     private NoticeDetailDAO noticeDetailDAO;
 
-    private NoticeCategoryDAO noticeCategoryDAO;
-
-    private ScientificResearchDetailDAO scientificResearchDetailDAO;
-
     private ResourceDetailDAO resourceDetailDAO;
 
     private AllCategroryDAO allCategroryDAO;
@@ -78,13 +73,10 @@ public class HomeServiceImpl implements HomeService {
                            CooperationLinkDAO cooperationLinkDAO, FooterDAO footerDAO,
                            PictureService pictureService, NewsCategoryDAO newsCategoryDAO,
                            NewsDetailDAO newsDetailDAO, ObjectMapper objectMapper,
-                           ScientificResearchDetailDAO scientificResearchDetailDAO,
-                           NoticeDetailDAO noticeDetailDAO, NoticeCategoryDAO noticeCategoryDAO,
+                           NoticeDetailDAO noticeDetailDAO,
                            ResourceDetailDAO resourceDetailDAO, AllCategroryDAO allCategroryDAO) {
         this.resourceDetailDAO = resourceDetailDAO;
-        this.noticeCategoryDAO = noticeCategoryDAO;
         this.noticeDetailDAO = noticeDetailDAO;
-        this.scientificResearchDetailDAO = scientificResearchDetailDAO;
         this.objectMapper = objectMapper;
         this.newsDetailDAO = newsDetailDAO;
         this.newsCategoryDAO = newsCategoryDAO;
@@ -268,14 +260,19 @@ public class HomeServiceImpl implements HomeService {
         List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
                 CommonConstants.PUBLISHED, PageRequest.of(0, 4,
                         new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
-        List<ImageResponse> resourceImageUrlList = new ArrayList<>();
+        List<OverviewWithImageResponse> resourceImageUrlList = new ArrayList<>();
         resourceOverviewList.forEach(one -> {
             try {
                 String pictureListImage = pictureService.formImageUrl(one.getImage());
                 List<Picture> pictureList = objectMapper.readValue(pictureListImage,
                         objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                pictureList.forEach(onePicture -> resourceImageUrlList.add(new ImageResponse(one.getTitle(),
-                        onePicture.getUrl())));
+                if (pictureList.size() > 0) {
+                    pictureList.forEach(onePicture -> resourceImageUrlList.add(new OverviewWithImageResponse(
+                            one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(), onePicture.getUrl())));
+                } else {
+                    resourceImageUrlList.add(new OverviewWithImageResponse(
+                            one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(), new Picture().getUrl()));
+                }
             } catch (IOException e) {
                 logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
                 e.printStackTrace();
