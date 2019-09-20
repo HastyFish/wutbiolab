@@ -11,9 +11,9 @@ import com.gooalgene.wutbiolab.service.LabService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +56,8 @@ public class ApiLabController {
                 labDetail = content.get(0);
             }
         }
+        LabCategory category = labService.getCategoryById(labCategoryId);
+        labDetail.setCategory(category.getCategory());
         return ResponseUtil.success(labDetail);
     }
 

@@ -11,7 +11,8 @@ import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
-import com.gooalgene.wutbiolab.response.front.NewsResponse;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
+import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
@@ -126,26 +127,31 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByCategory(String category,
-                                                                               int pageNum,
-                                                                               int pageSize) {
-        Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(category,
-                CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
-        return ResponseUtil.success(new PageResponse<>(newsOverviewPage.getContent(), pageNum,
-                pageSize, newsOverviewPage.getTotalElements()));
+    public CommonResponse<DetailPageResponse<NewsOverview>> newsDetailPageByCategory(Integer categoryId,
+                                                                                     int pageNum,
+                                                                                     int pageSize) {
+        if (newsCategoryDAO.findById(categoryId.longValue()).isPresent()) {
+            NewsCategory newsCategory = newsCategoryDAO.findById(categoryId.longValue()).get();
+            Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(newsCategory.getCategory(),
+                    CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
+            return ResponseUtil.success(new DetailPageResponse<>(newsOverviewPage.getContent(), pageNum,
+                    pageSize, newsOverviewPage.getTotalElements(), newsCategory.getCategory()));
+        } else {
+            return ResponseUtil.error("Wrong id");
+        }
     }
 
     @Override
-    public CommonResponse<NewsResponse> newsDetailPublishedById(long id) {
+    public CommonResponse<DetailResponse<NewsDetail, NewsOverview>> newsDetailPublishedById(long id) {
         NewsDetail newsDetail = newsDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         NewsOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
         NewsOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        return ResponseUtil.success(new NewsResponse(newsDetail, previous, next));
+        return ResponseUtil.success(new DetailResponse<>(newsDetail, next, previous));
     }
 
     private NewsOverview nextPublishedNewsDetail(long publishDate, String category) {
         Page<NewsOverview> newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
+                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {
@@ -155,7 +161,7 @@ public class NewsServiceImpl implements NewsService {
 
     private NewsOverview previousPublishedNewsDetail(long publishDate, String category) {
         Page<NewsOverview> newsDetailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {

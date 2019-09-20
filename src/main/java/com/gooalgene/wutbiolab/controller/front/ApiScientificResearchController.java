@@ -2,6 +2,7 @@ package com.gooalgene.wutbiolab.controller.front;
 
 import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
+import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +27,11 @@ public class ApiScientificResearchController {
     private ScientificResearchService scientificResearchService;
 
 
-    @GetMapping("/list/{labCategoryId}")
-    public CommonResponse<PageResponse<ScientificResearchDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("labCategoryId")Long labCategoryId,
+    @GetMapping("/list/{categoryId}")
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("categoryId")Long categoryId,
                                 @RequestParam("pageNum")Integer pageNum,@RequestParam("pageSize")Integer pageSize){
-        PageResponse<ScientificResearchDetail> scientificResearchDetails = scientificResearchService.getPublishedByCategoryId(labCategoryId, pageNum, pageSize);
+        PageResponse<ScientificResearchDetail> scientificResearchDetails =
+                scientificResearchService.getPublishedByCategoryId(categoryId, pageNum, pageSize);
         return ResponseUtil.success(scientificResearchDetails);
     }
 

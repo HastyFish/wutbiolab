@@ -4,6 +4,7 @@ import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -45,6 +46,9 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
     List<Object[]> getResearchTeamByPublishStatus(@Param("publishStatus") Integer publishStatus);
 
 
+    @Modifying
+    @Query("update LabDetail ld set ld.publishStatus=1 where ld.id=:id")
+    Integer updatePublishStatusById(@Param("id")Long id);
 
     LabDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
 

@@ -179,7 +179,7 @@ public class LabServiceImpl implements LabService {
             Long publishDate = labDetail.getPublishDate();
             LabDetail pre = getOneByPublishDate(publishDate, ">");
             LabDetail next = getOneByPublishDate(publishDate, "<");
-            map.put("labDetail",labDetail);
+            map.put("detail",labDetail);
             map.put("previous",pre);
             map.put("next",next);
         }
@@ -246,6 +246,10 @@ public class LabServiceImpl implements LabService {
             return pageResponse;
         }
         return null;
+    }
+
+    public LabCategory getCategoryById(Long labCategoryId){
+        return labCategoryDAO.findById(labCategoryId).orElse(null);
     }
 
     private List<MentorResponse> formatObj2MentorResponse(List<Object[]> researchTeam) {

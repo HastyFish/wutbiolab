@@ -68,6 +68,9 @@ public class LabDetail implements Serializable {
      */
     private Integer mentorOrder;
 
+    @Transient
+    private String category;
+
     public LabDetail(Long id,String title, Long publishDate) {
         this.id=id;
         this.title = title;
