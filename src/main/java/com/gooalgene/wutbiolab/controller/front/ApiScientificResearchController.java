@@ -28,14 +28,11 @@ public class ApiScientificResearchController {
 
 
     @GetMapping("/list/{categoryId}")
-    public CommonResponse<Map<String,Object>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("categoryId")Long categoryId,
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getLabDetailByLabCategoryIdAndPublishStatus(@PathVariable("categoryId")Long categoryId,
                                 @RequestParam("pageNum")Integer pageNum,@RequestParam("pageSize")Integer pageSize){
-        PageResponse<ScientificResearchDetail> scientificResearchDetails = scientificResearchService.getPublishedByCategoryId(categoryId, pageNum, pageSize);
-        ScientificResearchCategory category = scientificResearchService.getCategoryById(categoryId);
-        Map<String,Object> map=new HashMap<>();
-        map.put("category",category.getCategory());
-        map.put("page",scientificResearchDetails);
-        return ResponseUtil.success(map);
+        PageResponse<ScientificResearchDetail> scientificResearchDetails =
+                scientificResearchService.getPublishedByCategoryId(categoryId, pageNum, pageSize);
+        return ResponseUtil.success(scientificResearchDetails);
     }
 
     @GetMapping("/{id}")

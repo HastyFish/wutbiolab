@@ -141,7 +141,7 @@ public class ResourceServiceImpl implements ResourceService {
             Long publishDate = resourceDetail.getPublishDate();
             ResourceDetail pre = getOneByPublishDate(publishDate, ">");
             ResourceDetail next = getOneByPublishDate(publishDate, "<");
-            map.put("labDetail",resourceDetail);
+            map.put("detail",resourceDetail);
             map.put("previous",pre);
             map.put("next",next);
         }
