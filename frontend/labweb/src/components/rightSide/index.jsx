@@ -7,7 +7,6 @@ class RightSide extends Component {
     }
     componentWillReceiveProps(nextProps) {
         let navId = null;
-        debugger;
         if(!nextProps.location.state){
             navId = 1
         }else{
