@@ -154,7 +154,9 @@ class ListPage extends React.PureComponent {
                          {this.tableChild(dataList)}
                      </ul>
                     }
-                    <Pagination {...page}/>
+                   {
+                       !!total &&  <Pagination {...page}/>
+                   }
                 </div>
             </div>
          );
