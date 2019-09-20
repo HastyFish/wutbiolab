@@ -50,7 +50,15 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
     @Query("update LabDetail ld set ld.publishStatus=1 where ld.id=:id")
     Integer updatePublishStatusById(@Param("id")Long id);
 
-    LabDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
+
+//    LabDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
+
+
+    @Query(value = "select ld.*,ac.category from lab_detail ld join all_category ac on (ld.categoryId=ac.id and ac.discriminator='lab')" +
+            " where ld.id=:id and ld.publishStatus=:publishStatus",nativeQuery = true)
+    List<Object[]> getByIdAndPublishStatus(@Param("id") Long id,@Param("publishStatus") Integer publishStatus);
+
+
 
 
 //    List<LabDetail> getByIdIn(List<Long> ids);
