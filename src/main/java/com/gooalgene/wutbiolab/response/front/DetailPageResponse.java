@@ -15,6 +15,11 @@ public class DetailPageResponse<T> extends PageResponse<T> {
         this.category = category;
     }
 
+    public DetailPageResponse(List<T> list, Integer pageNum, Integer pageSize, Long total) {
+        super(list, pageNum, pageSize, total);
+    }
+
+
     private String category;
 
 }
