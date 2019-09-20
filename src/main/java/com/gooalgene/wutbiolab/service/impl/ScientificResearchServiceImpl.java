@@ -9,6 +9,7 @@ import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCateg
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
 import com.gooalgene.wutbiolab.response.AcademicResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,8 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
                 CommonConstants.PUBLISHED, pageable);
         long totalElements = scientificResearchDetailPage.getTotalElements();
         List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
-        PageResponse<ScientificResearchDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);
+        ScientificResearchCategory category = getCategoryById(scientificResearchCategoryId);
+        PageResponse<ScientificResearchDetail> pageResponse=new DetailPageResponse<>(content,pageNum,pageSize,totalElements,category.getCategory());
         return pageResponse;
     }
 
@@ -130,7 +132,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
             Long publishDate = one.getPublishDate();
             ScientificResearchDetail pre = getOneByPublishDate(publishDate, ">");
             ScientificResearchDetail next = getOneByPublishDate(publishDate, "<");
-            map.put("scientificResearchDetail",one);
+            map.put("detail",one);
             map.put("previous",pre);
             map.put("next",next);
         }
