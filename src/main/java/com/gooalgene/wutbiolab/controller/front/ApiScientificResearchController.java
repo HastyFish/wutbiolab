@@ -11,6 +11,7 @@ import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,13 @@ public class ApiScientificResearchController {
     public CommonResponse<Map<String,ScientificResearchDetail>> getPublishedById(@PathVariable("id") Long id){
         Map<String,ScientificResearchDetail> map = scientificResearchService.getPublishedById(id);
         return ResponseUtil.success(map);
+    }
+
+    @ApiOperation(value="获取所有一级分类", notes="获取所有一级分类")
+    @GetMapping("/all/category")
+    public CommonResponse<List<ScientificResearchCategory>> getAllCategory(){
+        List<ScientificResearchCategory> allCategory = scientificResearchService.getAllCategory();
+        return ResponseUtil.success(allCategory);
     }
 
 

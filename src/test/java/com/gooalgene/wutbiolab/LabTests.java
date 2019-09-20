@@ -1,21 +1,18 @@
 package com.gooalgene.wutbiolab;
 
 import com.gooalgene.wutbiolab.dao.lab.LabDetailDAO;
-import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.service.LabService;
-import org.hibernate.transform.Transformers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -28,10 +25,11 @@ public class LabTests {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+//	@Rollback(false)
 	@Transactional
 	@Test
 	public void testDAO() {
-		labDetailDAO.updatePublishStatusById(2l);
+		Integer integer = labDetailDAO.updatePublishStatusById(2l);
 		System.out.println(1);
 
 	}

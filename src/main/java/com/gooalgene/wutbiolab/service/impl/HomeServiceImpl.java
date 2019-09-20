@@ -2,6 +2,7 @@ package com.gooalgene.wutbiolab.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooalgene.wutbiolab.constant.CommonConstants;
+import com.gooalgene.wutbiolab.dao.AllCategroryDAO;
 import com.gooalgene.wutbiolab.dao.home.AcademicImageDAO;
 import com.gooalgene.wutbiolab.dao.home.CooperationLinkDAO;
 import com.gooalgene.wutbiolab.dao.home.FooterDAO;
@@ -13,6 +14,7 @@ import com.gooalgene.wutbiolab.dao.notice.NoticeDetailDAO;
 import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import com.gooalgene.wutbiolab.entity.home.AcademicImage;
 import com.gooalgene.wutbiolab.entity.home.CooperationLink;
 import com.gooalgene.wutbiolab.entity.home.Footer;
@@ -68,6 +70,8 @@ public class HomeServiceImpl implements HomeService {
 
     private ResourceDetailDAO resourceDetailDAO;
 
+    private AllCategroryDAO allCategroryDAO;
+
     private Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);
 
     public HomeServiceImpl(AcademicImageDAO academicImageDAO, NewsImageDAO newsImageDAO,
@@ -76,7 +80,7 @@ public class HomeServiceImpl implements HomeService {
                            NewsDetailDAO newsDetailDAO, ObjectMapper objectMapper,
                            ScientificResearchDetailDAO scientificResearchDetailDAO,
                            NoticeDetailDAO noticeDetailDAO, NoticeCategoryDAO noticeCategoryDAO,
-                           ResourceDetailDAO resourceDetailDAO) {
+                           ResourceDetailDAO resourceDetailDAO,AllCategroryDAO allCategroryDAO) {
         this.resourceDetailDAO = resourceDetailDAO;
         this.noticeCategoryDAO = noticeCategoryDAO;
         this.noticeDetailDAO = noticeDetailDAO;
@@ -89,6 +93,7 @@ public class HomeServiceImpl implements HomeService {
         this.newsImageDAO = newsImageDAO;
         this.cooperationLinkDAO = cooperationLinkDAO;
         this.footerDAO = footerDAO;
+        this.allCategroryDAO=allCategroryDAO;
     }
 
     @Override
@@ -287,5 +292,10 @@ public class HomeServiceImpl implements HomeService {
 
 
         return ResponseUtil.success(result);
+    }
+
+    @Override
+    public List<AllCategory> getAllCategorys() {
+        return allCategroryDAO.findAll();
     }
 }
