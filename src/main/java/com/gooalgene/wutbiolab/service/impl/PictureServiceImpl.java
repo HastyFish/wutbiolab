@@ -44,13 +44,15 @@ public class PictureServiceImpl implements PictureService {
             try {
                 List<Picture> oldImageList = objectMapper.readValue(oldPictureListString,
                         objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                oldImageList.forEach(one -> {
-                    String oldImageName = one.getUrl();
-                    String oldImagePath = gooalApplicationProperty.getImagePath() + oldImageName;
-                    File oldImageFile = new File(oldImagePath);
-                    if (oldImageFile.exists()) {
-                        if (!oldImageFile.delete()) {
-                            logger.error(" Old image exist but fail to delete");
+                oldImageList.forEach(oneOldPicture -> {
+                    if (!newPictureListString.contains(oneOldPicture.getUrl())) {
+                        String oldImageName = oneOldPicture.getUrl();
+                        String oldImagePath = gooalApplicationProperty.getImagePath() + oldImageName;
+                        File oldImageFile = new File(oldImagePath);
+                        if (oldImageFile.exists()) {
+                            if (!oldImageFile.delete()) {
+                                logger.error(" Old image exist but fail to delete");
+                            }
                         }
                     }
                 });
