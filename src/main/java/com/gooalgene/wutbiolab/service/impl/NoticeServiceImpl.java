@@ -37,14 +37,15 @@ public class NoticeServiceImpl implements NoticeService {
                                                                          Long categoryId) {
 //        Page<NoticeDetail> page = noticeDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
         Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD);
         Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
         Page<NoticeOverview> page;
         if (null == categoryId) {
             page = noticeDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         } else {
             page = noticeDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         }
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
@@ -96,7 +97,11 @@ public class NoticeServiceImpl implements NoticeService {
                     noticeCategory.getCategory(),
                     CommonConstants.PUBLISHED,
                     PageRequest.of(pageNum - 1, pageSize,
-                            new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                    )
+                            ));
             return ResponseUtil.success(new DetailPageResponse<>(noticeOverviewPage.getContent(), pageNum,
                     pageSize, noticeOverviewPage.getTotalElements(), noticeCategory.getCategory()));
         } else {
