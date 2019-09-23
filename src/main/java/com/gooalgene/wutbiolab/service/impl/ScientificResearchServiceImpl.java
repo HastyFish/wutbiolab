@@ -124,6 +124,10 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         PageResponse<ScientificResearchDetail> pageResponse=new DetailPageResponse<>(content,pageNum,pageSize,totalElements,category.getCategory());
         return pageResponse;
     }
+    @Override
+    public ScientificResearchCategory getCategoryById(Long categoryId) {
+        return scientificResearchCategoryDAO.findById(categoryId).orElse(null);
+    }
 
     @Override
     public Map<String,ScientificResearchDetail> getPublishedById(Long id){
@@ -137,8 +141,17 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         if(scientificResearchDetail!=null){
             Long publishDate = scientificResearchDetail.getPublishDate();
             Long categoryId = scientificResearchDetail.getCategoryId();
-            ScientificResearchDetail pre = getOneByPublishDate(categoryId,publishDate, ">","asc");
-            ScientificResearchDetail next = getOneByPublishDate(categoryId,publishDate, "<","desc");
+            String countSql="select count(1) from  scientific_research_detail srd  where srd.publishDate =:publishDate " +
+                    "and srd.publishStatus="+CommonConstants.PUBLISHED;
+            Object singleResult = entityManager.createNativeQuery(countSql)
+                    .setParameter("publishDate",publishDate).getSingleResult();
+            BigInteger bigInteger = (BigInteger) singleResult;
+            long count = bigInteger == null ? 0 : bigInteger.longValue();
+
+
+
+            ScientificResearchDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
+            ScientificResearchDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
             map.put("detail",scientificResearchDetail);
             map.put("previous",pre);
             map.put("next",next);
@@ -146,16 +159,23 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         return map;
     }
 
-    @Override
-    public ScientificResearchCategory getCategoryById(Long categoryId) {
-        return scientificResearchCategoryDAO.findById(categoryId).orElse(null);
-    }
 
-    private ScientificResearchDetail getOneByPublishDate(Long categoryId,Long publishDate, String operation,String sort){
-        String sql="select srd.id,srd.title from scientific_research_detail srd where  srd.publishDate "+operation+
-                " :publishDate  and srd.publishStatus=1  and srd.categoryId=:categoryId " +
-                " ORDER BY publishDate "+sort+" limit 1";
-        Query nativeQuery = entityManager.createNativeQuery(sql);
+
+    private ScientificResearchDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String sort){
+        Query nativeQuery=null;
+        if(count>1){
+            String operationAndEq = operation.concat("=");
+            String sql="select srd.id,srd.title from scientific_research_detail srd where  srd.publishDate "+operationAndEq+
+                    " :publishDate  and srd.publishStatus=1  and srd.categoryId=:categoryId and srd.id"+operation+":id " +
+                    " ORDER BY srd.publishDate "+sort+",srd.id "+sort+" limit 1";
+            nativeQuery = entityManager.createNativeQuery(sql);
+            nativeQuery.setParameter("id",id);
+        }else {
+            String sql="select srd.id,srd.title from scientific_research_detail srd where  srd.publishDate "+operation+
+                    " :publishDate  and srd.publishStatus=1  and srd.categoryId=:categoryId  " +
+                    " ORDER BY srd.publishDate "+sort+" limit 1";
+            nativeQuery = entityManager.createNativeQuery(sql);
+        }
         nativeQuery.setParameter("publishDate",publishDate);
         nativeQuery.setParameter("categoryId",categoryId);
         Object object = null;

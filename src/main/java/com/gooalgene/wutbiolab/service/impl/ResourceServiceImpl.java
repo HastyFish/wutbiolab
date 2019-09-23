@@ -163,8 +163,17 @@ public class ResourceServiceImpl implements ResourceService {
         if(resourceDetail!=null){
             Long categoryId = resourceDetail.getCategoryId();
             Long publishDate = resourceDetail.getPublishDate();
-            ResourceDetail pre = getOneByPublishDate(categoryId,publishDate, ">","asc");
-            ResourceDetail next = getOneByPublishDate(categoryId,publishDate, "<","desc");
+            String countSql="select count(1) from  resource_detail rd  where rd.publishDate =:publishDate " +
+                    "and rd.publishStatus="+CommonConstants.PUBLISHED;
+            Object singleResult = entityManager.createNativeQuery(countSql)
+                    .setParameter("publishDate",publishDate).getSingleResult();
+            BigInteger bigInteger = (BigInteger) singleResult;
+            long count = bigInteger == null ? 0 : bigInteger.longValue();
+
+
+
+            ResourceDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
+            ResourceDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
             map.put("detail",resourceDetail);
             map.put("previous",pre);
             map.put("next",next);
@@ -172,11 +181,22 @@ public class ResourceServiceImpl implements ResourceService {
         return map;
     }
 
-    private ResourceDetail getOneByPublishDate(Long categoryId,Long publishDate, String operation,String  sort) {
-        String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
-                " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId " +
-                " ORDER BY publishDate "+sort+" limit 1";
-        Query nativeQuery = entityManager.createNativeQuery(sql);
+    private ResourceDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String  sort) {
+        Query nativeQuery=null;
+        if(count>1){
+            String operationAndEq = operation.concat("=");
+            String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operationAndEq+
+                    " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId and rd.id"+operation+":id " +
+                    " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
+            nativeQuery = entityManager.createNativeQuery(sql);
+            nativeQuery.setParameter("id",id);
+        }else {
+            String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
+                    " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId " +
+                    " ORDER BY rd.publishDate "+sort+" limit 1";
+            nativeQuery = entityManager.createNativeQuery(sql);
+        }
+
         nativeQuery.setParameter("publishDate",publishDate);
         nativeQuery.setParameter("categoryId",categoryId);
         Object object = null;
