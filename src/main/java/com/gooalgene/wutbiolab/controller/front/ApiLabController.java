@@ -79,9 +79,14 @@ public class ApiLabController {
 
     @ApiOperation(value="查询研究团队所有已发布数据", notes="查询研究团队所有已发布数据")
     @GetMapping("/researchTeam/{categoryId}")
-    public CommonResponse<List<MentorResponse>> getPublishedResearchTeam(@PathVariable("categoryId")Long categoryId){
+    public CommonResponse<Map<String,Object>> getPublishedResearchTeam(@PathVariable("categoryId")Long categoryId){
+        Map<String,Object> map=new HashMap<>();
+        LabCategory labCategory= labService.getCategoryById(categoryId);
+        String category=labCategory!=null?labCategory.getCategory():null;
         List<MentorResponse> researchTeam = labService.getPublishedResearchTeam();
-        return ResponseUtil.success(researchTeam);
+        map.put("category",category);
+        map.put("list",researchTeam);
+        return ResponseUtil.success(map);
     }
 
 

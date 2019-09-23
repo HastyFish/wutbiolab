@@ -1,26 +1,29 @@
 import React from 'react';
 import './index.less'
-import { Breadcrumb,Pagination, Row,Col  } from 'antd';
+import { Breadcrumb,Table  } from 'antd';
 import {getLabLabCategoryId} from '@/api'
-import {getNewsDay} from '@utils/dateUtils'
 import {getTitleinfo} from '@utils/tools'
-class ListPage extends React.PureComponent {
+
+
+
+class SciTable extends React.PureComponent {
     constructor(props) {
         super(props);
         let pathnameList = this.props.location.pathname.split("/");
         let navId = Number(pathnameList[pathnameList.length-1]) ;
         this.state = { 
             titleName : "",
-            dataList:{},
+            dataList:[],
             navId,
             titleinfo:"",
             navName:"",
             pageNum:1,
-            pageSize:10,
+            pageSize:30,
             total:0
          }
     }
-       //每页展示条数发生变化的回调函数
+
+           //每页展示条数发生变化的回调函数
   onShowSizeChange = async (current, size) => {
     let {pageNum,pageSize} = this.state;
     pageNum = 1;
@@ -39,6 +42,7 @@ class ListPage extends React.PureComponent {
         pageNum
     },()=>{ this.getTable()})
   }
+
       //获取表格数据
       getTable = async()=>{
         if(this.props.location.state){
@@ -46,30 +50,16 @@ class ListPage extends React.PureComponent {
                 titleinfo :this.props.location.state.titleinfo,
             })
         }
-          let {navId,pageNum,pageSize} = this.state;
-          let type = "";
-          if([1,2,3,4].includes(navId)){
-                type="lab"
-          }else if([30,31,32,33].includes(navId)){
-            type="news"
-          }else if([34,35,36].includes(navId)){
-            type="notice"
-          }else if([10,11].includes(navId)){
-            type="scientificResearch"
-          }else if([37,38,39].includes(navId)){
-            type="resource/published"
-          }
-        let data = await getLabLabCategoryId(navId,pageNum,pageSize,type);
+        let {navId,pageNum,pageSize} = this.state;
+        let data = await getLabLabCategoryId(navId,pageNum,pageSize,"scientificResearch");
         if(data.result){
             this.setState({
                 dataList : data.result.list,
-                total:data.result.total,
                 navName:data.result.category
             })
         }else{ 
             this.setState({
                 dataList : [],
-                total:0,
             })
         }
     }
@@ -90,51 +80,48 @@ class ListPage extends React.PureComponent {
             navId:data.id,
             titleinfo:this.state.titleinfo
         }
-        let url = "";
         let navId = this.state.navId;
-        if([1,2,3,4].includes(navId)){
-            url = "/introduction"
-        }else if([30,31,32,33].includes(navId)){
-            url = "/news"
-        }else if([34,35,36].includes(navId)){
-            url = "/notices"
-        }else if([10,11].includes(navId)){
-            url = "/scientific"
-        }else if([37,38,39].includes(navId)){
-            url = "/resources"
-        }
-        this.props.history.push(`${url}/${navId}/info`,childList);
+        this.props.history.push(`/scientific/${navId}/info`,childList);
     }
-    tableChild = (data)=>data.map((item,index)=>{
-        return(
-            <li key={index}>
-               <Row type="flex">
-                   <Col span={12}>
-                       <span  onClick={this.jump.bind(this,item)} className="curp">{item.title}</span>
-                   </Col>
-                   <Col span={12}  style={{textAlign:"right"}}>
-                       {getNewsDay(item.publishDate)}
-                   </Col>   
-               </Row>
-            </li>
-            
-        )
-    })
+
 
 
 
     render() { 
         let {dataList,titleinfo,navName,pageNum,pageSize,total,navId} = this.state;
+        const columns = [
+            {
+              title: '论文题目',
+              
+              render: (path, text, index) => {
+                return (
+                   <span className="curp" onClick={this.jump.bind(this,path)}>1</span>
+                )
+            }
+            },
+            {
+              title: '刊物名称',  
+              dataIndex: 'periodicalName',
+            },
+            {
+              title: '第一作者',
+              dataIndex: 'author',
+            },
+            {
+              title: '发表年度',
+              dataIndex: 'publishYear',
+            }
+          ];
         const page = {
-            current: pageNum,
-            showSizeChanger:true,
-            defaultCurrent:pageNum,
-            pageSize:pageSize,
-            total:total,
-            onShowSizeChange:this.onShowSizeChange,
-            onChange: this.changePage,
-            showTotal:(total)=>{
-            return `共${total}条`
+                current: pageNum,
+                showSizeChanger:true,
+                defaultCurrent:pageNum,
+                pageSize:pageSize,
+                total:total,
+                onShowSizeChange:this.onShowSizeChange,
+                onChange: this.changePage,
+                showTotal:(total)=>{
+                return `共${total}条`
             }
         }
         titleinfo = getTitleinfo(navId);
@@ -149,18 +136,17 @@ class ListPage extends React.PureComponent {
                     <div className="title-name">
                         {navName}
                     </div>
-                    {
-                     dataList.length>0 &&    <ul className="list-page">
-                         {this.tableChild(dataList)}
-                     </ul>
-                    }
-                   {
-                       !!total &&  <Pagination {...page}/>
-                   }
+                    <Table columns={columns} 
+                        dataSource={dataList} 
+                        bordered
+                        pagination={total>0 ? page : false}
+                        
+                        rowKey="id"
+                        />
                 </div>
             </div>
          );
     }
 }
  
-export default ListPage;
+export default SciTable;

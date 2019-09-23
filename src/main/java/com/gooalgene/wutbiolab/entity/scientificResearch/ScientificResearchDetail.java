@@ -3,16 +3,21 @@ package com.gooalgene.wutbiolab.entity.scientificResearch;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+//todo 字段顺序严禁修改!!!!!!!!!!!!!!!
 /**
  * 科研工作子模块详情
  */
 
+@AllArgsConstructor
+@Builder
 @ApiModel(value = "科研工作子模块详情", description = "科研工作子模块详情")
 @NoArgsConstructor
 @Table(name = "scientific_research_detail")
@@ -56,6 +61,9 @@ public class ScientificResearchDetail implements Serializable {
 
     @ApiModelProperty(value = "学术类型id", example = "1")
     private Long academicCategoryId;
+
+    @Transient
+    private String category;
 
 
     public ScientificResearchDetail(Long id,String title, Long publishDate, Integer publishStatus, String periodicalName, String author,

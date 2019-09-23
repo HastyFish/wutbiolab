@@ -3,15 +3,20 @@ package com.gooalgene.wutbiolab.entity.lab;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+//todo 字段顺序严禁修改!!!!!!!!!!!!!!!
 /**
  * 实验室四个模块通用详情表
  */
+@AllArgsConstructor
+@Builder
 @ApiModel(value = "实验室子模块详情", description = "实验室子模块详情")
 @NoArgsConstructor
 @Table(name = "lab_detail")

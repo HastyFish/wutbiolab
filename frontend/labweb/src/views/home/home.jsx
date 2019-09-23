@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import MoreTitle from "@components/home/moreTitle";
 import './home.less';
 import { Row, Col,Carousel ,Typography } from "antd";
-// import {getHotNews,getCooperation,getSlideshow,getProductAll,getStrength} from '@api/';
-import ac from './11.jpg';
+import {getHome,getSlideshow} from '@/api'
+
 const { Paragraph } = Typography;
 
 class Home extends Component {
@@ -11,76 +11,73 @@ class Home extends Component {
     super(props);
     this.state = {
       slideList: [],
+      homeList:[]
     };
   }
-  // async componentDidMount(){
-  //   let slide = await getSlideshow();
-  //   let product = await getProductAll();
-  //   let strength = await getStrength();
-  //   let news = await getHotNews();
-  //   let Cooperation = await getCooperation();
-  //   this.setState({
-  //     slideList : slide.result ? JSON.parse(slide.result) :[],
-  //     productList : product.result,
-  //     newsList : news.result,
-  //     strengthList : strength.result,
-  //     CooperationList : Cooperation.result ?  JSON.parse(Cooperation.result) : [],
-  //   })
-  // }
+  async componentDidMount(){
+    let slide = await getSlideshow();
+    let home = await getHome();
+    this.setState({
+      slideList : slide.result || [],
+      homeList:home.result || []
+    })
+  }
   render() {
-    // const {slideList,productList,newsList,strengthList,CooperationList} = this.state;
+     const {slideList,homeList} = this.state;
+     let [list1=[],list2=[],list3=[],list4=[],list5=[],list6=[],list7=[],list8=[],list9=[]] = homeList;
     return (
       <div className="home">
         <div className="home-more">
           <Row type="flex" style={{ height: "400px" }}>
             <Col className="home-left">
               <Carousel  autoplay>
-                <div >
-                  <div>
-                    <img src={ac} width="660px" alt=""/>
-                    <Paragraph ellipsis style={{width:"500px"}}>ParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraph</Paragraph>
-                  </div>
-                </div>
-                <div >
-                  <div>
-                    <img src={ac} width="660px" alt=""/>
-                    <Paragraph ellipsis style={{width:"500px"}}>ParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraphParagraph</Paragraph>
-                  </div>
-                </div>
+               
+                {
+                    slideList.map((item,index)=>{
+                       return(
+                        <div key={index}>
+                        <img src={item.imageurl} width="660px" alt="轮播图"/>
+                        <div className="silde-title" >
+                          <Paragraph ellipsis style={{width:"500px"}}>{item.title}</Paragraph>
+                        </div>
+                    </div>
+                       )
+                    })
+                  }
               </Carousel>
             </Col>
             <Col className="home-right">
-              <MoreTitle titleinfo="科研动态" type="1"/>
+              <MoreTitle titleinfo="科研动态" datalist={list1} type="1"/>
             </Col>
           </Row>
           <Row type="flex">
             <Col className="home-left">
-              <MoreTitle titleinfo="新闻"  type="2"/>
+              <MoreTitle titleinfo="新闻动态"  datalist={list2} imglist={list3}  type="2"/>
             </Col>
             <Col className="home-right">
-              <MoreTitle titleinfo="通知公告"  type="3"/>
+              <MoreTitle titleinfo="通知公告" datalist={list4}  type="3"/>
             </Col>
           </Row>
           <Row type="flex">
             <Col className="home-left">
-              <MoreTitle titleinfo="学术活动"  type="2"/>
+              <MoreTitle titleinfo="学术活动" datalist={list5} imglist={list6}  type="2"/>
             </Col>
             <Col className="home-right">
-              <MoreTitle titleinfo="招聘招生"  type="3"/>
+              <MoreTitle titleinfo="招聘招生" datalist={list7}   type="3"/>
             </Col>
           </Row>
         </div>
         <div className="home-more">
           <Row type="flex">
               <Col span={24}>
-                <MoreTitle titleinfo="资源发布"  type="4"/>
+                <MoreTitle titleinfo="资源发布" datalist={list8}  type="4"/>
               </Col>
             </Row>
         </div>
         <div className="home-more">
           <Row type="flex">
               <Col span={24}>
-                <MoreTitle titleinfo="友情链接"  type="5"/>
+                <MoreTitle titleinfo="友情链接" datalist={list9}  type="5"/>
               </Col>
             </Row>
         </div>

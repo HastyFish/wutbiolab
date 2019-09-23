@@ -40,5 +40,10 @@ public interface ScientificResearchDetailDAO extends JpaRepository<ScientificRes
     Page<ScientificResearchDetail> getByCategoryIdAndPublishStatus(@Param("categoryId") Long categoryId,
                                                                                      @Param("publishStatus") Integer publishStatus, Pageable pageable);
 
-    ScientificResearchDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
+//    ScientificResearchDetail getByIdAndPublishStatus(Long id,Integer publishStatus);
+    @Query(value = "select srd.*,ac.category from scientific_research_detail srd join all_category ac on (srd.categoryId=ac.id and ac.discriminator='scientific')" +
+        " where srd.id=:id and srd.publishStatus=:publishStatus",nativeQuery = true)
+    List<Object[]> getByIdAndPublishStatus(@Param("id") Long id,@Param("publishStatus")Integer publishStatus);
+
+
 }
