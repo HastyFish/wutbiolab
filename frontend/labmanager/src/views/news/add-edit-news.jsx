@@ -142,7 +142,7 @@ class EditNews extends Component{
     const {categoryList} = this.state;
     let category = categoryList.find(item => item.id === e);
     this.setState({
-      categoryType:category.category
+      categoryType:category.id
     })
   }
 
