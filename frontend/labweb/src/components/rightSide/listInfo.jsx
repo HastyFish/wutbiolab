@@ -83,7 +83,7 @@ class ListInfo extends Component {
                 navName:this.state.navName,
                 titleinfo:this.state.titleinfo
             }
-
+            window.scroll({ top: 0 });
             this.props.history.push(`${url}/${order}/info`,childList);
            
         }
