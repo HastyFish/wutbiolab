@@ -41,7 +41,8 @@ class TableInfo extends Component {
             let data = await getLabId(this.state.infoId,type);
             if(data.result){
                 this.setState({
-                    dataList : data.result.detail
+                    dataList : data.result.detail,
+                    navName:data.result.detail.category
                 })
             }
         }
@@ -56,7 +57,7 @@ class TableInfo extends Component {
                     <Breadcrumb.Item >{infoName}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="title-name title-info-name">
-                    {dataList.mentorName}
+                    {dataList.mentorName || dataList.title }
                 </div>
                 <p dangerouslySetInnerHTML={{__html: dataList.context}}></p>
             </div>

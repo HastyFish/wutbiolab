@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './index.less'
 import { Breadcrumb,Table  } from 'antd';
 import {getLabLabCategoryId} from '@/api'
@@ -139,7 +139,8 @@ class SciTable extends React.PureComponent {
                     <Table columns={columns} 
                         dataSource={dataList} 
                         bordered
-                        pagination={page}
+                        pagination={total>0 ? page : false}
+                        
                         rowKey="id"
                         />
                 </div>

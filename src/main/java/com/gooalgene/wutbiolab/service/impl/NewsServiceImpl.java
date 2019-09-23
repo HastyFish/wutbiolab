@@ -141,7 +141,8 @@ public class NewsServiceImpl implements NewsService {
         if (newsCategoryDAO.findById(categoryId.longValue()).isPresent()) {
             NewsCategory newsCategory = newsCategoryDAO.findById(categoryId.longValue()).get();
             Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(newsCategory.getCategory(),
-                    CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize));
+                    CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize,
+                            new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
             return ResponseUtil.success(new DetailPageResponse<>(newsOverviewPage.getContent(), pageNum,
                     pageSize, newsOverviewPage.getTotalElements(), newsCategory.getCategory()));
         } else {

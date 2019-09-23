@@ -6,6 +6,7 @@ import { Switch, Route } from 'react-router-dom';
 import ListInfo from '@components/rightSide/listInfo';
 import ListPage from '@components/rightSide/listPage';
 import SciTable from '@components/rightSide/sciTable';
+import TableInfo from '@components/rightSide/tableInfo';
 
 
 import {getSciAll} from '@/api'
@@ -61,7 +62,6 @@ class Scientific extends Component {
             <div className="scientific">
                 <Row type="flex">
                     <Col span={6}>
-                        {/* <LeftSide titleinfo="实验室简介"></LeftSide> */}
                         {/* 左边导航 */}
                         <div className="leftSide">
                             <div className="leftSide-header">
@@ -82,7 +82,7 @@ class Scientific extends Component {
                     <Col span={18}>
                         <Switch>
                             <Route path='/scientific/10' exact component={SciTable} />
-                            <Route path='/scientific/10/info'  component={ListInfo} />
+                            <Route path='/scientific/10/info'  component={TableInfo} />
                             <Route path='/scientific/11' exact component={ListPage} />
                             <Route path='/scientific/11/info'  component={ListInfo} />
                         </Switch>
