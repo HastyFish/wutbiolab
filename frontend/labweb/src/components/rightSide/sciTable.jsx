@@ -95,7 +95,7 @@ class SciTable extends React.PureComponent {
               dataIndex: 'title',
               render: (path, text, index) => {
                 return (
-                   <span className="curp" onClick={this.jump.bind(this,path)}>{path.title}</span>
+                   <span className="curp" key={index} onClick={this.jump.bind(this,text)}>{path}</span>
                 )
             }
             },
