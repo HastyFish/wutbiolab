@@ -85,7 +85,8 @@ public class NoticeServiceImpl implements NoticeService {
             Page<NoticeOverview> noticeOverviewPage = noticeDetailDAO.findByCategoryAndPublishStatusPage(
                     noticeCategory.getCategory(),
                     CommonConstants.PUBLISHED,
-                    PageRequest.of(pageNum - 1, pageSize));
+                    PageRequest.of(pageNum - 1, pageSize,
+                            new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
             return ResponseUtil.success(new DetailPageResponse<>(noticeOverviewPage.getContent(), pageNum,
                     pageSize, noticeOverviewPage.getTotalElements(), noticeCategory.getCategory()));
         } else {
