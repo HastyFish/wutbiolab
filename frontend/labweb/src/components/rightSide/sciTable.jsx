@@ -140,7 +140,6 @@ class SciTable extends React.PureComponent {
                         dataSource={dataList} 
                         bordered
                         pagination={total>0 ? page : false}
-                        
                         rowKey="id"
                         />
                 </div>
