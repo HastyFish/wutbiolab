@@ -11,7 +11,7 @@ import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import java.util.List;
 
 public interface NewsService {
-    CommonResponse<PageResponse<NewsOverview>> newsDetailPage(Integer pageNum, Integer pageSize);
+    CommonResponse<PageResponse<NewsOverview>> newsDetailPage(Integer pageNum, Integer pageSize, Long categoryId);
 
     CommonResponse<List<NewsCategory>> allNewsCategory();
 
@@ -21,7 +21,7 @@ public interface NewsService {
 
     CommonResponse<Boolean> deleteById(Integer id);
 
-    CommonResponse<DetailPageResponse<NewsOverview>> newsDetailPageByCategory(Integer categoryId, int pageNum, int pageSize);
+    CommonResponse<DetailPageResponse<NewsOverview>> newsDetailPageByCategory(long categoryId, int pageNum, int pageSize);
 
     CommonResponse<DetailResponse<NewsDetail, NewsOverview>> newsDetailPublishedById(long id);
 }

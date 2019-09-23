@@ -3,7 +3,7 @@ package com.gooalgene.wutbiolab.controller.front;
 import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
-import com.gooalgene.wutbiolab.response.front.ImageResponse;
+import com.gooalgene.wutbiolab.response.front.OverviewWithImageResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +24,7 @@ public class ApiHomeController {
     }
 
     @GetMapping("/slideshow")
-    public CommonResponse<List<ImageResponse>> getSlideshow() {
+    public CommonResponse<List<OverviewWithImageResponse>> getSlideshow() {
         return homeService.displayNewsSlideShow();
     }
 

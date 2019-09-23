@@ -6,7 +6,7 @@ import { Switch, Route } from 'react-router-dom';
 import ListInfo from '@components/rightSide/listInfo';
 import ListPage from '@components/rightSide/listPage';
 import SciTable from '@components/rightSide/sciTable';
-import TableInfo from '@components/rightSide/tableInfo';
+// import TableInfo from '@components/rightSide/tableInfo';
 
 
 import {getSciAll} from '@/api'
@@ -71,7 +71,9 @@ class Scientific extends Component {
                                 {
                                     !!navList.length && navList.map((item, index) => {
                                         return (
-                                            <li className={item.id === navId ? "active" : null} key={index} onClick={this.changeNav.bind(this, item, index)}>{item.category}</li>
+                                            <li className={`curp ${item.id === navId ? "active" : null}`} key={index} onClick={this.changeNav.bind(this, item, index)}>{item.category}</li>
+
+                                            // <li className={item.id === navId ? "active" : null} key={index} onClick={this.changeNav.bind(this, item, index)}>{item.category}</li>
                                         )
                                     })
                                 }
@@ -82,7 +84,7 @@ class Scientific extends Component {
                     <Col span={18}>
                         <Switch>
                             <Route path='/scientific/10' exact component={SciTable} />
-                            <Route path='/scientific/10/info'  component={TableInfo} />
+                            <Route path='/scientific/10/info'  component={ListInfo} />
                             <Route path='/scientific/11' exact component={ListPage} />
                             <Route path='/scientific/11/info'  component={ListInfo} />
                         </Switch>

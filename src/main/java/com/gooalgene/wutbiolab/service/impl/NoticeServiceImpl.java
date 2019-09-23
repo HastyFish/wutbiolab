@@ -33,9 +33,19 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NoticeOverview>> noticeDetailPage(Integer pageNum, Integer pageSize) {
+    public CommonResponse<PageResponse<NoticeOverview>> noticeDetailPage(Integer pageNum, Integer pageSize,
+                                                                         Long categoryId) {
 //        Page<NoticeDetail> page = noticeDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
-        Page<NoticeOverview> page = noticeDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize));
+        Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Page<NoticeOverview> page;
+        if (null == categoryId) {
+            page = noticeDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder)));
+        } else {
+            page = noticeDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder)));
+        }
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 

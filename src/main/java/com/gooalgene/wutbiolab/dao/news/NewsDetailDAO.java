@@ -16,20 +16,24 @@ public interface NewsDetailDAO extends JpaRepository<NewsDetail, Long> {
             "a.category as category, a.title as title from NewsDetail a")
     Page<NewsOverview> findNewsDetailBy(Pageable pageable);
 
-    @Query("select a.id as id, a.image as image, a.publishStatus, a.title as title, a.category as category" +
-            " from NewsDetail a where a.category = ?1 and a.publishStatus = ?2")
+    @Query("select a.id as id, a.publishStatus as publishStatus, a.publishDate as publishDate, " +
+            "a.category as category, a.title as title from NewsDetail a where a.categoryId = ?1")
+    Page<NewsOverview> findNewsDetailByCategoryId(long categoryId, Pageable pageable);
+
+    @Query("select a.id as id, a.image as image, a.publishStatus, a.title as title, a.category as category," +
+            "a.categoryId as categoryId from NewsDetail a where a.category = ?1 and a.publishStatus = ?2")
     List<NewsOverview> findByCategoryAndPublishStatus(String category, Integer publishStatus);
 
-    @Query("select a.id as id, a.title as title, a.category as category, a.categoryId as categoryId" +
-            " from NewsDetail a where a.categoryId = ?1 and a.publishStatus = ?2")
+    @Query("select a.id as id, a.title as title, a.category as category, a.categoryId as categoryId," +
+            "a.publishDate as publishDate from NewsDetail a where a.categoryId = ?1 and a.publishStatus = ?2")
     Page<NewsOverview> findByCategoryIdAndPublishStatusPage(Long categoryId, Integer publishStatus, Pageable pageable);
 
 //    @Query("select a.title as title, a.publishDate as publishDate from NewsDetail a")
     long countByCategoryIdEquals(long categoryId);
 
     @Query("select a.id as id, a.title as title, a.publishDate as publishDate, " +
-            "a.category as category, a.categoryId as categoryId from NewsDetail a")
-    Page<NewsOverview> findByPublishStatusEquals(Integer published, Pageable pageable);
+            "a.category as category, a.categoryId as categoryId from NewsDetail a where a.publishStatus = ?1")
+    Page<NewsOverview> findByPublishStatusEquals(Integer publishStatus, Pageable pageable);
 
     @Query("select a.id as id, a.title as title, a.publishDate as publishDate, a.category as category from NewsDetail a " +
             "where a.category = ?1 and a.publishStatus = ?2")
