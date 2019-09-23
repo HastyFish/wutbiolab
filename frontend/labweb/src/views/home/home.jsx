@@ -22,6 +22,14 @@ class Home extends Component {
       homeList:home.result || []
     })
   }
+  jump=(data)=>{
+    let url = `/news/30/info`
+    let childList = {
+        navId:data.id,
+        titleinfo:data.title
+    }
+        this.props.history.push(`${url}`,childList);
+    }
   render() {
      const {slideList,homeList} = this.state;
      let [list1=[],list2=[],list3=[],list4=[],list5=[],list6=[],list7=[],list8=[],list9=[]] = homeList;
@@ -36,10 +44,10 @@ class Home extends Component {
                     slideList.map((item,index)=>{
                        return(
                         <div key={index}>
-                        <img src={item.imageurl} width="660px" alt="轮播图"/>
-                        <div className="silde-title" >
-                          <Paragraph ellipsis style={{width:"500px"}}>{item.title}</Paragraph>
-                        </div>
+                          <img src={item.imageurl} width="660px" alt="轮播图"  onClick={this.jump.bind(this,item)} className="curp"/>
+                          <div className="silde-title" >
+                            <Paragraph ellipsis style={{width:"500px"}}>{item.title}</Paragraph>
+                          </div>
                     </div>
                        )
                     })

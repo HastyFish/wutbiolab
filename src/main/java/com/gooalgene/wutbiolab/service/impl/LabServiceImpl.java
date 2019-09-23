@@ -183,8 +183,8 @@ public class LabServiceImpl implements LabService {
         if (labDetail != null) {
             Long publishDate = labDetail.getPublishDate();
             Long categoryId = labDetail.getCategoryId();
-            LabDetail pre = getOneByPublishDate(categoryId,publishDate, ">");
-            LabDetail next = getOneByPublishDate(categoryId,publishDate, "<");
+            LabDetail pre = getOneByPublishDate(categoryId,publishDate, ">","asc");
+            LabDetail next = getOneByPublishDate(categoryId,publishDate, "<","desc");
             map.put("detail",labDetail);
             map.put("previous",pre);
             map.put("next",next);
@@ -192,9 +192,10 @@ public class LabServiceImpl implements LabService {
         return map;
     }
 
-    private LabDetail getOneByPublishDate(Long categoryId,Long publishDate,String operation){
+    private LabDetail getOneByPublishDate(Long categoryId,Long publishDate,String operation,String sort){
         String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operation+
-                " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId ORDER BY publishDate limit 1";
+                " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId " +
+                " ORDER BY labDetail.publishDate "+sort+" limit 1";
         Query nativeQuery = entityManager.createNativeQuery(sql);
         nativeQuery.setParameter("publishDate",publishDate);
         nativeQuery.setParameter("categoryId",categoryId);
