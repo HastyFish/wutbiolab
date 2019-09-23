@@ -79,6 +79,7 @@ class ListPage extends React.PureComponent {
             this.setState({
                 navId:nextProps.location.state.navId,
                 titleinfo :nextProps.location.state.titleinfo,
+                pageNum:1
             },()=>{ this.getTable()})
         }
     }

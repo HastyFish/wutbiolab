@@ -104,6 +104,8 @@ export default class Notice extends Component{
         title: '类型',
         dataIndex: 'category',
         key: 'category',
+        filters: [{value: 34, text: "规章制度"},{value: 35, text: "教育培养"},{value: 36, text: "招聘招生"}],
+        filterMultiple: false,
       },
       {
         title: '操作',
@@ -167,6 +169,24 @@ export default class Notice extends Component{
     }
   }
 
+  //表格中类型筛选
+  handleTableFilterChange = async (pagination, filters, sorter) => {
+    //console.log(pagination,filters,sorter)
+    let categoryId = filters.category[0];
+    const result = await reqNoticeList({pageNum:1,pageSize:10,categoryId});
+    if(result.code === 0){
+      //更新state
+      this.setState({
+        pageNum:1,
+        pageSize:10,
+        total:result.result.total,
+        dataSource:result.result.list
+      })
+    }else{
+      message.error('获取通知列表失败，请稍后再试!');
+    }
+  };
+
   //初始化表格显示的列的格式
   componentWillMount(){
     this.initColumns();
@@ -182,7 +202,7 @@ export default class Notice extends Component{
         dataSource:result.result.list
       })
     }else{
-      message.error('获取新闻列表失败，请稍后再试!');
+      message.error('获取通知列表失败，请稍后再试!');
     }
   }
 
@@ -199,14 +219,17 @@ export default class Notice extends Component{
         </div>
         <div className="notice-body">
           <Button type="primary" style={{width:180,height:40,margin:'0 0 20px 0'}} onClick={this.addNotice}>新增</Button>
-          <Table
-            bordered
-            rowKey='id'
-            loading={loading}
-            dataSource={dataSource} 
-            columns={columns}
-            pagination = {false}
-          />
+          <LocaleProvider locale={zhCN} >
+            <Table
+              bordered
+              rowKey='id'
+              loading={loading}
+              dataSource={dataSource} 
+              columns={columns}
+              pagination = {false}
+              onChange={this.handleTableFilterChange}
+            />
+          </LocaleProvider>
           <div style={{marginTop:'20px',float:'right'}}>
             <LocaleProvider locale={zhCN} >
               <Pagination 

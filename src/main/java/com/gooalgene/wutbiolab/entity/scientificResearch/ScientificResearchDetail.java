@@ -43,6 +43,7 @@ public class ScientificResearchDetail implements Serializable {
     /**
      * 发布状态，一旦发布即为已发布，一旦保存即为草稿（未发布）
      */
+    @Builder.Default
     @ApiModelProperty(value = "发布状态(0:未发布，1:已发布)", example = "0")
     @Column(columnDefinition = "INT default 0")
     private Integer publishStatus = 0;

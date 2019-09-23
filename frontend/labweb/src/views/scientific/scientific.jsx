@@ -62,7 +62,6 @@ class Scientific extends Component {
             <div className="scientific">
                 <Row type="flex">
                     <Col span={6}>
-                        {/* <LeftSide titleinfo="实验室简介"></LeftSide> */}
                         {/* 左边导航 */}
                         <div className="leftSide">
                             <div className="leftSide-header">
@@ -72,7 +71,9 @@ class Scientific extends Component {
                                 {
                                     !!navList.length && navList.map((item, index) => {
                                         return (
-                                            <li className={item.id === navId ? "active" : null} key={index} onClick={this.changeNav.bind(this, item, index)}>{item.category}</li>
+                                            <li className={`curp ${item.id === navId ? "active" : null}`} key={index} onClick={this.changeNav.bind(this, item, index)}>{item.category}</li>
+
+                                            // <li className={item.id === navId ? "active" : null} key={index} onClick={this.changeNav.bind(this, item, index)}>{item.category}</li>
                                         )
                                     })
                                 }
