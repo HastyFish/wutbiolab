@@ -9,10 +9,8 @@ import com.gooalgene.wutbiolab.dao.home.FooterDAO;
 import com.gooalgene.wutbiolab.dao.home.NewsImageDAO;
 import com.gooalgene.wutbiolab.dao.news.NewsCategoryDAO;
 import com.gooalgene.wutbiolab.dao.news.NewsDetailDAO;
-import com.gooalgene.wutbiolab.dao.notice.NoticeCategoryDAO;
 import com.gooalgene.wutbiolab.dao.notice.NoticeDetailDAO;
 import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
-import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
 import com.gooalgene.wutbiolab.entity.Picture;
 import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import com.gooalgene.wutbiolab.entity.home.AcademicImage;
@@ -27,7 +25,6 @@ import com.gooalgene.wutbiolab.request.HomeImageRequest;
 import com.gooalgene.wutbiolab.response.admin.HomeImageResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
-import com.gooalgene.wutbiolab.response.front.ImageResponse;
 import com.gooalgene.wutbiolab.response.front.OverviewWithImageResponse;
 import com.gooalgene.wutbiolab.service.HomeService;
 import com.gooalgene.wutbiolab.service.PictureService;
@@ -168,26 +165,33 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public CommonResponse<List<ImageResponse>> displayNewsSlideShow() {
+    public CommonResponse<List<OverviewWithImageResponse>> displayNewsSlideShow() {
         if (newsCategoryDAO.findById(CommonConstants.TOUTIAO).isPresent()) {
             NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO).get();
             List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryAndPublishStatus(
                     headline.getCategory(), CommonConstants.PUBLISHED);
-            List<ImageResponse> imageUrlList = new ArrayList<>();
+            List<OverviewWithImageResponse> overviewList = new ArrayList<>();
             newsDetailList.forEach(one -> {
                 try {
                     String pictureListImage = pictureService.formImageUrl(one.getImage());
                     List<Picture> pictureList = objectMapper.readValue(
                             pictureListImage,
                             objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                    pictureList.forEach(onePicture -> imageUrlList.add(new ImageResponse(one.getTitle(),
-                            onePicture.getUrl())));
+                    if (pictureList.size() > 0) {
+                        pictureList.forEach(onePicture -> overviewList.add(new OverviewWithImageResponse(
+                                one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(),
+                                onePicture.getUrl())));
+                    } else {
+                        overviewList.add(new OverviewWithImageResponse(one.getId(), one.getCategoryId(),
+                                one.getCategory(), one.getTitle(), ""));
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
                 }
             });
-            return ResponseUtil.success(imageUrlList);
+            return ResponseUtil.success(overviewList);
         } else {
             return ResponseUtil.error("No category like headline");
         }
@@ -209,7 +213,7 @@ public class HomeServiceImpl implements HomeService {
         /*科研动态*/
         List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
                 CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
-                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD))).getContent();
+                        sort)).getContent();
         result.add(scientificNewsList);
 
         /*新闻动态*/
@@ -237,7 +241,7 @@ public class HomeServiceImpl implements HomeService {
         /*学术活动*/
         List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
                 CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
-                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD))).getContent();
+                        sort)).getContent();
         result.add(acadeimcNewsList);
 
         /*学术活动图片*/

@@ -11,7 +11,7 @@ import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import java.util.List;
 
 public interface NoticeService {
-    CommonResponse<PageResponse<NoticeOverview>> noticeDetailPage(Integer pageNum, Integer pageSize);
+    CommonResponse<PageResponse<NoticeOverview>> noticeDetailPage(Integer pageNum, Integer pageSize, Long categoryId);
 
     CommonResponse<List<NoticeCategory>> allNoticeCategory();
 

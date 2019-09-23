@@ -29,7 +29,7 @@ public class ApiNewsController {
     }
 
     @GetMapping("/list/{categoryId}")
-    public CommonResponse<DetailPageResponse<NewsOverview>> newsDetailByCategory(@PathVariable("categoryId") Integer categoryId,
+    public CommonResponse<DetailPageResponse<NewsOverview>> newsDetailByCategory(@PathVariable("categoryId") long categoryId,
                                                                                  @RequestParam("pageNum") Integer pageNum,
                                                                                  @RequestParam("pageSize") Integer pageSize) {
         return newsService.newsDetailPageByCategory(categoryId, pageNum, pageSize);
