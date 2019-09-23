@@ -111,24 +111,24 @@ public class NoticeServiceImpl implements NoticeService {
         NoticeOverview previous;
         if (noticeDetailDAO.countByPublishDateAndPublishStatus(
                 noticeDetail.getPublishDate(), CommonConstants.PUBLISHED) > 1) {
-            next = nextPublishedNewsDetail(noticeDetail.getPublishDate(),
+            next = nextPublishedNoticeDetail(noticeDetail.getPublishDate(),
                     noticeDetail.getCategory(),
                     noticeDetail.getId());
             previous = previousPublishedNewsDetail(noticeDetail.getPublishDate(),
                     noticeDetail.getCategory(),
                     noticeDetail.getId());
         } else {
-            next = nextPublishedNewsDetail(noticeDetail.getPublishDate(),
+            next = nextPublishedNoticeDetail(noticeDetail.getPublishDate(),
                     noticeDetail.getCategory(),
                     null);
             previous = previousPublishedNewsDetail(noticeDetail.getPublishDate(),
                     noticeDetail.getCategory(),
                     null);
         }
-        return ResponseUtil.success(new DetailResponse<>(noticeDetail, previous, next));
+        return ResponseUtil.success(new DetailResponse<>(noticeDetail, next, previous));
     }
 
-    private NoticeOverview nextPublishedNewsDetail(long publishDate, String category, Long id) {
+    private NoticeOverview nextPublishedNoticeDetail(long publishDate, String category, Long id) {
         Page<NoticeOverview> newsDetailPage;
         if (null != id) {
             newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
