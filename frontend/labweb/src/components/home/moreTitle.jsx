@@ -5,7 +5,6 @@ import { withRouter  } from 'react-router-dom';
 import './index.less'
 import {getNewsDay} from '../../utils/dateUtils'
 
-
 const { Paragraph } = Typography;
 class MoreTitle extends Component {
     constructor(props) {
@@ -26,19 +25,20 @@ class MoreTitle extends Component {
             this.props.history.push("news/33");
             break;
             case "通知公告": 
-            this.props.history.push("notices/1");
+            this.props.history.push("notices/34");
             break;
             case "招聘招生": 
-            this.props.history.push("notices/1");
+            this.props.history.push("notices/36");
             break;
             case "科研动态": 
             this.props.history.push("news/32");
             break;
             case "资源发布": 
-            this.props.history.push("resources/1");
+            this.props.history.push("resources/37");
             break;
             default:;
         }
+        window.scroll({ top: 0 })
     }
     jump=(data)=>{
         let url = "";
@@ -63,6 +63,7 @@ class MoreTitle extends Component {
             titleinfo:this.state.titleinfo
         }
             this.props.history.push(`${url}`,childList);
+            window.scroll({ top: 0 })
         }
     /**
      * 获取首页more数据 type 1，2，3的情况
