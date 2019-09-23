@@ -9,14 +9,17 @@ import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
+import com.gooalgene.wutbiolab.exception.WutbiolabException;
 import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.common.ResultCode;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -202,10 +205,26 @@ public class LabServiceImpl implements LabService {
     private LabDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate,String operation,String sort){
         Query nativeQuery=null;
         if(count>1){
-            String operationAndEq = operation.concat("=");
+            String negationOperation=null;
+            if(StringUtils.equals(operation,">")){
+                negationOperation="<";
+            }else if(StringUtils.equals(operation,"<")){
+                negationOperation=">";
+            }else {
+                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+            }
+            String negationSort=null;
+            if(StringUtils.equals(sort,"desc")){
+                negationSort="asc";
+            }else  if(StringUtils.equals(negationSort,"asc")){
+                negationSort="desc";
+            }else {
+                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+            }
+            String operationAndEq = negationOperation.concat("=");
             String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operationAndEq+
                     " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId labDetail.id"+operation+":id " +
-                    " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+sort+" limit 1";
+                    " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+negationSort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
             nativeQuery.setParameter("id",id);
         }else {
