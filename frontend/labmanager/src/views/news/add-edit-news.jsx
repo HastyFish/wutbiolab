@@ -46,7 +46,7 @@ class EditNews extends Component{
           newItem:{
           },
           categoryList:[],  //新闻类型下拉列表
-          categoryType:'头条新闻'  //默认选中新闻类型
+          categoryType:30  //默认选中新闻类型
         }
     }else{
       //说明是新增
@@ -54,7 +54,7 @@ class EditNews extends Component{
         newItem:{
         },
         categoryList:[],  //新闻类型下拉列表
-        categoryType:'头条新闻'
+        categoryType:30
       }
     }
   }
@@ -72,7 +72,7 @@ class EditNews extends Component{
         //判断是否有图片,获取封面图片
         let image;
         const {categoryType} = this.state;
-        if(categoryType === '头条新闻'){
+        if(categoryType === 30){
           image = JSON.stringify(this.pw.current.getImgs());
         }else{
           image = JSON.stringify([]);
@@ -246,7 +246,7 @@ class EditNews extends Component{
               }
             </Item>
             {
-              categoryType === '头条新闻' ? (
+              categoryType === 30 ? (
               <Item label="封面上传">
                 {image ? <PicturesWall ref={this.pw} option={{width:660,height:400}} image = {JSON.parse(image)} /> : null}
                 {!image ? <PicturesWall ref={this.pw} option={{width:660,height:400}} image = {[]} /> : null}
