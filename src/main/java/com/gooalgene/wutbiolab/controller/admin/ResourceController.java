@@ -27,8 +27,9 @@ public class ResourceController {
     }
 
     @GetMapping
-    public CommonResponse<PageResponse<ResourceOverview>> getResourceDetailPage(Integer pageNum, Integer pageSize) {
-        return resourceService.resourceDetailPage(pageNum, pageSize);
+    public CommonResponse<PageResponse<ResourceOverview>> getResourceDetailPage(Integer pageNum, Integer pageSize,
+                                                                                Long categoryId) {
+        return resourceService.resourceDetailPage(pageNum, pageSize, categoryId);
     }
 
     @GetMapping("/{id}")

@@ -26,8 +26,9 @@ public class NoticeController {
     }
 
     @GetMapping
-    public CommonResponse<PageResponse<NoticeOverview>> getNoticeDetailPage(Integer pageNum, Integer pageSize) {
-        return noticeService.noticeDetailPage(pageNum, pageSize);
+    public CommonResponse<PageResponse<NoticeOverview>> getNoticeDetailPage(Integer pageNum, Integer pageSize,
+                                                                            Long categoryId) {
+        return noticeService.noticeDetailPage(pageNum, pageSize, categoryId);
     }
 
     @GetMapping("/{id}")

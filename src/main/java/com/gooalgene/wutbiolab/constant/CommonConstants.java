@@ -28,6 +28,11 @@ public interface CommonConstants {
     String PUBLISHDATEFIELD = "publishDate";
 
     /**
+     * 类别Id字段名
+     */
+    String CATEGORYIDFIELD = "categoryId";
+
+    /**
     * 模块分类
      */
     Integer LAB=1;

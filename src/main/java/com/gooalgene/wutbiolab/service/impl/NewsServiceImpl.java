@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,9 +49,20 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<PageResponse<NewsOverview>> newsDetailPage(Integer pageNum, Integer pageSize) {
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPage(Integer pageNum,
+                                                                     Integer pageSize,
+                                                                     Long categoryId) {
 //        Page<NewsDetail> page = newsDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
-        Page<NewsOverview> page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize));
+        Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Page<NewsOverview> page;
+        if (null != categoryId) {
+            page = newsDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder)));
+        } else {
+            page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder)));
+        }
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 
@@ -135,11 +147,11 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public CommonResponse<DetailPageResponse<NewsOverview>> newsDetailPageByCategory(Integer categoryId,
+    public CommonResponse<DetailPageResponse<NewsOverview>> newsDetailPageByCategory(long categoryId,
                                                                                      int pageNum,
                                                                                      int pageSize) {
-        if (newsCategoryDAO.findById(categoryId.longValue()).isPresent()) {
-            NewsCategory newsCategory = newsCategoryDAO.findById(categoryId.longValue()).get();
+        if (newsCategoryDAO.findById(categoryId).isPresent()) {
+            NewsCategory newsCategory = newsCategoryDAO.findById(categoryId).get();
             Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(newsCategory.getCategory(),
                     CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize,
                             new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));

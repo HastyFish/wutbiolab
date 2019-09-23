@@ -15,7 +15,7 @@ public interface ResourceService {
 
     CommonResponse<List<ResourceCategory>> allResourceCategory();
 
-    CommonResponse<PageResponse<ResourceOverview>> resourceDetailPage(Integer pageNum, Integer pageSize);
+    CommonResponse<PageResponse<ResourceOverview>> resourceDetailPage(Integer pageNum, Integer pageSize, Long categoryId);
 
     CommonResponse<ResourceDetail> resourceDetailById(Integer id);
 

@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -66,9 +67,19 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public CommonResponse<PageResponse<ResourceOverview>> resourceDetailPage(Integer pageNum, Integer pageSize) {
+    public CommonResponse<PageResponse<ResourceOverview>> resourceDetailPage(Integer pageNum, Integer pageSize,
+                                                                             Long categoryId) {
 //        Page<ResourceDetail> page = resourceDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
-        Page<ResourceOverview> page = resourceDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize));
+        Page<ResourceOverview> page;
+        Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        if (null == categoryId) {
+            page = resourceDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder)));
+        } else {
+            page = resourceDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder)));
+        }
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 
