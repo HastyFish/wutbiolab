@@ -104,6 +104,8 @@ export default class News extends Component{
         title: '类型',
         dataIndex: 'category',
         key: 'category',
+        filters: [{value: 30, text: "头条新闻"},{value: 31, text: "综合新闻"},{value: 32, text: "科研动态"},{value: 33, text: "学术活动"}],
+        filterMultiple: false,
       },
       {
         title: '操作',
@@ -166,6 +168,23 @@ export default class News extends Component{
       }
     }
   }
+  //表格中类型筛选
+  handleTableFilterChange = async (pagination, filters, sorter) => {
+    //console.log(pagination,filters,sorter)
+    let categoryId = filters.category[0];
+    const result = await reqNewsList({pageNum:1,pageSize:10,categoryId});
+    if(result.code === 0){
+      //更新state
+      this.setState({
+        pageNum:1,
+        pageSize:10,
+        total:result.result.total,
+        dataSource:result.result.list
+      })
+    }else{
+      message.error('获取新闻列表失败，请稍后再试!');
+    }
+  };
 
   //初始化表格显示的列的格式
   componentWillMount(){
@@ -199,14 +218,17 @@ export default class News extends Component{
         </div>
         <div className="new-body">
           <Button type="primary" style={{width:180,height:40,margin:'0 0 20px 0'}} onClick={this.addNews}>新增</Button>
-          <Table
-            bordered
-            rowKey='id'
-            loading={loading}
-            dataSource={dataSource} 
-            columns={columns}
-            pagination = {false}
-          />
+          <LocaleProvider locale={zhCN} >
+            <Table
+              bordered
+              rowKey='id'
+              loading={loading}
+              dataSource={dataSource} 
+              columns={columns}
+              pagination = {false}
+              onChange={this.handleTableFilterChange}
+            />
+          </LocaleProvider>
           <div style={{marginTop:'20px',float:'right'}}>
             <LocaleProvider locale={zhCN} >
               <Pagination 
