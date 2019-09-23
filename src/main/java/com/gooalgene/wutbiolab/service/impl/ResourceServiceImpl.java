@@ -10,12 +10,15 @@ import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
+import com.gooalgene.wutbiolab.exception.WutbiolabException;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.response.common.ResultCode;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.PictureService;
 import com.gooalgene.wutbiolab.service.ResourceService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -184,10 +187,26 @@ public class ResourceServiceImpl implements ResourceService {
     private ResourceDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String  sort) {
         Query nativeQuery=null;
         if(count>1){
-            String operationAndEq = operation.concat("=");
+            String negationOperation=null;
+            if(StringUtils.equals(operation,">")){
+                negationOperation="<";
+            }else if(StringUtils.equals(operation,"<")){
+                negationOperation=">";
+            }else {
+                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+            }
+            String negationSort=null;
+            if(StringUtils.equals(sort,"desc")){
+                negationSort="asc";
+            }else  if(StringUtils.equals(negationSort,"asc")){
+                negationSort="desc";
+            }else {
+                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+            }
+            String operationAndEq = negationOperation.concat("=");
             String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operationAndEq+
                     " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId and rd.id"+operation+":id " +
-                    " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
+                    " ORDER BY rd.publishDate "+sort+",rd.id "+negationSort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
             nativeQuery.setParameter("id",id);
         }else {
