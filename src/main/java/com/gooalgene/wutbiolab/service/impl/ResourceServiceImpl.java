@@ -152,8 +152,8 @@ public class ResourceServiceImpl implements ResourceService {
         if(resourceDetail!=null){
             Long categoryId = resourceDetail.getCategoryId();
             Long publishDate = resourceDetail.getPublishDate();
-            ResourceDetail pre = getOneByPublishDate(publishDate,categoryId, ">");
-            ResourceDetail next = getOneByPublishDate(publishDate,categoryId, "<");
+            ResourceDetail pre = getOneByPublishDate(categoryId,publishDate, ">","asc");
+            ResourceDetail next = getOneByPublishDate(categoryId,publishDate, "<","desc");
             map.put("detail",resourceDetail);
             map.put("previous",pre);
             map.put("next",next);
@@ -161,9 +161,10 @@ public class ResourceServiceImpl implements ResourceService {
         return map;
     }
 
-    private ResourceDetail getOneByPublishDate(Long publishDate,Long categoryId, String operation) {
+    private ResourceDetail getOneByPublishDate(Long categoryId,Long publishDate, String operation,String  sort) {
         String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
-                " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId ORDER BY publishDate limit 1";
+                " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId " +
+                " ORDER BY publishDate "+sort+" limit 1";
         Query nativeQuery = entityManager.createNativeQuery(sql);
         nativeQuery.setParameter("publishDate",publishDate);
         nativeQuery.setParameter("categoryId",categoryId);

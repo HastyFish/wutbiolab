@@ -104,6 +104,8 @@ export default class Source extends Component{
         title: '类型',
         dataIndex: 'category',
         key: 'category',
+        filters: [{value: 37, text: "在线数据库"},{value: 38, text: "公共数据集"},{value: 39, text: "软件下载"}],
+        filterMultiple: false,
       },
       {
         title: '操作',
@@ -167,6 +169,24 @@ export default class Source extends Component{
     }
   }
 
+  //表格中类型筛选
+  handleTableFilterChange = async (pagination, filters, sorter) => {
+    //console.log(pagination,filters,sorter)
+    let categoryId = filters.category[0];
+    const result = await reqSourceList({pageNum:1,pageSize:10,categoryId});
+      if(result.code === 0){
+        //更新state
+        this.setState({
+          pageNum:1,
+          pageSize:10,
+          total:result.result.total,
+          dataSource:result.result.list
+        })
+      }else{
+        message.error('获取资源列表失败，请稍后再试!');
+      }
+  };
+
   //初始化表格显示的列的格式
   componentWillMount(){
     this.initColumns();
@@ -199,14 +219,18 @@ export default class Source extends Component{
         </div>
         <div className="source-body">
           <Button type="primary" style={{width:180,height:40,margin:'0 0 20px 0'}} onClick={this.addSource}>新增</Button>
-          <Table
-            bordered
-            rowKey='id'
-            loading={loading}
-            dataSource={dataSource} 
-            columns={columns}
-            pagination = {false}
-          />
+          <LocaleProvider locale={zhCN} >
+            <Table
+              bordered
+              rowKey='id'
+              loading={loading}
+              dataSource={dataSource} 
+              columns={columns}
+              pagination = {false}
+              onChange={this.handleTableFilterChange}
+            />
+          </LocaleProvider>
+          
           <div style={{marginTop:'20px',float:'right'}}>
             <LocaleProvider locale={zhCN} >
               <Pagination 
