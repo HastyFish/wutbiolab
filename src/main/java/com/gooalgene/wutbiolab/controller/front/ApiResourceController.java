@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@RestController("apiResourceController2")
 @RequestMapping("/api/resource")
 public class ApiResourceController {
     @Autowired
