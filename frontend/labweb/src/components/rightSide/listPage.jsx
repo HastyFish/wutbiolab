@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './index.less'
 import { Breadcrumb,Pagination, Row,Col  } from 'antd';
 import {getLabLabCategoryId} from '@/api'
@@ -79,6 +79,7 @@ class ListPage extends React.PureComponent {
             this.setState({
                 navId:nextProps.location.state.navId,
                 titleinfo :nextProps.location.state.titleinfo,
+                pageNum:1
             },()=>{ this.getTable()})
         }
     }
