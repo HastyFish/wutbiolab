@@ -48,5 +48,25 @@ public interface NoticeDetailDAO extends JpaRepository<NoticeDetail, Long> {
             "and category = ?2 and publishStatus = ?3")
     Page<NoticeOverview> findNextNoticeDetail(long publishDate, String category, Integer publishStatus, Pageable pageable);
 
+    /**
+     * 发布内容中与指定时间相等的发布条数
+     */
+    long countByPublishDateAndPublishStatus(long publishDate, int publishStatus);
+
+    /**
+     * 发布内容中存在相同时间的前一条查询
+     */
+    @Query("select a.id as id, a.title as title from NoticeDetail a where publishDate >= ?1 and a.id < ?4 " +
+            "and category = ?2 and publishStatus = ?3")
+    Page<NoticeOverview> findPreviousNoticeDetail(long publishDate, String category, int publishStatus, long id, Pageable pageable);
+
+    /**
+     * 发布内容中存在相同时间的后一条查询
+     */
+    @Query("select a.id as id, a.title as title from NoticeDetail a where publishDate <= ?1 and a.id > ?4 " +
+            "and a.category = ?2 and a.publishStatus = ?3")
+    Page<NoticeOverview> findNextNoticeDetail(long publishDate, String category, int publishStatus,
+                                              long id, Pageable pageable);
+
 
 }

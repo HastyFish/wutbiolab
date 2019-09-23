@@ -3,7 +3,6 @@ package com.gooalgene.wutbiolab.dao.news;
 import com.gooalgene.wutbiolab.entity.news.NewsDetail;
 import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -41,11 +40,37 @@ public interface NewsDetailDAO extends JpaRepository<NewsDetail, Long> {
 
     NewsDetail findByIdAndPublishStatus(Long id, Integer publishStatus);
 
+    /**
+     * 发布内容中不存在相同时间的前一条查询
+     */
     @Query("select a.id as id, a.title as title from NewsDetail a where publishDate > ?1 " +
             "and category = ?2 and publishStatus = ?3")
     Page<NewsOverview> findPreviousNewsDetail(long publishDate, String category, int publishStatus, Pageable pageable);
 
+    /**
+     * 发布内容中不存在相同时间的后一条查询
+     */
     @Query("select a.id as id, a.title as title from NewsDetail a where publishDate < ?1 " +
             "and category = ?2 and publishStatus = ?3")
-    Page<NewsOverview> findNextNewsDetail(long publishDate, String category, Integer publishStatus, Pageable pageable);
+    Page<NewsOverview> findNextNewsDetail(long publishDate, String category, int publishStatus, Pageable pageable);
+
+    /**
+     * 发布内容中与指定时间相等的发布条数
+     */
+    long countByPublishDateAndPublishStatus(long publishDate, int publishStatus);
+
+    /**
+     * 发布内容中存在相同时间的前一条查询
+     */
+    @Query("select a.id as id, a.title as title from NewsDetail a where publishDate >= ?1 and a.id < ?4 " +
+            "and category = ?2 and publishStatus = ?3")
+    Page<NewsOverview> findPreviousNewsDetail(long publishDate, String category, int publishStatus, long id, Pageable pageable);
+
+    /**
+     * 发布内容中存在相同时间的后一条查询
+     */
+    @Query("select a.id as id, a.title as title from NewsDetail a where publishDate <= ?1 and a.id > ?4 " +
+            "and a.category = ?2 and a.publishStatus = ?3")
+    Page<NewsOverview> findNextNewsDetail(long publishDate, String category, int publishStatus,
+                                          long id, Pageable pageable);
 }

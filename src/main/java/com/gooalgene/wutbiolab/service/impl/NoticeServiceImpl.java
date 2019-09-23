@@ -106,15 +106,51 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public CommonResponse<DetailResponse<NoticeDetail, NoticeOverview>> noticeDetailPublishedById(long id) {
-        NoticeDetail newsDetail = noticeDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
-        NoticeOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        NoticeOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        return ResponseUtil.success(new DetailResponse<>(newsDetail, previous, next));
+        NoticeDetail noticeDetail = noticeDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        NoticeOverview next;
+        NoticeOverview previous;
+        if (noticeDetailDAO.countByPublishDateAndPublishStatus(
+                noticeDetail.getPublishDate(), CommonConstants.PUBLISHED) > 1) {
+            next = nextPublishedNewsDetail(noticeDetail.getPublishDate(),
+                    noticeDetail.getCategory(),
+                    noticeDetail.getId());
+            previous = previousPublishedNewsDetail(noticeDetail.getPublishDate(),
+                    noticeDetail.getCategory(),
+                    noticeDetail.getId());
+        } else {
+            next = nextPublishedNewsDetail(noticeDetail.getPublishDate(),
+                    noticeDetail.getCategory(),
+                    null);
+            previous = previousPublishedNewsDetail(noticeDetail.getPublishDate(),
+                    noticeDetail.getCategory(),
+                    null);
+        }
+        return ResponseUtil.success(new DetailResponse<>(noticeDetail, previous, next));
     }
 
-    private NoticeOverview nextPublishedNewsDetail(long publishDate, String category) {
-        Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+    private NoticeOverview nextPublishedNewsDetail(long publishDate, String category, Long id) {
+        Page<NoticeOverview> newsDetailPage;
+        if (null != id) {
+            newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    id,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+        } else {
+            newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)
+                            )
+                    )
+            );
+        }
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {
@@ -122,11 +158,31 @@ public class NoticeServiceImpl implements NoticeService {
         }
     }
 
-    private NoticeOverview previousPublishedNewsDetail(long publishDate, String category) {
-        Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
-        if (newsDetailPage.getTotalElements() > 0) {
-            return newsDetailPage.getContent().get(0);
+    private NoticeOverview previousPublishedNewsDetail(long publishDate, String category, Long id) {
+        Page<NoticeOverview> noticeDetailPage;
+        if (null != id) {
+            noticeDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    id,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+        } else {
+            noticeDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)
+                            )
+                    )
+            );
+        }
+        if (noticeDetailPage.getTotalElements() > 0) {
+            return noticeDetailPage.getContent().get(0);
         } else {
             return null;
         }
