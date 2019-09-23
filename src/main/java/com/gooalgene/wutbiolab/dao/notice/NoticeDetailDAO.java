@@ -28,8 +28,8 @@ public interface NoticeDetailDAO extends JpaRepository<NoticeDetail, Long> {
             "where a.category = ?1 and a.publishStatus = ?2")
     List<NoticeOverview> findByCategoryAndPublishStatus(String category, Integer publishStatus);
 
-    @Query("select a.id as id, a.title as title, a.category as category, a.categoryId as categoryId" +
-            " from NoticeDetail a where a.categoryId = ?1 and a.publishStatus = ?2")
+    @Query("select a.id as id, a.title as title, a.category as category, a.categoryId as categoryId," +
+            "a.publishDate as publishDate from NoticeDetail a where a.categoryId = ?1 and a.publishStatus = ?2")
     Page<NoticeOverview> findByCategoryIdAndPublishStatusPage(Long categoryId, Integer publishStatus,
                                                               Pageable pageable);
 

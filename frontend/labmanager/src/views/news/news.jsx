@@ -164,7 +164,8 @@ export default class News extends Component{
           dataSource:result.result.list
         })
       }else{
-        message.error('获取新闻列表失败，请稍后再试!');
+        //message.error('获取新闻列表失败，请稍后再试!');
+        message.error(result.msg);
       }
     }
   }
@@ -182,7 +183,8 @@ export default class News extends Component{
         dataSource:result.result.list
       })
     }else{
-      message.error('获取新闻列表失败，请稍后再试!');
+      //message.error('获取新闻列表失败，请稍后再试!');
+      message.error(result.msg);
     }
   };
 
@@ -201,7 +203,8 @@ export default class News extends Component{
         dataSource:result.result.list
       })
     }else{
-      message.error('获取新闻列表失败，请稍后再试!');
+      //message.error('获取新闻列表失败，请稍后再试!');
+      message.error(result.msg);
     }
   }
 

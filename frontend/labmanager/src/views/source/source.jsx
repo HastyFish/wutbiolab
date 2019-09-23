@@ -164,7 +164,7 @@ export default class Source extends Component{
           dataSource:result.result.list
         })
       }else{
-        message.error('获取资源列表失败，请稍后再试!');
+        //message.error('获取资源列表失败，请稍后再试!');
       }
     }
   }
@@ -183,7 +183,8 @@ export default class Source extends Component{
           dataSource:result.result.list
         })
       }else{
-        message.error('获取资源列表失败，请稍后再试!');
+        //message.error('获取资源列表失败，请稍后再试!');
+        message.error(result.msg);
       }
   };
 
@@ -202,7 +203,8 @@ export default class Source extends Component{
         dataSource:result.result.list
       })
     }else{
-      message.error('获取资源列表失败，请稍后再试!');
+      //message.error('获取资源列表失败，请稍后再试!');
+      message.error(result.msg);
     }
   }
 
