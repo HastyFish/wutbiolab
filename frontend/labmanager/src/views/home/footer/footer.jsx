@@ -136,7 +136,7 @@ class Footer extends Component{
                   输入框{index + 1}
                 </Col>
                 <Col span={8} offset={2}>
-                  <Input value={item.context.context} onChange={this.changeText.bind(this,index)} placeholder='请输入页脚'/>
+                  <Input value={item.context.context} onChange={this.changeText.bind(this,index)} maxLength={30} placeholder='请输入页脚'/>
                 </Col>
                 <Col span={1} offset={2}>
                   <Icon type='delete' style={{cursor:'pointer'}} onClick={this.deleteItem.bind(this,index)}/>
