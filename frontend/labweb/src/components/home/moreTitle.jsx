@@ -103,7 +103,7 @@ class MoreTitle extends Component {
         }
         return (
             <div className="more-info">
-                <Row type="flex" className="more-header" style={{ marginBottom: (["4", "5"].includes(type)) ? "32px" : "50px" }}>
+                <Row type="flex" className="more-header" style={{ marginBottom: (["4", "5"].includes(type)) ? "32px" : "32px" }}>
                     <Col span={12} className="more-header-left">
                         <span>{titleinfo}</span>
                     </Col>
