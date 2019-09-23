@@ -92,7 +92,7 @@ class SciTable extends React.PureComponent {
         const columns = [
             {
               title: '论文题目',
-              
+              dataIndex: 'title',
               render: (path, text, index) => {
                 return (
                    <span className="curp" onClick={this.jump.bind(this,path)}>{path.title}</span>
