@@ -166,33 +166,33 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
 
     private ScientificResearchDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String sort){
         Query nativeQuery=null;
+//        String negationSort=null;
+//        if(StringUtils.equals(sort,"desc")){
+//            negationSort="asc";
+//        }else  if(StringUtils.equals(sort,"asc")){
+//            negationSort="desc";
+//        }else {
+//            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//        }
         if(count>1){
-            String negationOperation=null;
-            if(StringUtils.equals(operation,">")){
-                negationOperation="<";
-            }else if(StringUtils.equals(operation,"<")){
-                negationOperation=">";
-            }else {
-                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-            }
-            String negationSort=null;
-            if(StringUtils.equals(sort,"desc")){
-                negationSort="asc";
-            }else  if(StringUtils.equals(negationSort,"asc")){
-                negationSort="desc";
-            }else {
-                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-            }
-            String operationAndEq = negationOperation.concat("=");
+//            String negationOperation=null;
+//            if(StringUtils.equals(operation,">")){
+//                negationOperation="<";
+//            }else if(StringUtils.equals(operation,"<")){
+//                negationOperation=">";
+//            }else {
+//                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//            }
+            String operationAndEq = operation.concat("=");
             String sql="select srd.id,srd.title from scientific_research_detail srd where  srd.publishDate "+operationAndEq+
                     " :publishDate  and srd.publishStatus=1  and srd.categoryId=:categoryId and srd.id"+operation+":id " +
-                    " ORDER BY srd.publishDate "+sort+",srd.id "+negationSort+" limit 1";
+                    " ORDER BY srd.publishDate "+sort+",srd.id "+sort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
             nativeQuery.setParameter("id",id);
         }else {
             String sql="select srd.id,srd.title from scientific_research_detail srd where  srd.publishDate "+operation+
                     " :publishDate  and srd.publishStatus=1  and srd.categoryId=:categoryId  " +
-                    " ORDER BY srd.publishDate "+sort+" limit 1";
+                    " ORDER BY srd.publishDate "+sort+",srd.id "+sort+"  limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
         }
         nativeQuery.setParameter("publishDate",publishDate);

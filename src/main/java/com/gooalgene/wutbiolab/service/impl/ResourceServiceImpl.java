@@ -186,33 +186,34 @@ public class ResourceServiceImpl implements ResourceService {
 
     private ResourceDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String  sort) {
         Query nativeQuery=null;
+//        String negationSort=null;
+//        if(StringUtils.equals(sort,"desc")){
+//            negationSort="asc";
+//        }else if(StringUtils.equals(sort,"asc")){
+//            negationSort="desc";
+//        }else {
+//            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//        }
         if(count>1){
-            String negationOperation=null;
-            if(StringUtils.equals(operation,">")){
-                negationOperation="<";
-            }else if(StringUtils.equals(operation,"<")){
-                negationOperation=">";
-            }else {
-                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-            }
-            String negationSort=null;
-            if(StringUtils.equals(sort,"desc")){
-                negationSort="asc";
-            }else  if(StringUtils.equals(negationSort,"asc")){
-                negationSort="desc";
-            }else {
-                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-            }
-            String operationAndEq = negationOperation.concat("=");
+//            String negationOperation=null;
+//            if(StringUtils.equals(operation,">")){
+//                negationOperation="<";
+//            }else if(StringUtils.equals(operation,"<")){
+//                negationOperation=">";
+//            }else {
+//                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//            }
+
+            String operationAndEq = operation.concat("=");
             String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operationAndEq+
                     " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId and rd.id"+operation+":id " +
-                    " ORDER BY rd.publishDate "+sort+",rd.id "+negationSort+" limit 1";
+                    " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
             nativeQuery.setParameter("id",id);
         }else {
             String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
                     " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId " +
-                    " ORDER BY rd.publishDate "+sort+" limit 1";
+                    " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
         }
 

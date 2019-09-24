@@ -204,33 +204,34 @@ public class LabServiceImpl implements LabService {
 
     private LabDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate,String operation,String sort){
         Query nativeQuery=null;
+//        String negationSort=null;
+//        if(StringUtils.equals(sort,"desc")){
+//            negationSort="asc";
+//        }else  if(StringUtils.equals(sort,"asc")){
+//            negationSort="desc";
+//        }else {
+//            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//        }
         if(count>1){
-            String negationOperation=null;
-            if(StringUtils.equals(operation,">")){
-                negationOperation="<";
-            }else if(StringUtils.equals(operation,"<")){
-                negationOperation=">";
-            }else {
-                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-            }
-            String negationSort=null;
-            if(StringUtils.equals(sort,"desc")){
-                negationSort="asc";
-            }else  if(StringUtils.equals(negationSort,"asc")){
-                negationSort="desc";
-            }else {
-                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-            }
-            String operationAndEq = negationOperation.concat("=");
+//            String negationOperation=null;
+//            if(StringUtils.equals(operation,">")){
+//                negationOperation="<";
+//            }else if(StringUtils.equals(operation,"<")){
+//                negationOperation=">";
+//            }else {
+//                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//            }
+
+            String operationAndEq = operation.concat("=");
             String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operationAndEq+
                     " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId labDetail.id"+operation+":id " +
-                    " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+negationSort+" limit 1";
+                    " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+sort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
             nativeQuery.setParameter("id",id);
         }else {
             String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operation+
                     " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId " +
-                    " ORDER BY labDetail.publishDate "+sort+" limit 1";
+                    " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+sort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
         }
         nativeQuery.setParameter("publishDate",publishDate);

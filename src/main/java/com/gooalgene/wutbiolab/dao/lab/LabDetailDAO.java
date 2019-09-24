@@ -30,7 +30,7 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
 
     @Query("select new LabDetail(labDetail.id,labDetail.title,labDetail.publishDate) from LabDetail labDetail " +
             "where labDetail.categoryId=:categoryId and labDetail.publishStatus=:publishStatus" +
-            " order by labDetail.publishDate desc ")
+            " order by labDetail.publishDate desc,labDetail.id desc ")
     Page<LabDetail> getListByCategoryIdAndPublishStatus(@Param("categoryId") Long categoryId,
                                                            @Param("publishStatus") Integer publishStatus, Pageable pageable);
 
