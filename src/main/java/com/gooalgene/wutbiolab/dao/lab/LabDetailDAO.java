@@ -39,11 +39,14 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
             " order by mentorCategoryId, ld.mentorOrder",nativeQuery = true)
     List<Object[]> getResearchTeam();
 
-    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category,ld.publishStatus FROM lab_detail ld " +
+    @Query(value = "SELECT ld.id,mc.id mentorCategoryId,ld.mentorName,ld.mentorOrder,mc.category,ld.publishStatus," +
+            "LENGTH(context) contextLength FROM lab_detail ld " +
             " RIGHT JOIN all_category mc ON ld.mentorCategoryId=mc.id where mc.discriminator='mentor'and " +
             " ld.publishStatus=:publishStatus " +
             " order by mentorCategoryId, ld.mentorOrder",nativeQuery = true)
     List<Object[]> getResearchTeamByPublishStatus(@Param("publishStatus") Integer publishStatus);
+
+    List<LabDetail> getByIdIn(List<Long> ids);
 
 
     @Modifying

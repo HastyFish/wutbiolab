@@ -32,6 +32,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -101,8 +105,30 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
+    public List<LabDetail> getByIdIn(List<Long> ids){
+        return labDetailDAO.getByIdIn(ids);
+    }
+    @Override
     public void saveList(List<LabDetail> labDetails){
         labDetailDAO.saveAll(labDetails);
+    }
+
+    @Override
+    @Transactional
+    public void updateMentorOrderById(Map<Long,Integer> map){
+        StringBuilder sqlBuilder=new StringBuilder("update lab_detail set mentorOrder= case id ");
+        StringBuilder idsStrBuilder=new StringBuilder();
+        for(Map.Entry<Long,Integer> entry:map.entrySet()){
+            Long id = entry.getKey();
+            Integer mentorOrder = entry.getValue();
+            idsStrBuilder.append(id).append(",");
+            sqlBuilder.append("WHEN "+id+" THEN "+mentorOrder+" ");
+        }
+        String ids = idsStrBuilder.toString();
+        sqlBuilder.append("end where id in (".concat(ids.substring(0,ids.length()-1)).concat(")") );
+        String sql = sqlBuilder.toString();
+        Query nativeQuery = entityManager.createNativeQuery(sql);
+        int i = nativeQuery.executeUpdate();
     }
     @Override
     @Transactional
@@ -204,24 +230,7 @@ public class LabServiceImpl implements LabService {
 
     private LabDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate,String operation,String sort){
         Query nativeQuery=null;
-//        String negationSort=null;
-//        if(StringUtils.equals(sort,"desc")){
-//            negationSort="asc";
-//        }else  if(StringUtils.equals(sort,"asc")){
-//            negationSort="desc";
-//        }else {
-//            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-//        }
         if(count>1){
-//            String negationOperation=null;
-//            if(StringUtils.equals(operation,">")){
-//                negationOperation="<";
-//            }else if(StringUtils.equals(operation,"<")){
-//                negationOperation=">";
-//            }else {
-//                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-//            }
-
             String operationAndEq = operation.concat("=");
             String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operationAndEq+
                     " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId and labDetail.id"+operation+":id " +
@@ -252,6 +261,26 @@ public class LabServiceImpl implements LabService {
         String title = (String) objects[1];
         labDetail.setTitle(title);
         return labDetail;
+    }
+    private LabDetail getOneByPublishDate2(Long count,Long id,Long categoryId,Long publishDate,String operation,String sort){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<LabDetail> query = criteriaBuilder.createQuery(LabDetail.class);
+        Root<LabDetail> root = query.from(LabDetail.class);
+        Predicate predicate1 = criteriaBuilder.equal(root.get("publishDate"), publishDate);
+        Predicate predicate2 = criteriaBuilder.equal(root.get("publishStatus"), CommonConstants.PUBLISHED);
+        Predicate predicate3 = criteriaBuilder.equal(root.get("categoryId"), categoryId);
+
+
+
+        query.multiselect(root.get("id"),root.get("title"));
+        query.orderBy(criteriaBuilder.desc(root.get("publishDate")));
+        if(count>1){
+
+        }else {
+
+        }
+
+        return null;
     }
 
     @Override
@@ -303,12 +332,22 @@ public class LabServiceImpl implements LabService {
             Long mentorCategoryId = ((BigInteger) objects[1]).longValue();
             String mentorCategoryName = (String) objects[4];
             Integer publishStatus = (Integer) objects[5];
+            BigInteger bigIntegerContextLength = (BigInteger) objects[6];
+            Boolean isEmpty=false;
+            if(bigIntegerContextLength==null){
+                isEmpty=true;
+            }else if(bigIntegerContextLength.longValue()==0) {
+                isEmpty=true;
+            }
+
             Object idObject = objects[0];
             if (idObject != null) {
                 Long labDetailId = ((BigInteger) idObject).longValue();
                 String mentorName = (String) objects[2];
                 Integer mentorOder = (Integer) objects[3];
                 LabDetail labDetail = new LabDetail();
+
+                labDetail.setIsEmpty(isEmpty);
                 labDetail.setId(labDetailId);
                 labDetail.setMentorName(mentorName);
                 labDetail.setMentorOrder(mentorOder);

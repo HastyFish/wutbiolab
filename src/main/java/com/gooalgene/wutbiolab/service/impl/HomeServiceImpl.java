@@ -275,9 +275,11 @@ public class HomeServiceImpl implements HomeService {
         result.add(noticeList);
 
         /*资源发布*/
+        Sort.Order orderPublishDate=new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order orderId=new Sort.Order(Sort.Direction.DESC, CommonConstants.ID);
         List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
                 CommonConstants.PUBLISHED, PageRequest.of(0, 4,
-                        new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                        Sort.by(orderPublishDate,orderId)));
         List<OverviewWithImageResponse> resourceImageUrlList = new ArrayList<>();
         resourceOverviewList.forEach(one -> {
             try {
