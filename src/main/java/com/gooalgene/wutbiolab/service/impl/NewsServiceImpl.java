@@ -116,10 +116,10 @@ public class NewsServiceImpl implements NewsService {
             }
         } else {
             try {
-                if (newsDetail.getCategoryId().equals(CommonConstants.TOUTIAO)
-                        && newsDetailDAO.countByCategoryIdEquals(CommonConstants.TOUTIAO) >= 5) {
-                    return ResponseUtil.error("头条新闻已经有5条");
-                }
+//                if (newsDetail.getCategoryId().equals(CommonConstants.TOUTIAO)
+//                        && newsDetailDAO.countByCategoryIdEquals(CommonConstants.TOUTIAO) >= 5) {
+//                    return ResponseUtil.error("头条新闻已经有5条");
+//                }
                 String newImage = pictureService.saveBase64(null, newsDetail.getImage());
                 if (null != newImage) {
                     newsDetail.setImage(newImage);
