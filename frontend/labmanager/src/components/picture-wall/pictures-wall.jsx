@@ -65,13 +65,13 @@ export default class PicturesWall extends React.Component {
   };
 
   beforeUpload = (file) => {
-    const isLt1M = file.size / 1024 / 1024 < 1;
+    const isLt3M = file.size / 1024 / 1024 <= 3;
     if (!['image/png','image/jpeg'].includes(file.type)) {
       message.error('上传的图片不符合要求！');
       return false;
     }
-    if (!isLt1M) {
-      message.error('图片不能大于1M!');
+    if (!isLt3M) {
+      message.error('图片不能大于3M!');
       return false;
     }
     // const r = new FileReader();
