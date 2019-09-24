@@ -6,11 +6,13 @@ import com.gooalgene.wutbiolab.entity.news.NewsOverview;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "后台新闻", tags = {"后台新闻接口"})
 @RestController
 @RequestMapping("/news")
 public class NewsController {
@@ -41,11 +43,13 @@ public class NewsController {
         return newsService.newsDetailById(id);
     }
 
+    @ApiOperation(value="保存新闻", notes="保存新闻")
     @PostMapping
     public CommonResponse<Boolean> renewNewsDetail(@RequestBody NewsDetail newsDetail) {
         return newsService.renewNews(newsDetail);
     }
 
+    @ApiOperation(value="删除新闻", notes="删除新闻")
     @DeleteMapping("/{id}")
     public CommonResponse<Boolean> deleteNewsDetail(@PathVariable int id) {
         return newsService.deleteById(id);

@@ -37,7 +37,7 @@ public class NoticeServiceImpl implements NoticeService {
                                                                          Long categoryId) {
 //        Page<NoticeDetail> page = noticeDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
         Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
-        Sort.Order idOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
         Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
         Page<NoticeOverview> page;
         if (null == categoryId) {
@@ -99,7 +99,7 @@ public class NoticeServiceImpl implements NoticeService {
                     PageRequest.of(pageNum - 1, pageSize,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
                                     )
                             ));
             return ResponseUtil.success(new DetailPageResponse<>(noticeOverviewPage.getContent(), pageNum,
@@ -142,7 +142,7 @@ public class NoticeServiceImpl implements NoticeService {
                     PageRequest.of(0, 1,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
                             )
                     )
             );
@@ -154,7 +154,7 @@ public class NoticeServiceImpl implements NoticeService {
                         PageRequest.of(0, 1,
                                 Sort.by(
                                         new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
                                 )
                         )
                 );
@@ -165,7 +165,7 @@ public class NoticeServiceImpl implements NoticeService {
                     PageRequest.of(0, 1,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
                             )
                     )
             );
@@ -186,7 +186,7 @@ public class NoticeServiceImpl implements NoticeService {
                     PageRequest.of(0, 1,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
                             )
                     )
             );
@@ -198,7 +198,7 @@ public class NoticeServiceImpl implements NoticeService {
                         PageRequest.of(0, 1,
                                 Sort.by(
                                         new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
-                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
                                 )
                         )
                 );
@@ -209,7 +209,7 @@ public class NoticeServiceImpl implements NoticeService {
                     PageRequest.of(0, 1,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
                             )
                     )
             );

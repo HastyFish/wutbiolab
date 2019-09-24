@@ -228,7 +228,13 @@ public class HomeServiceImpl implements HomeService {
             NewsImage newsImage = newsImageDAO.findAll().get(0);
             List<Picture> pictureList = objectMapper.readValue((pictureService.formImageUrl(newsImage.getContext())),
                     objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-            result.add(pictureList.get(0).getUrl());
+            if (pictureList.size() > 1) {
+                result.add(pictureList.get(0));
+            } else if (pictureList.size() == 0) {
+                result.add("");
+            } else {
+                pictureList.forEach(one -> result.add(one.getUrl()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
             result.add("");
@@ -250,7 +256,14 @@ public class HomeServiceImpl implements HomeService {
             AcademicImage academicImage = academicImageDAO.findAll().get(0);
             List<Picture> pictureList = objectMapper.readValue((pictureService.formImageUrl(academicImage.getContext())),
                     objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-            result.add(pictureList.get(0).getUrl());
+            if (pictureList.size() > 1) {
+                result.add(pictureList.get(0));
+            } else if (pictureList.size() == 1) {
+                pictureList.forEach(one -> result.add(one.getUrl()));
+            } else {
+                result.add("");
+            }
+            //            result.add(pictureList.get(0).getUrl());
         } catch (IOException e) {
             e.printStackTrace();
         }
