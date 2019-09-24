@@ -146,7 +146,7 @@ class EditNotice extends Component{
         }
       }else{
         //select框赋值
-        this.props.form.setFieldsValue({'categoryId':categoryList[0].category})
+        this.props.form.setFieldsValue({'categoryId':categoryList[0].id})
       }
     }else{
       message.error('获取通知类型失败，请稍后再试!');

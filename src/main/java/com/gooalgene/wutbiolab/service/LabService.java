@@ -47,11 +47,23 @@ public interface LabService {
     List<MentorResponse> getResearchTeam();
 
     /**
+     *
+     * @param ids
+     * @return
+     */
+    List<LabDetail> getByIdIn(List<Long> ids);
+
+    /**
      * 保存多条数据
      * @param labDetails
      */
     void saveList(List<LabDetail> labDetails);
 
+    /**
+     * 通过多个id批量更新导师排序
+     * @param map
+     */
+    void updateMentorOrderById(Map<Long,Integer> map);
     /**
      * 保存或发布模块的一条数据
      * @param labDetail

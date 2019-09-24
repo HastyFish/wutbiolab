@@ -101,8 +101,30 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
+    public List<LabDetail> getByIdIn(List<Long> ids){
+        return labDetailDAO.getByIdIn(ids);
+    }
+    @Override
     public void saveList(List<LabDetail> labDetails){
         labDetailDAO.saveAll(labDetails);
+    }
+
+    @Override
+    @Transactional
+    public void updateMentorOrderById(Map<Long,Integer> map){
+        StringBuilder sqlBuilder=new StringBuilder("update lab_detail set mentorOrder= case id ");
+        StringBuilder idsStrBuilder=new StringBuilder();
+        for(Map.Entry<Long,Integer> entry:map.entrySet()){
+            Long id = entry.getKey();
+            Integer mentorOrder = entry.getValue();
+            idsStrBuilder.append(id).append(",");
+            sqlBuilder.append("WHEN "+id+" THEN "+mentorOrder+" ");
+        }
+        String ids = idsStrBuilder.toString();
+        sqlBuilder.append("end where id in (".concat(ids.substring(0,ids.length()-1)).concat(")") );
+        String sql = sqlBuilder.toString();
+        Query nativeQuery = entityManager.createNativeQuery(sql);
+        int i = nativeQuery.executeUpdate();
     }
     @Override
     @Transactional
@@ -224,7 +246,7 @@ public class LabServiceImpl implements LabService {
 
             String operationAndEq = operation.concat("=");
             String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operationAndEq+
-                    " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId labDetail.id"+operation+":id " +
+                    " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId and labDetail.id"+operation+":id " +
                     " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+sort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
             nativeQuery.setParameter("id",id);

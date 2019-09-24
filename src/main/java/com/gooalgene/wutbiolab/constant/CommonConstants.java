@@ -26,6 +26,7 @@ public interface CommonConstants {
      * 发布时间的字段名
      */
     String PUBLISHDATEFIELD = "publishDate";
+    String ID = "id";
 
     /**
      * 类别Id字段名

@@ -4,7 +4,6 @@ import {
   Form,
   Row,
   Col,
-  Input,
   Button,
   message
 } from 'antd'
@@ -29,13 +28,11 @@ class Deriection extends Component {
 
  //保存或发布机构概况
  saveOrPublishData = async (type) => {
-  this.props.form.validateFields(async (err, values) => {
-    if(!err){
-      const id = this.id || null;
+
+  const id = this.id || null;
       const categoryId = 2;
-      const {title} = values;
       const context = this.editor.current.getContext();
-      const param = {id,categoryId,title, context}
+      const param = {id,categoryId, context}
       //判断是保存还是发布
       let result;
       if(type==='save'){
@@ -53,8 +50,33 @@ class Deriection extends Component {
       }else{
         message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
       }
-    }
-  })
+
+  // this.props.form.validateFields(async (err, values) => {
+  //   if(!err){
+  //     const id = this.id || null;
+  //     const categoryId = 2;
+  //     const {title} = values;
+  //     const context = this.editor.current.getContext();
+  //     const param = {id,categoryId,title, context}
+  //     //判断是保存还是发布
+  //     let result;
+  //     if(type==='save'){
+  //       //编辑状态下的保存
+  //       param.publishStatus = 0;
+  //       result = await reqSaveDeriect(param);
+  //     }else{
+  //       //编辑状态下的发布
+  //       param.publishStatus = 1;
+  //       result = await reqPublishDeriect(param);
+  //     }
+      
+  //     if(result.code === 0){
+  //       message.success(`${type === 'save'?'保存':'发布'}成功`);
+  //     }else{
+  //       message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
+  //     }
+  //   }
+  // })
 }
 
 //取消编辑研究方向，重新获取原来的储存数据
@@ -79,8 +101,8 @@ async componentDidMount(){
 }
 
   render(){
-    const {title,context} = this.state
-    const {getFieldDecorator} = this.props.form;
+    const {context} = this.state
+    // const {getFieldDecorator} = this.props.form;
 
     return (
       <div className="lab">
@@ -99,7 +121,7 @@ async componentDidMount(){
         <div className='lab-body'>
           <div className='lab-content'>
             <Form className="form-lable-info">
-              <Item label='标题'>
+              {/* <Item label='标题'>
                 {
                   getFieldDecorator('title', {
                     initialValue: title,
@@ -110,7 +132,7 @@ async componentDidMount(){
                     <Input placeholder='请输入标题' />
                   )
                 }
-              </Item>
+              </Item> */}
               <Item label='内容'>
                 {/* <RichTextEdit ref={this.editor} context={description} changeRichText = {(description) => this.setState({description})}/> */}
                 {
