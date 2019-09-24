@@ -224,7 +224,7 @@ public class LabServiceImpl implements LabService {
 
             String operationAndEq = operation.concat("=");
             String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operationAndEq+
-                    " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId labDetail.id"+operation+":id " +
+                    " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId and labDetail.id"+operation+":id " +
                     " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+sort+" limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
             nativeQuery.setParameter("id",id);
