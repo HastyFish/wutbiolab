@@ -14,7 +14,7 @@ class Notices extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleinfo : "新闻动态",
+            titleinfo : "通知公告",
             navList : [],
             dataList:[],
             navId:34,
