@@ -63,14 +63,14 @@ public interface NewsDetailDAO extends JpaRepository<NewsDetail, Long> {
      * 发布内容中存在相同时间的前一条查询
      */
     @Query("select a.id as id, a.title as title, a.publishDate as publishDate from NewsDetail a where " +
-            "publishDate >= ?1 and a.id < ?4 and category = ?2 and publishStatus = ?3")
+            "publishDate >= ?1 and a.id > ?4 and category = ?2 and publishStatus = ?3")
     Page<NewsOverview> findPreviousNewsDetail(long publishDate, String category, int publishStatus, long id, Pageable pageable);
 
     /**
      * 发布内容中存在相同时间的后一条查询
      */
     @Query("select a.id as id, a.title as title, a.publishDate as publishDate from NewsDetail a where " +
-            "publishDate <= ?1 and a.id > ?4 and a.category = ?2 and a.publishStatus = ?3")
+            "publishDate <= ?1 and a.id < ?4 and a.category = ?2 and a.publishStatus = ?3")
     Page<NewsOverview> findNextNewsDetail(long publishDate, String category, int publishStatus,
                                           long id, Pageable pageable);
 }

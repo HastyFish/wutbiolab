@@ -55,7 +55,7 @@ public class NewsServiceImpl implements NewsService {
 //        Page<NewsDetail> page = newsDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
         Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
         Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
-        Sort.Order idOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
         Page<NewsOverview> page;
         if (null != categoryId) {
             page = newsDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
@@ -157,7 +157,7 @@ public class NewsServiceImpl implements NewsService {
                     CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
                             )
                     ));
             return ResponseUtil.success(new DetailPageResponse<>(newsOverviewPage.getContent(), pageNum,
@@ -200,7 +200,7 @@ public class NewsServiceImpl implements NewsService {
                     PageRequest.of(0, 1,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
                             )
                     )
             );
@@ -212,7 +212,7 @@ public class NewsServiceImpl implements NewsService {
                         PageRequest.of(0, 1,
                                 Sort.by(
                                         new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
                                 )
                         )
                 );
@@ -223,7 +223,7 @@ public class NewsServiceImpl implements NewsService {
                     PageRequest.of(0, 1,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
                             )
                     )
             );
@@ -244,7 +244,7 @@ public class NewsServiceImpl implements NewsService {
                     PageRequest.of(0, 1,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
                             )
                     )
             );
@@ -256,7 +256,7 @@ public class NewsServiceImpl implements NewsService {
                         PageRequest.of(0, 1,
                                 Sort.by(
                                         new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
-                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
                                 )
                         )
                 );
@@ -267,7 +267,7 @@ public class NewsServiceImpl implements NewsService {
                     PageRequest.of(0, 1,
                             Sort.by(
                                     new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
                             )
                     )
             );
