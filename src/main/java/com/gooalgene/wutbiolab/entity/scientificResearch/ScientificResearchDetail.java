@@ -57,7 +57,7 @@ public class ScientificResearchDetail implements Serializable {
     private String publishYear;
 
     @ApiModelProperty(value = "富文本内容", example = "内容1")
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String context;
 
     @ApiModelProperty(value = "学术类型id", example = "1")
