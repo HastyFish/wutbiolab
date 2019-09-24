@@ -27,7 +27,7 @@ public class NewsController {
         return newsService.allNewsCategory();
     }
 
-    @ApiOperation(value="查询新闻分页列表", notes="查询新闻分页列表，参数为pageNum和pageSize")
+    @ApiOperation(value="查询新闻分页列表", notes="查询新闻分页列表，参数为pageNum, pageSize和categoryId（可为空）")
     @GetMapping
     public CommonResponse<PageResponse<NewsOverview>> getNewsDetailPage(Integer pageNum,
                                                                         Integer pageSize,

@@ -75,13 +75,14 @@ public class ResourceServiceImpl implements ResourceService {
 //        Page<ResourceDetail> page = resourceDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
         Page<ResourceOverview> page;
         Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD);
         Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
         if (null == categoryId) {
             page = resourceDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         } else {
             page = resourceDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         }
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
