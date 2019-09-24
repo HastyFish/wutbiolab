@@ -256,8 +256,8 @@ class EditNews extends Component{
             {
               categoryType === 30 ? (
               <Item label="封面上传">
-                {image ? <PicturesWall ref={this.pw} option={{width:660,height:400}} image = {JSON.parse(image)} /> : null}
-                {!image ? <PicturesWall ref={this.pw} option={{width:660,height:400}} image = {[]} /> : null}
+                {image ? <PicturesWall ref={this.pw} option={{width:450,height:300}} image = {JSON.parse(image)} /> : null}
+                {!image ? <PicturesWall ref={this.pw} option={{width:450,height:300}} image = {[]} /> : null}
               </Item>
               ):null
             }
