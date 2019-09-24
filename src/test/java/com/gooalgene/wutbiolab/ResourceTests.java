@@ -1,5 +1,6 @@
 package com.gooalgene.wutbiolab;
 
+import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.lab.LabDetailDAO;
 import com.gooalgene.wutbiolab.dao.resource.ResourceDetailDAO;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -25,14 +27,19 @@ public class ResourceTests {
 
 	@Test
 	public void testDAO() {
-		Page<ResourceOverview> newsDetailByPublishStatus = resourceDetailDAO.findNewsDetailByPublishStatus(37l,1, PageRequest.of(0, 11));
+//		Page<ResourceOverview> newsDetailByPublishStatus = resourceDetailDAO.findNewsDetailByPublishStatus(37l,1, PageRequest.of(0, 11));
 
-		newsDetailByPublishStatus.forEach(resourceOverview -> {
+		Sort.Order orderPublishDate=new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+		Sort.Order orderId=new Sort.Order(Sort.Direction.DESC, CommonConstants.ID);
+		List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
+				CommonConstants.PUBLISHED, PageRequest.of(0, 4,
+						Sort.by(orderPublishDate,orderId)));
+		resourceOverviewList.forEach(resourceOverview -> {
 			Long id = resourceOverview.getId();
-			Long publishDate = resourceOverview.getPublishDate();
+			String image = resourceOverview.getImage();
 			String title = resourceOverview.getTitle();
-			Long categoryId = resourceOverview.getCategoryId();
-			System.out.println(id+":"+title+":"+publishDate);
+			String category = resourceOverview.getCategory();
+			System.out.println(id+":"+title+":"+image+":"+category);
 		});
 		System.out.println(1);
 
