@@ -33,6 +33,11 @@ public interface CommonConstants {
     String CATEGORYIDFIELD = "categoryId";
 
     /**
+     * 主键自增id字段名
+     */
+    String IDFIELD = "id";
+
+    /**
     * 模块分类
      */
     Integer LAB=1;

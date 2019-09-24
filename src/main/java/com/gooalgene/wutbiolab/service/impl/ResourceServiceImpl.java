@@ -10,12 +10,15 @@ import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceCategory;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
+import com.gooalgene.wutbiolab.exception.WutbiolabException;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.response.common.ResultCode;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.PictureService;
 import com.gooalgene.wutbiolab.service.ResourceService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -72,13 +75,14 @@ public class ResourceServiceImpl implements ResourceService {
 //        Page<ResourceDetail> page = resourceDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
         Page<ResourceOverview> page;
         Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD);
         Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
         if (null == categoryId) {
             page = resourceDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         } else {
             page = resourceDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         }
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
@@ -163,8 +167,17 @@ public class ResourceServiceImpl implements ResourceService {
         if(resourceDetail!=null){
             Long categoryId = resourceDetail.getCategoryId();
             Long publishDate = resourceDetail.getPublishDate();
-            ResourceDetail pre = getOneByPublishDate(id,categoryId,publishDate, ">=","asc");
-            ResourceDetail next = getOneByPublishDate(id,categoryId,publishDate, "<=","desc");
+            String countSql="select count(1) from  resource_detail rd  where rd.publishDate =:publishDate " +
+                    "and rd.publishStatus="+CommonConstants.PUBLISHED;
+            Object singleResult = entityManager.createNativeQuery(countSql)
+                    .setParameter("publishDate",publishDate).getSingleResult();
+            BigInteger bigInteger = (BigInteger) singleResult;
+            long count = bigInteger == null ? 0 : bigInteger.longValue();
+
+
+
+            ResourceDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
+            ResourceDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
             map.put("detail",resourceDetail);
             map.put("previous",pre);
             map.put("next",next);
@@ -172,12 +185,39 @@ public class ResourceServiceImpl implements ResourceService {
         return map;
     }
 
-    private ResourceDetail getOneByPublishDate(Long id,Long categoryId,Long publishDate, String operation,String  sort) {
-        String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
-                " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId and rd.id!=:id " +
-                " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
-        Query nativeQuery = entityManager.createNativeQuery(sql);
-        nativeQuery.setParameter("id",id);
+    private ResourceDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String  sort) {
+        Query nativeQuery=null;
+//        String negationSort=null;
+//        if(StringUtils.equals(sort,"desc")){
+//            negationSort="asc";
+//        }else if(StringUtils.equals(sort,"asc")){
+//            negationSort="desc";
+//        }else {
+//            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//        }
+        if(count>1){
+//            String negationOperation=null;
+//            if(StringUtils.equals(operation,">")){
+//                negationOperation="<";
+//            }else if(StringUtils.equals(operation,"<")){
+//                negationOperation=">";
+//            }else {
+//                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//            }
+
+            String operationAndEq = operation.concat("=");
+            String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operationAndEq+
+                    " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId and rd.id"+operation+":id " +
+                    " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
+            nativeQuery = entityManager.createNativeQuery(sql);
+            nativeQuery.setParameter("id",id);
+        }else {
+            String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
+                    " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId " +
+                    " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
+            nativeQuery = entityManager.createNativeQuery(sql);
+        }
+
         nativeQuery.setParameter("publishDate",publishDate);
         nativeQuery.setParameter("categoryId",categoryId);
         Object object = null;
