@@ -1,9 +1,10 @@
 import React from 'react';
 import './index.less'
-import { Breadcrumb,Pagination, Row,Col  } from 'antd';
+import { Breadcrumb,Pagination, Row,Col ,ConfigProvider } from 'antd';
 import {getLabLabCategoryId} from '@/api'
 import {getNewsDay} from '@utils/dateUtils'
 import {getTitleinfo} from '@utils/tools'
+import zhCN from 'antd/es/locale/zh_CN';
 class ListPage extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -17,7 +18,8 @@ class ListPage extends React.PureComponent {
             navName:"",
             pageNum:1,
             pageSize:10,
-            total:0
+            total:0,
+            locale: zhCN,
          }
     }
        //每页展示条数发生变化的回调函数
@@ -111,7 +113,7 @@ class ListPage extends React.PureComponent {
             <li key={index}>
                <Row type="flex">
                    <Col span={12}>
-                       <span  onClick={this.jump.bind(this,item)} className="curp">{item.title}</span>
+                      <span  className={`color-block ${index===0 ? "first-color-block" : null} `}></span> <span  onClick={this.jump.bind(this,item)} className="curp">{item.title}</span>
                    </Col>
                    <Col span={12}  style={{textAlign:"right"}}>
                        {getNewsDay(item.publishDate)}
@@ -125,7 +127,7 @@ class ListPage extends React.PureComponent {
 
 
     render() { 
-        let {dataList,titleinfo,navName,pageNum,pageSize,total,navId} = this.state;
+        let {dataList,titleinfo,navName,pageNum,pageSize,total,navId,locale} = this.state;
         const page = {
             current: pageNum,
             showSizeChanger:true,
@@ -148,16 +150,24 @@ class ListPage extends React.PureComponent {
                 </Breadcrumb>
                     <div>
                     <div className="title-name">
-                        {navName}
+                        {/* {navName} */}
                     </div>
                     {
                      dataList.length>0 &&    <ul className="list-page">
                          {this.tableChild(dataList)}
                      </ul>
                     }
-                   {
-                       !!total &&  <Pagination {...page}/>
-                   }
+                  
+                       <div style={{textAlign:"right",width:710}}>
+                        <ConfigProvider locale={locale}>
+                        {
+                                !!total &&  <Pagination {...page}/>
+                            }
+                                </ConfigProvider>
+                            
+                       </div>
+                       
+                   
                 </div>
             </div>
          );

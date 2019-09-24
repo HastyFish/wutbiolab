@@ -34,7 +34,7 @@ public class LabTests {
 	@Test
 	public void testDAO() {
 //		List<LabDetail> byIdIn = labDetailDAO.getByIdIn(Arrays.asList(1l, 6l, 3l));
-		boolean b = 1l == 2l;
+		boolean b = 0 == 0;
 		System.out.println(1);
 
 	}
