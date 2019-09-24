@@ -18,7 +18,7 @@ public class HomeInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String context;
 
     @ApiModelProperty(value = "发布状态(0:未发布，1:已发布)", example = "0")

@@ -8,15 +8,16 @@ import { Breadcrumb } from 'antd';
 class TableInfo extends Component {
     constructor(props) {
         super(props);
-        let navId = null,navName="",titleinfo="";
+        let navId = null,navName="",titleinfo="",infoName="";
         if(props.location.state){
-            ({navId,navName,titleinfo} = props.location.state)
+            ({navId,navName,titleinfo,infoName} = props.location.state)
         }
         this.state = {
             infoId:navId,
             navName,
             titleinfo,
             dataList:{},
+            infoName
           }
     }
    componentDidMount(){
