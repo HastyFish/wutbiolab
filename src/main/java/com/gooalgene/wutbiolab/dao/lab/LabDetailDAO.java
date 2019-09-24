@@ -45,6 +45,8 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
             " order by mentorCategoryId, ld.mentorOrder",nativeQuery = true)
     List<Object[]> getResearchTeamByPublishStatus(@Param("publishStatus") Integer publishStatus);
 
+    List<LabDetail> getByIdIn(List<Long> ids);
+
 
     @Modifying
     @Query("update LabDetail ld set ld.publishStatus=1 where ld.id=:id")

@@ -17,7 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Api(value = "后端实验室模块", tags = {"后端实验室模块接口"})
 @RestController
@@ -85,7 +89,14 @@ public class LabController {
     @ApiOperation(value="研究团队排序", notes="研究团队排序")
     @PostMapping("/researchTeam/sort")
     public CommonResponse saveLabDetails(@RequestBody List<LabDetail> labDetails){
-        labService.saveList(labDetails);
+        Map<Long,Integer> map=new HashMap<>();
+        for (LabDetail labDetail : labDetails) {
+            Long id = labDetail.getId();
+            Integer mentorOrder = labDetail.getMentorOrder();
+            map.put(id, mentorOrder);
+        }
+        labService.updateMentorOrderById(map);
+//        labService.saveList(labDetails);
         return ResponseUtil.success();
     }
 

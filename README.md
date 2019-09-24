@@ -32,4 +32,8 @@ insert into wutbiolab.home_info(discriminator, context, publishStatus) values ('
 
 truncate wutbiolab.user;
 insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvRWeWugTrUkAtxw1WkgeFLeff8QozRHiWj.Aa','admin');
+insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvRWeWugTrUkAtxw1WkgeFLeff8QozRHiWj.Aa','wp');
+insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvRWeWugTrUkAtxw1WkgeFLeff8QozRHiWj.Aa','gyq');
+insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvRWeWugTrUkAtxw1WkgeFLeff8QozRHiWj.Aa','wjy');
+
 ```

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,19 +33,19 @@ public class LabTests {
 	@Transactional
 	@Test
 	public void testDAO() {
-//		Integer integer = labDetailDAO.updatePublishStatusById(2l);
-//		List<Object[]> byIdAndPublishStatus =labDetailDAO.getByIdAndPublishStatus(4l, 1);
-		String countSql="select count(1) from  resource_detail labDetail  where labDetail.publishDate =:publishDate";
-		Query nativeQuery = entityManager.createNativeQuery(countSql);
-		nativeQuery.setParameter("publishDate",1569859200000l);
-		Object singleResult = nativeQuery.getSingleResult();
+//		List<LabDetail> byIdIn = labDetailDAO.getByIdIn(Arrays.asList(1l, 6l, 3l));
+		boolean b = 1l == 2l;
 		System.out.println(1);
 
 	}
 
 	@Test
 	public void testService(){
-		Map<String, LabDetail> publishedById = labService.getPublishedById(1l);
+		Map<Long,Integer> map=new HashMap<>();
+		map.put(3l,3);
+		map.put(6l,6);
+		map.put(7l,7);
+		labService.updateMentorOrderById(map);
 		System.out.println(1);
 
 	}
