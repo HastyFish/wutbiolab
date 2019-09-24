@@ -134,9 +134,9 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     private NoticeOverview nextPublishedNoticeDetail(long publishDate, String category, Long id) {
-        Page<NoticeOverview> newsDetailPage;
+        Page<NoticeOverview> detailPage;
         if (null != id) {
-            newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
+            detailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
                     CommonConstants.PUBLISHED,
                     id,
                     PageRequest.of(0, 1,
@@ -146,8 +146,21 @@ public class NoticeServiceImpl implements NoticeService {
                             )
                     )
             );
+            if ((detailPage.getTotalElements() > 0
+                    && !detailPage.getContent().get(0).getPublishDate().equals(publishDate))
+                    || detailPage.getTotalElements() == 0) {
+                detailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
+                        CommonConstants.PUBLISHED,
+                        PageRequest.of(0, 1,
+                                Sort.by(
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                )
+                        )
+                );
+            }
         } else {
-            newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
+            detailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
                     CommonConstants.PUBLISHED,
                     PageRequest.of(0, 1,
                             Sort.by(
@@ -157,17 +170,17 @@ public class NoticeServiceImpl implements NoticeService {
                     )
             );
         }
-        if (newsDetailPage.getTotalElements() > 0) {
-            return newsDetailPage.getContent().get(0);
+        if (detailPage.getTotalElements() > 0) {
+            return detailPage.getContent().get(0);
         } else {
             return null;
         }
     }
 
     private NoticeOverview previousPublishedNewsDetail(long publishDate, String category, Long id) {
-        Page<NoticeOverview> noticeDetailPage;
+        Page<NoticeOverview> detailPage;
         if (null != id) {
-            noticeDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
+            detailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
                     CommonConstants.PUBLISHED,
                     id,
                     PageRequest.of(0, 1,
@@ -177,8 +190,21 @@ public class NoticeServiceImpl implements NoticeService {
                             )
                     )
             );
+            if ((detailPage.getTotalElements() > 0
+                    && !detailPage.getContent().get(0).getPublishDate().equals(publishDate))
+                    || detailPage.getTotalElements() == 0) {
+                detailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
+                        CommonConstants.PUBLISHED,
+                        PageRequest.of(0, 1,
+                                Sort.by(
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                )
+                        )
+                );
+            }
         } else {
-            noticeDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
+            detailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
                     CommonConstants.PUBLISHED,
                     PageRequest.of(0, 1,
                             Sort.by(
@@ -188,8 +214,8 @@ public class NoticeServiceImpl implements NoticeService {
                     )
             );
         }
-        if (noticeDetailPage.getTotalElements() > 0) {
-            return noticeDetailPage.getContent().get(0);
+        if (detailPage.getTotalElements() > 0) {
+            return detailPage.getContent().get(0);
         } else {
             return null;
         }

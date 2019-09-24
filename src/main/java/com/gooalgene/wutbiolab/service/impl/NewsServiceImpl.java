@@ -204,6 +204,19 @@ public class NewsServiceImpl implements NewsService {
                             )
                     )
             );
+            if ((newsDetailPage.getTotalElements() > 0
+                    && !newsDetailPage.getContent().get(0).getPublishDate().equals(publishDate))
+                    || newsDetailPage.getTotalElements() == 0) {
+                newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category,
+                        CommonConstants.PUBLISHED,
+                        PageRequest.of(0, 1,
+                                Sort.by(
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                )
+                        )
+                );
+            }
         } else {
             newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category,
                     CommonConstants.PUBLISHED,
@@ -223,9 +236,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     private NewsOverview previousPublishedNewsDetail(long publishDate, String category, Long id) {
-        Page<NewsOverview> newsDetailPage;
+        Page<NewsOverview> detailPage;
         if (null != id) {
-            newsDetailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category,
+            detailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category,
                     CommonConstants.PUBLISHED,
                     id,
                     PageRequest.of(0, 1,
@@ -235,8 +248,21 @@ public class NewsServiceImpl implements NewsService {
                             )
                     )
             );
+            if ((detailPage.getTotalElements() > 0
+                    && !detailPage.getContent().get(0).getPublishDate().equals(publishDate))
+                    || detailPage.getTotalElements() == 0) {
+                detailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category,
+                        CommonConstants.PUBLISHED,
+                        PageRequest.of(0, 1,
+                                Sort.by(
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                )
+                        )
+                );
+            }
         } else {
-            newsDetailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category,
+            detailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category,
                     CommonConstants.PUBLISHED,
                     PageRequest.of(0, 1,
                             Sort.by(
@@ -246,8 +272,8 @@ public class NewsServiceImpl implements NewsService {
                     )
             );
         }
-        if (newsDetailPage.getTotalElements() > 0) {
-            return newsDetailPage.getContent().get(0);
+        if (detailPage.getTotalElements() > 0) {
+            return detailPage.getContent().get(0);
         } else {
             return null;
         }
