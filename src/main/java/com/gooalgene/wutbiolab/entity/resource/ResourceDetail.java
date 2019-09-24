@@ -33,9 +33,9 @@ public class ResourceDetail {
     @Column
     private Long categoryId;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String image;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String context;
 }

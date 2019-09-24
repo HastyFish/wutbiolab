@@ -24,7 +24,7 @@ public class NewsDetail implements Serializable {
     @Column(columnDefinition = "text")
     private String image;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String context;
 
     @Column

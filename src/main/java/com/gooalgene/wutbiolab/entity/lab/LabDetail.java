@@ -51,7 +51,7 @@ public class LabDetail implements Serializable {
     private Long categoryId;
 
     @ApiModelProperty(value = "富文本内容", example = "内容")
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String context;
 
     @ApiModelProperty(value = "导师类型id", example = "1")

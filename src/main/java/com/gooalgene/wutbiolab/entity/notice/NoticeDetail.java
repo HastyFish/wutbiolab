@@ -35,7 +35,7 @@ public class NoticeDetail implements Serializable {
     @Column
     private String category;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String context;
 
 }
