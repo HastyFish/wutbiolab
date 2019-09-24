@@ -36,8 +36,8 @@ mybatis:
 ## 图片存放路径
 gooal:
   application:
-    image-path: /gooal/data
-    image-nginx-url: http://192.168.0.110:83/images/
+    image-path: /data/images
+    image-nginx-url: http://testadmin.wutbiolab.com:93/images/
     #    export-temp-path: D:\
     #    export-nginx-url: http://192.168.0.110:83/tempFile
 #    export-temp-path: /tmp/data/
