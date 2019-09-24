@@ -88,7 +88,7 @@ class TablePage extends React.PureComponent {
             data.map((item,index)=>{
                 if(item.isEmpty){
                     return(
-                        <td style={{color: "#333"}} key={index}><span onClick={this.jump.bind(this, item)}>{item.mentorName}</span></td>
+                        <td key={index}><span style={{color: "#333"}} >{item.mentorName}</span></td>
                     )
                 }else{
                     return(
