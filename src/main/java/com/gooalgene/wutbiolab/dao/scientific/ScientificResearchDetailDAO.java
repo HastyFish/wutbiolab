@@ -36,7 +36,7 @@ public interface ScientificResearchDetailDAO extends JpaRepository<ScientificRes
     @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +
             "s.author,s.publishYear ) from ScientificResearchDetail s " +
             " where s.categoryId=:categoryId and " +
-            "s.publishStatus=:publishStatus")
+            "s.publishStatus=:publishStatus order by s.publishDate desc,s.id desc ")
     Page<ScientificResearchDetail> getByCategoryIdAndPublishStatus(@Param("categoryId") Long categoryId,
                                                                                      @Param("publishStatus") Integer publishStatus, Pageable pageable);
 

@@ -55,13 +55,14 @@ public class NewsServiceImpl implements NewsService {
 //        Page<NewsDetail> page = newsDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
         Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
         Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
         Page<NewsOverview> page;
         if (null != categoryId) {
             page = newsDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         } else {
             page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         }
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
@@ -154,7 +155,11 @@ public class NewsServiceImpl implements NewsService {
             NewsCategory newsCategory = newsCategoryDAO.findById(categoryId).get();
             Page<NewsOverview> newsOverviewPage = newsDetailDAO.findByCategoryAndPublishStatusPage(newsCategory.getCategory(),
                     CommonConstants.PUBLISHED, PageRequest.of(pageNum - 1, pageSize,
-                            new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                            )
+                    ));
             return ResponseUtil.success(new DetailPageResponse<>(newsOverviewPage.getContent(), pageNum,
                     pageSize, newsOverviewPage.getTotalElements(), newsCategory.getCategory()));
         } else {
@@ -165,14 +170,64 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public CommonResponse<DetailResponse<NewsDetail, NewsOverview>> newsDetailPublishedById(long id) {
         NewsDetail newsDetail = newsDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
-        NewsOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        NewsOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
+        NewsOverview next;
+        NewsOverview previous;
+        if (newsDetailDAO.countByPublishDateAndPublishStatus(
+                newsDetail.getPublishDate(), CommonConstants.PUBLISHED) > 1) {
+            next = nextPublishedNewsDetail(newsDetail.getPublishDate(),
+                    newsDetail.getCategory(),
+                    newsDetail.getId());
+            previous = previousPublishedNewsDetail(newsDetail.getPublishDate(),
+                    newsDetail.getCategory(),
+                    newsDetail.getId());
+        } else {
+            next = nextPublishedNewsDetail(newsDetail.getPublishDate(),
+                    newsDetail.getCategory(),
+                    null);
+            previous = previousPublishedNewsDetail(newsDetail.getPublishDate(),
+                    newsDetail.getCategory(),
+                    null);
+        }
         return ResponseUtil.success(new DetailResponse<>(newsDetail, next, previous));
     }
 
-    private NewsOverview nextPublishedNewsDetail(long publishDate, String category) {
-        Page<NewsOverview> newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+    private NewsOverview nextPublishedNewsDetail(long publishDate, String category, Long id) {
+        Page<NewsOverview> newsDetailPage;
+        if (null != id) {
+            newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    id,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+            if ((newsDetailPage.getTotalElements() > 0
+                    && !newsDetailPage.getContent().get(0).getPublishDate().equals(publishDate))
+                    || newsDetailPage.getTotalElements() == 0) {
+                newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category,
+                        CommonConstants.PUBLISHED,
+                        PageRequest.of(0, 1,
+                                Sort.by(
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                )
+                        )
+                );
+            }
+        } else {
+            newsDetailPage = newsDetailDAO.findNextNewsDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+        }
         if (newsDetailPage.getTotalElements() > 0) {
             return newsDetailPage.getContent().get(0);
         } else {
@@ -180,11 +235,45 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
-    private NewsOverview previousPublishedNewsDetail(long publishDate, String category) {
-        Page<NewsOverview> newsDetailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
-        if (newsDetailPage.getTotalElements() > 0) {
-            return newsDetailPage.getContent().get(0);
+    private NewsOverview previousPublishedNewsDetail(long publishDate, String category, Long id) {
+        Page<NewsOverview> detailPage;
+        if (null != id) {
+            detailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    id,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+            if ((detailPage.getTotalElements() > 0
+                    && !detailPage.getContent().get(0).getPublishDate().equals(publishDate))
+                    || detailPage.getTotalElements() == 0) {
+                detailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category,
+                        CommonConstants.PUBLISHED,
+                        PageRequest.of(0, 1,
+                                Sort.by(
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                )
+                        )
+                );
+            }
+        } else {
+            detailPage = newsDetailDAO.findPreviousNewsDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+        }
+        if (detailPage.getTotalElements() > 0) {
+            return detailPage.getContent().get(0);
         } else {
             return null;
         }

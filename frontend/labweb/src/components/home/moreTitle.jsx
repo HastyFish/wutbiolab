@@ -99,11 +99,13 @@ class MoreTitle extends Component {
         let { titleinfo, type, dataList=[] ,imgList="" } = this.state;
         if(this.props.datalist && this.props.datalist.length){
             dataList = this.props.datalist;
+        }
+        if(this.props.imglist){
             imgList = this.props.imglist;
         }
         return (
             <div className="more-info">
-                <Row type="flex" className="more-header" style={{ marginBottom: (["4", "5"].includes(type)) ? "32px" : "50px" }}>
+                <Row type="flex" className="more-header" style={{ marginBottom: (["4", "5"].includes(type)) ? "32px" : "32px" }}>
                     <Col span={12} className="more-header-left">
                         <span>{titleinfo}</span>
                     </Col>

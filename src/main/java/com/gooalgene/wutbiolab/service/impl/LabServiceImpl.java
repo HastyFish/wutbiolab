@@ -9,14 +9,17 @@ import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
+import com.gooalgene.wutbiolab.exception.WutbiolabException;
 import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.common.ResultCode;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -105,7 +108,7 @@ public class LabServiceImpl implements LabService {
     @Transactional
     public void saveOrPublishLabDetail(LabDetail labDetail, Integer publishStatus) {
         labDetail.setPublishStatus(publishStatus);
-        labDetailDAO.save(labDetail);
+        LabDetail save = labDetailDAO.save(labDetail);
     }
 
 
@@ -183,8 +186,15 @@ public class LabServiceImpl implements LabService {
         if (labDetail != null) {
             Long publishDate = labDetail.getPublishDate();
             Long categoryId = labDetail.getCategoryId();
-            LabDetail pre = getOneByPublishDate(id,categoryId,publishDate, ">=","asc");
-            LabDetail next = getOneByPublishDate(id,categoryId,publishDate, "<=","desc");
+            String countSql="select count(1) from  lab_detail labDetail  where labDetail.publishDate =:publishDate " +
+                    "and labDetail.publishStatus="+CommonConstants.PUBLISHED;
+            Object singleResult = entityManager.createNativeQuery(countSql)
+                    .setParameter("publishDate",publishDate).getSingleResult();
+            BigInteger bigInteger = (BigInteger) singleResult;
+            long count = bigInteger == null ? 0 : bigInteger.longValue();
+
+            LabDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
+            LabDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
             map.put("detail",labDetail);
             map.put("previous",pre);
             map.put("next",next);
@@ -192,12 +202,38 @@ public class LabServiceImpl implements LabService {
         return map;
     }
 
-    private LabDetail getOneByPublishDate(Long id,Long categoryId,Long publishDate,String operation,String sort){
-        String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operation+
-                " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId and labDetail.id!=:id " +
-                " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+sort+" limit 1";
-        Query nativeQuery = entityManager.createNativeQuery(sql);
-        nativeQuery.setParameter("id",id);
+    private LabDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate,String operation,String sort){
+        Query nativeQuery=null;
+//        String negationSort=null;
+//        if(StringUtils.equals(sort,"desc")){
+//            negationSort="asc";
+//        }else  if(StringUtils.equals(sort,"asc")){
+//            negationSort="desc";
+//        }else {
+//            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//        }
+        if(count>1){
+//            String negationOperation=null;
+//            if(StringUtils.equals(operation,">")){
+//                negationOperation="<";
+//            }else if(StringUtils.equals(operation,"<")){
+//                negationOperation=">";
+//            }else {
+//                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
+//            }
+
+            String operationAndEq = operation.concat("=");
+            String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operationAndEq+
+                    " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId and labDetail.id"+operation+":id " +
+                    " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+sort+" limit 1";
+            nativeQuery = entityManager.createNativeQuery(sql);
+            nativeQuery.setParameter("id",id);
+        }else {
+            String sql="select labDetail.id,labDetail.title from lab_detail labDetail where  labDetail.publishDate "+operation+
+                    " :publishDate  and labDetail.publishStatus=1 and labDetail.categoryId=:categoryId " +
+                    " ORDER BY labDetail.publishDate "+sort+",labDetail.id "+sort+" limit 1";
+            nativeQuery = entityManager.createNativeQuery(sql);
+        }
         nativeQuery.setParameter("publishDate",publishDate);
         nativeQuery.setParameter("categoryId",categoryId);
         Object object = null;

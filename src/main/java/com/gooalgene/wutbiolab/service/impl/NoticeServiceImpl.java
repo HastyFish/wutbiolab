@@ -37,14 +37,15 @@ public class NoticeServiceImpl implements NoticeService {
                                                                          Long categoryId) {
 //        Page<NoticeDetail> page = noticeDetailDAO.findAll(PageRequest.of(pageNum - 1, pageSize));
         Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
         Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
         Page<NoticeOverview> page;
         if (null == categoryId) {
             page = noticeDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         } else {
             page = noticeDetailDAO.findNewsDetailByCategoryId(categoryId, PageRequest.of(pageNum - 1, pageSize,
-                    Sort.by(daterder, categoryOrder)));
+                    Sort.by(daterder, categoryOrder, idOrder)));
         }
         return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
@@ -96,7 +97,11 @@ public class NoticeServiceImpl implements NoticeService {
                     noticeCategory.getCategory(),
                     CommonConstants.PUBLISHED,
                     PageRequest.of(pageNum - 1, pageSize,
-                            new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                    )
+                            ));
             return ResponseUtil.success(new DetailPageResponse<>(noticeOverviewPage.getContent(), pageNum,
                     pageSize, noticeOverviewPage.getTotalElements(), noticeCategory.getCategory()));
         } else {
@@ -106,27 +111,111 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public CommonResponse<DetailResponse<NoticeDetail, NoticeOverview>> noticeDetailPublishedById(long id) {
-        NoticeDetail newsDetail = noticeDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
-        NoticeOverview next = nextPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        NoticeOverview previous = previousPublishedNewsDetail(newsDetail.getPublishDate(), newsDetail.getCategory());
-        return ResponseUtil.success(new DetailResponse<>(newsDetail, previous, next));
+        NoticeDetail noticeDetail = noticeDetailDAO.findByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
+        NoticeOverview next;
+        NoticeOverview previous;
+        if (noticeDetailDAO.countByPublishDateAndPublishStatus(
+                noticeDetail.getPublishDate(), CommonConstants.PUBLISHED) > 1) {
+            next = nextPublishedNoticeDetail(noticeDetail.getPublishDate(),
+                    noticeDetail.getCategory(),
+                    noticeDetail.getId());
+            previous = previousPublishedNewsDetail(noticeDetail.getPublishDate(),
+                    noticeDetail.getCategory(),
+                    noticeDetail.getId());
+        } else {
+            next = nextPublishedNoticeDetail(noticeDetail.getPublishDate(),
+                    noticeDetail.getCategory(),
+                    null);
+            previous = previousPublishedNewsDetail(noticeDetail.getPublishDate(),
+                    noticeDetail.getCategory(),
+                    null);
+        }
+        return ResponseUtil.success(new DetailResponse<>(noticeDetail, next, previous));
     }
 
-    private NoticeOverview nextPublishedNewsDetail(long publishDate, String category) {
-        Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
-        if (newsDetailPage.getTotalElements() > 0) {
-            return newsDetailPage.getContent().get(0);
+    private NoticeOverview nextPublishedNoticeDetail(long publishDate, String category, Long id) {
+        Page<NoticeOverview> detailPage;
+        if (null != id) {
+            detailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    id,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+            if ((detailPage.getTotalElements() > 0
+                    && !detailPage.getContent().get(0).getPublishDate().equals(publishDate))
+                    || detailPage.getTotalElements() == 0) {
+                detailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
+                        CommonConstants.PUBLISHED,
+                        PageRequest.of(0, 1,
+                                Sort.by(
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                        new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                                )
+                        )
+                );
+            }
+        } else {
+            detailPage = noticeDetailDAO.findNextNoticeDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+        }
+        if (detailPage.getTotalElements() > 0) {
+            return detailPage.getContent().get(0);
         } else {
             return null;
         }
     }
 
-    private NoticeOverview previousPublishedNewsDetail(long publishDate, String category) {
-        Page<NoticeOverview> newsDetailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 1, new Sort(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD)));
-        if (newsDetailPage.getTotalElements() > 0) {
-            return newsDetailPage.getContent().get(0);
+    private NoticeOverview previousPublishedNewsDetail(long publishDate, String category, Long id) {
+        Page<NoticeOverview> detailPage;
+        if (null != id) {
+            detailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    id,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+            if ((detailPage.getTotalElements() > 0
+                    && !detailPage.getContent().get(0).getPublishDate().equals(publishDate))
+                    || detailPage.getTotalElements() == 0) {
+                detailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
+                        CommonConstants.PUBLISHED,
+                        PageRequest.of(0, 1,
+                                Sort.by(
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                        new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                                )
+                        )
+                );
+            }
+        } else {
+            detailPage = noticeDetailDAO.findPreviousNoticeDetail(publishDate, category,
+                    CommonConstants.PUBLISHED,
+                    PageRequest.of(0, 1,
+                            Sort.by(
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.ASC, CommonConstants.IDFIELD)
+                            )
+                    )
+            );
+        }
+        if (detailPage.getTotalElements() > 0) {
+            return detailPage.getContent().get(0);
         } else {
             return null;
         }

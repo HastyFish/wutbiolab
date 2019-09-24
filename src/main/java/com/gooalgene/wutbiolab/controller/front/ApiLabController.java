@@ -62,10 +62,10 @@ public class ApiLabController {
             List<LabDetail> content = labDetails.getList();
             if(content!=null&&!content.isEmpty()){
                 labDetail = content.get(0);
+                LabCategory category = labService.getCategoryById(labCategoryId);
+                labDetail.setCategory(category!=null?category.getCategory():null);
             }
         }
-        LabCategory category = labService.getCategoryById(labCategoryId);
-        labDetail.setCategory(category!=null?category.getCategory():null);
         return ResponseUtil.success(labDetail);
     }
 

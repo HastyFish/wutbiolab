@@ -169,7 +169,8 @@ public class HomeServiceImpl implements HomeService {
         if (newsCategoryDAO.findById(CommonConstants.TOUTIAO).isPresent()) {
             NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO).get();
             List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryAndPublishStatus(
-                    headline.getCategory(), CommonConstants.PUBLISHED);
+                    headline.getCategory(), CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                            new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
             List<OverviewWithImageResponse> overviewList = new ArrayList<>();
             newsDetailList.forEach(one -> {
                 try {
@@ -227,7 +228,13 @@ public class HomeServiceImpl implements HomeService {
             NewsImage newsImage = newsImageDAO.findAll().get(0);
             List<Picture> pictureList = objectMapper.readValue((pictureService.formImageUrl(newsImage.getContext())),
                     objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-            result.add(pictureList.get(0).getUrl());
+            if (pictureList.size() > 1) {
+                result.add(pictureList.get(0));
+            } else if (pictureList.size() == 0) {
+                result.add("");
+            } else {
+                pictureList.forEach(one -> result.add(one.getUrl()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
             result.add("");
@@ -249,7 +256,14 @@ public class HomeServiceImpl implements HomeService {
             AcademicImage academicImage = academicImageDAO.findAll().get(0);
             List<Picture> pictureList = objectMapper.readValue((pictureService.formImageUrl(academicImage.getContext())),
                     objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-            result.add(pictureList.get(0).getUrl());
+            if (pictureList.size() > 1) {
+                result.add(pictureList.get(0));
+            } else if (pictureList.size() == 1) {
+                pictureList.forEach(one -> result.add(one.getUrl()));
+            } else {
+                result.add("");
+            }
+            //            result.add(pictureList.get(0).getUrl());
         } catch (IOException e) {
             e.printStackTrace();
         }
