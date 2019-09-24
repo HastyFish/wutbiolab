@@ -99,6 +99,8 @@ class MoreTitle extends Component {
         let { titleinfo, type, dataList=[] ,imgList="" } = this.state;
         if(this.props.datalist && this.props.datalist.length){
             dataList = this.props.datalist;
+        }
+        if(this.props.imglist){
             imgList = this.props.imglist;
         }
         return (

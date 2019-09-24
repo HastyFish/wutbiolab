@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController("apiResourceController2")
 @RequestMapping("/api/resource")
-public class ApiResouurceController {
+public class ApiResourceController {
     @Autowired
     private ResourceService resourceService;
 
