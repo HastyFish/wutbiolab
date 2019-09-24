@@ -134,7 +134,7 @@ class SciTable extends React.PureComponent {
                 </Breadcrumb>
                     <div>
                     <div className="title-name">
-                        {navName}
+                        {/* {navName} */}
                     </div>
                     <Table columns={columns} 
                         dataSource={dataList} 

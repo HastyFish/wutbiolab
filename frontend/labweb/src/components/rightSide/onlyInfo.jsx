@@ -59,7 +59,7 @@ class OnlyInfo extends React.PureComponent {
                     <Breadcrumb.Item >{navName}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="title-name">
-                    {dataList.title}
+                    {/* {dataList.title} */}
                 </div>
                 <p dangerouslySetInnerHTML={{__html: dataList.context}}></p>
             </div>

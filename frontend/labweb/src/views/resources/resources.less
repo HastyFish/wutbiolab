@@ -7,7 +7,7 @@
         width: 290px;
         min-height: 551px;
         border:1px solid #CCCCCC;
-        box-shadow:0px 1px 1px 0px rgba(86,89,91,0.3);
+                // box-shadow:0px 1px 1px 0px rgba(86,89,91,0.3);
         color: #666666;
         font-size: 16px;
         .leftSide-header{
@@ -28,6 +28,12 @@
                     background-color: #398EF3;
                     border-left: 4px solid #F1F199;
                     color: #fff;
+                }
+                &:not(.active){
+                    &:hover{
+                        background:#C3DDFB;
+                        color: #fff;
+                    }
                 }
             }
         }

@@ -14,8 +14,7 @@ class TablePage extends React.PureComponent {
             dataList: {},
             navId,
             titleinfo: "",
-            navName: "",
-            infoName: ''
+            navName: ""
         }
     }
     // //动态获取父级传来的值再做渲染
@@ -55,7 +54,8 @@ class TablePage extends React.PureComponent {
         let childList = {
             navId:data.id,
             navName:this.state.navName,
-            titleinfo:this.state.titleinfo
+            titleinfo:this.state.titleinfo,
+            infoName:data.mentorName
         }
         this.props.history.push(`/introduction/3/info`,childList);
     }
@@ -65,11 +65,12 @@ class TablePage extends React.PureComponent {
          if(data.length){
              num = Math.ceil(data.length/8);
          }
+         let newData =[...data] ;
          let arr = Array(num).fill(0);
          return arr.map((item,index)=>{
              return(
                     <tr key={index}>
-                        {this.tableTd(data.slice(index,8))}
+                        {this.tableTd(newData.splice(0,8))}
                     </tr>
                 
              )
@@ -85,9 +86,15 @@ class TablePage extends React.PureComponent {
         }
         return(
             data.map((item,index)=>{
-                return(
-                    <td key={index}><span onClick={this.jump.bind(this, item)}>{item.mentorName}</span></td>
-                )
+                if(item.isEmpty){
+                    return(
+                        <td style={{color: "#333"}} key={index}><span onClick={this.jump.bind(this, item)}>{item.mentorName}</span></td>
+                    )
+                }else{
+                    return(
+                        <td key={index}><span onClick={this.jump.bind(this, item)}>{item.mentorName}</span></td>
+                    )
+                }
             })
         )
     }
@@ -113,18 +120,17 @@ class TablePage extends React.PureComponent {
 
 
     render() {
-        let { dataList, titleinfo, navName, infoName } = this.state;
+        let { dataList, titleinfo, navName } = this.state;
         return (
             <div className="right-container">
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item>首页</Breadcrumb.Item>
                     <Breadcrumb.Item>{titleinfo}</Breadcrumb.Item>
                     <Breadcrumb.Item >{navName}</Breadcrumb.Item>
-                    <Breadcrumb.Item >{infoName}</Breadcrumb.Item>
                 </Breadcrumb>
                     <div className="table-page">
                         <div className="title-name">
-                            {navName}
+                            {/* {navName} */}
                         </div>
                         {
                             dataList.length > 0 && this.tableChild(dataList)
