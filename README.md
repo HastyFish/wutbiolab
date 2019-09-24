@@ -30,5 +30,6 @@ truncate wutbiolab.home_info;
 insert into wutbiolab.home_info(discriminator, context, publishStatus) values ('academic_picture', '[]', 0);
 insert into wutbiolab.home_info(discriminator, context, publishStatus) values ('news_picture', '[]', 0);
 
-
+truncate wutbiolab.user;
+insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvRWeWugTrUkAtxw1WkgeFLeff8QozRHiWj.Aa','admin');
 ```
