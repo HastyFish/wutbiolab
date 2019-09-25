@@ -1,7 +1,7 @@
 const  NavTitle = [
     {en:"Home",zh:"首页"},
     {en:"About",zh:"实验室简介"},
-    {en:"News & Even",zh:"新闻动态"},
+    {en:"News & Events",zh:"新闻动态"},
     {en:"Notice",zh:"通知公告"},
     {en:"Research",zh:"科研工作"},
     {en:"Resources",zh:"资源发布"}

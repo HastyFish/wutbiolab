@@ -47,6 +47,7 @@ class OnlyInfo extends React.PureComponent {
         }else{
             this.setState({
                 dataList : {},
+                navName:""
             })
         }
     }

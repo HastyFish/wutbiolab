@@ -90,7 +90,7 @@ class MoreTitle extends Component {
                 <Col span={6} className="more-container-left"  key={index}>
                     <div className="resources-conent" onClick={this.jump.bind(this,item)}>
                         <img src={item.imageurl} alt=""/>
-                        <p>{item.title}</p>
+                        <Paragraph ellipsis>{item.title}</Paragraph>
                     </div>
                 </Col>
             )
