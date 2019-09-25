@@ -4,7 +4,7 @@ public interface CommonConstants {
     //头条新闻
     long TOUTIAO= 30L;
     //综合新闻
-    long ZONGHE=2L;
+    long ZONGHE=31L;
     //科研动态
     long KEYAN=32;
     //通知公告
