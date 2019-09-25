@@ -11,7 +11,7 @@ import {
 
 import MentorClasifi from './teamadd/mentor-classifi';
 import AddlabDetails from './teamadd/add-person';
-import {reqResearchTeam, reqSortTeam, reqPublishResearchTeam} from '@/api';
+import {reqResearchTeam, reqSortTeam, reqDeleteTeam, reqPublishResearchTeam} from '@/api';
 
 import './team.less';
 
@@ -151,6 +151,22 @@ export default class Team extends Component {
     }
   }
 
+  //删除人员
+  deleteOrder = async (pindex, index, id) => {
+    //获取对应的二级分类列表
+    const {teamList} = this.state;
+    const {labDetails} = teamList[pindex];
+    //删除对应人员
+    labDetails.splice(index,1)
+    const result = await reqDeleteTeam(id);
+    if(result.code === 0){
+      this.setState({
+        teamList
+      })
+    }else{
+      message.error('删除失败，请稍后再试')
+    }
+  }
 
   //发布按钮点击事件
   publish = async () => {
@@ -208,10 +224,15 @@ export default class Team extends Component {
                         mentor.labDetails ? mentor.labDetails.map((c,index) => (
                             <p className='panelitem' key={c.id}>
                               {c.mentorName}
-                              <span style={{marginLeft:20}} className="icospan" onClick={() => this.editOrder(pindex,index)}>
+                              <span  className="icospan" onClick={() => this.deleteOrder(pindex, index, c.id)}>
+                                <Icon type="delete"/>
+                                <span className="iconame">删除</span>
+                              </span>
+                              <span style={{margin:'0 20px'}} className="icospan" onClick={() => this.editOrder(pindex,index)}>
                                 <Icon type="up"/>
                                 <span className="iconame">排序</span>
                               </span>
+                              
                               <span className="icospan" onClick={() => this.editlabDetails(c.id)}>
                                 <Icon type="edit"/>
                                 <span className="iconame">编辑</span>

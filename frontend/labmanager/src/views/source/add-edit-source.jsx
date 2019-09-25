@@ -69,7 +69,17 @@ class EditSource extends Component{
 
         //获取封面图片及富文本
         //判断是否有图片,获取封面图片
-        const image = JSON.stringify(this.pw.current.getImgs());
+        //判断是否有图片,获取封面图片
+        let image;
+        const {categoryType} = this.state;
+        let imgList = this.pw.current.getImgs();
+        if(imgList.length > 0 && imgList[0].url !== ''){
+          //判定是否上传图片
+          image = JSON.stringify(imgList);
+        }else{
+          message.error('必须上传封面图片');
+          return;
+        }
         const context = this.editor.current.getContext();
 
         //判断为新增还是编辑
