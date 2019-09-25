@@ -1,6 +1,8 @@
 package com.gooalgene.wutbiolab.service.impl;
 
 import com.gooalgene.wutbiolab.constant.CommonConstants;
+import com.gooalgene.wutbiolab.exception.WutbiolabException;
+import com.gooalgene.wutbiolab.response.common.ResultCode;
 import com.gooalgene.wutbiolab.service.CommonService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,8 @@ public class CommonServiceImpl implements CommonService {
             }else if (StringUtils.equals(operation,"<")){
                 predicate1 = criteriaBuilder.le(root.get("publishDate"), publishDate);
                 predicate4=criteriaBuilder.lt(root.get("id"),id);
+            }else {
+                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
             }
             Predicate and = criteriaBuilder.and(predicate1, predicate2,predicate3,predicate4);
             query.where(and);
@@ -43,6 +47,8 @@ public class CommonServiceImpl implements CommonService {
                 predicate1 = criteriaBuilder.gt(root.get("publishDate"), publishDate);
             }else if (StringUtils.equals(operation,"<")){
                 predicate1 = criteriaBuilder.lt(root.get("publishDate"), publishDate);
+            }else {
+                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
             }
             Predicate and = criteriaBuilder.and(predicate1, predicate2,predicate3);
             query.where(and);
@@ -52,6 +58,8 @@ public class CommonServiceImpl implements CommonService {
             query.orderBy(criteriaBuilder.asc(root.get("publishDate")),criteriaBuilder.asc(root.get("id")));
         }else if(StringUtils.equals(sort,"desc")){
             query.orderBy(criteriaBuilder.desc(root.get("publishDate")),criteriaBuilder.desc(root.get("id")));
+        }else {
+            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
         }
         List<T> details = entityManager.createQuery(query).setFirstResult(0).setMaxResults(1).getResultList();
         if(!CollectionUtils.isEmpty(details)){

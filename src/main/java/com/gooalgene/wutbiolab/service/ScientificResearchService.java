@@ -72,7 +72,7 @@ public interface ScientificResearchService {
      * @param id
      * @return
      */
-    Map<String,ScientificResearchDetail> getPublishedById(Long id);
+    Map<String,Object> getPublishedById(Long id);
 
     ScientificResearchCategory getCategoryById(Long categoryId);
 }

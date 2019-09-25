@@ -50,11 +50,11 @@ public class ResourceTests {
 
 	@Test
 	public void testService(){
-		Map<String, ResourceDetail> publishedById5 = resourceService.getPublishedById(5l);
-		Map<String, ResourceDetail> publishedById4 = resourceService.getPublishedById(4l);
-		Map<String, ResourceDetail> publishedById3 = resourceService.getPublishedById(3l);
-		Map<String, ResourceDetail> publishedById2 = resourceService.getPublishedById(2l);
-		Map<String, ResourceDetail> publishedById1 = resourceService.getPublishedById(1l);
+//		Map<String, ResourceDetail> publishedById5 = resourceService.getPublishedById(5l);
+//		Map<String, ResourceDetail> publishedById4 = resourceService.getPublishedById(4l);
+//		Map<String, ResourceDetail> publishedById3 = resourceService.getPublishedById(3l);
+//		Map<String, ResourceDetail> publishedById2 = resourceService.getPublishedById(2l);
+//		Map<String, ResourceDetail> publishedById1 = resourceService.getPublishedById(1l);
 		System.out.println(1);
 	}
 

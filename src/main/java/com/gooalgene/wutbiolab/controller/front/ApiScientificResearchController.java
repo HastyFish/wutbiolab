@@ -37,8 +37,8 @@ public class ApiScientificResearchController {
     }
 
     @GetMapping("/{id}")
-    public CommonResponse<Map<String,ScientificResearchDetail>> getPublishedById(@PathVariable("id") Long id){
-        Map<String,ScientificResearchDetail> map = scientificResearchService.getPublishedById(id);
+    public CommonResponse<Map<String,Object>> getPublishedById(@PathVariable("id") Long id){
+        Map<String,Object> map = scientificResearchService.getPublishedById(id);
         return ResponseUtil.success(map);
     }
 

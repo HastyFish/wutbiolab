@@ -34,11 +34,11 @@ public class SRTests {
 
     @Test
     public void testService2(){
-        Map<String, ScientificResearchDetail> publishedById62 = scientificResearchService.getPublishedById(62l);
-        Map<String, ScientificResearchDetail> publishedById61 = scientificResearchService.getPublishedById(61l);
-        Map<String, ScientificResearchDetail> publishedById60 = scientificResearchService.getPublishedById(60l);
-        Map<String, ScientificResearchDetail> publishedById59 = scientificResearchService.getPublishedById(59l);
-        Map<String, ScientificResearchDetail> publishedById58 = scientificResearchService.getPublishedById(58l);
+//        Map<String, ScientificResearchDetail> publishedById62 = scientificResearchService.getPublishedById(62l);
+//        Map<String, ScientificResearchDetail> publishedById61 = scientificResearchService.getPublishedById(61l);
+//        Map<String, ScientificResearchDetail> publishedById60 = scientificResearchService.getPublishedById(60l);
+//        Map<String, ScientificResearchDetail> publishedById59 = scientificResearchService.getPublishedById(59l);
+//        Map<String, ScientificResearchDetail> publishedById58 = scientificResearchService.getPublishedById(58l);
         System.out.println(1);
     }
 

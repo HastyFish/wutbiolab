@@ -132,8 +132,8 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     }
 
     @Override
-    public Map<String,ScientificResearchDetail> getPublishedById(Long id){
-        Map<String,ScientificResearchDetail> map=new HashMap<>();
+    public Map<String,Object> getPublishedById(Long id){
+        Map<String,Object> map=new HashMap<>();
 //        ScientificResearchDetail one = scientificResearchDetailDAO.getByIdAndPublishStatus(id,CommonConstants.PUBLISHED);
         List<Object[]> objects = scientificResearchDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         ScientificResearchDetail scientificResearchDetail=null;
@@ -159,6 +159,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
             map.put("detail",scientificResearchDetail);
             map.put("previous",pre);
             map.put("next",next);
+            map.put("firstCategory",CommonConstants.CATEGORY_SCIENTIFICRESEARCH);
         }
         return map;
     }
