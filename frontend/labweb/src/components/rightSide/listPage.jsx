@@ -1,10 +1,11 @@
 import React from 'react';
 import './index.less'
-import { Breadcrumb,Pagination, Row,Col ,ConfigProvider } from 'antd';
+import { Breadcrumb,Pagination, Row,Col ,ConfigProvider,Typography } from 'antd';
 import {getLabLabCategoryId} from '@/api'
 import {getNewsDay} from '@utils/dateUtils'
 import {getTitleinfo} from '@utils/tools'
 import zhCN from 'antd/es/locale/zh_CN';
+const { Paragraph } = Typography;
 class ListPage extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -112,10 +113,13 @@ class ListPage extends React.PureComponent {
         return(
             <li key={index}>
                <Row type="flex">
-                   <Col span={12}>
-                      <span  className={`color-block ${index===0 ? "first-color-block" : null} `}></span> <span  onClick={this.jump.bind(this,item)} className="curp">{item.title}</span>
+                   <Col span={1}>
+                    <span  className={`color-block ${index===0 ? "first-color-block" : null} `}></span> 
                    </Col>
-                   <Col span={12}  style={{textAlign:"right"}}>
+                   <Col span={16}>
+                      <Paragraph  ellipsis style={{display:"inline-block",width:550}} onClick={this.jump.bind(this,item)} className="curp">{item.title}</Paragraph>
+                   </Col>
+                   <Col span={6}  style={{textAlign:"right"}}>
                        {getNewsDay(item.publishDate)}
                    </Col>   
                </Row>
