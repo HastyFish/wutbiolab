@@ -97,13 +97,13 @@ class EditArticle extends Component{
         //提示错误
         message.error('表单验证不通过，请检查!');
         //如果富文本及照片墙已经填写则保留
-         //获取封面图片及富文本
-         const {imageUrl,imageName} = this.pw.current.getImgs();
+         //获取富文本
+         //const {imageUrl,imageName} = this.pw.current.getImgs();
          const context = this.editor.current.getContext();
          const newItem = this.state.newItem
          newItem.context = context;
-         newItem.imageName = imageName;
-         newItem.imageUrl = imageUrl;
+         //newItem.imageName = imageName;
+         //newItem.imageUrl = imageUrl;
          this.setState({
           newItem
          })

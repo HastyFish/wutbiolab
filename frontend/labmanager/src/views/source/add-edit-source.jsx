@@ -75,7 +75,7 @@ class EditSource extends Component{
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {title, categoryId, image, context,publishDate:Date.parse( new Date(publishDate._d))};
+        let param = {title, categoryId, image, context, publishDate:Date.parse( new Date(publishDate._d))};
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state;
@@ -117,7 +117,7 @@ class EditSource extends Component{
         message.error('表单验证不通过，请检查!');
         //如果富文本及照片墙已经填写则保留
          //获取封面图片及富文本
-         const image = this.pw.current.getImgs();
+         const image = JSON.stringify(this.pw.current.getImgs());
          const context = this.editor.current.getContext();
          const sourceItem = this.state.sourceItem
          sourceItem.context = context;
@@ -227,8 +227,8 @@ class EditSource extends Component{
             </Item>
 
             <Item label="封面上传">
-              {image ? <PicturesWall ref={this.pw} image = {JSON.parse(image)} /> : null}
-              {!image ? <PicturesWall ref={this.pw} image = {[]} /> : null}
+              {image ? <PicturesWall ref={this.pw} option={{width:220,height:80}} image = {JSON.parse(image)} /> : null}
+              {!image ? <PicturesWall ref={this.pw} option={{width:220,height:80}} image = {[]} /> : null}
             </Item>
 
             
