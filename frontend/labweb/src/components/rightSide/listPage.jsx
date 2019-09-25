@@ -162,7 +162,7 @@ class ListPage extends React.PureComponent {
                      </ul>
                     }
                   
-                       <div style={{textAlign:"right",width:710}}>
+                       <div style={{textAlign:"right",width:810}}>
                         <ConfigProvider locale={locale}>
                         {
                                 !!total &&  <Pagination {...page}/>

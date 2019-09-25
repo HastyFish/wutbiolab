@@ -95,7 +95,7 @@ class SciTable extends React.PureComponent {
               dataIndex: 'title',
               render: (path, text, index) => {
                 return (
-                   <span className="curp" key={index} onClick={this.jump.bind(this,text)}>{path}</span>
+                   <span className="curp sci-title" key={index} onClick={this.jump.bind(this,text)}>{path}</span>
                 )
             }
             },
@@ -137,6 +137,7 @@ class SciTable extends React.PureComponent {
                         {/* {navName} */}
                     </div>
                     <Table columns={columns} 
+                    className='sci-table'
                         dataSource={dataList} 
                         bordered
                         pagination={total>0 ? page : false}

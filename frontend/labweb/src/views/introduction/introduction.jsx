@@ -91,6 +91,7 @@ class Introduction extends Component {
                             <Route path='/introduction/3/info'  component={TableInfo} />
                             <Route path='/introduction/4' exact component={ListPage} />
                             <Route path='/introduction/4/info' exact component={ListInfo} />
+                            <Route path='/' component={OnlyInfo} />
                         </Switch>
                     </Col>
                 </Row>

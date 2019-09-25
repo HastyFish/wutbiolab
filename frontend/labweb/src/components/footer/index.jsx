@@ -29,15 +29,15 @@ class Footer extends Component {
         return (
             <div className="footer">
                 <Row type="flex" justify="space-between" className="footer-content">
-                   <Col span={11} className='footer-logo'>
+                   <Col span={12} className='footer-logo'>
                        <img src={Logo} alt="武汉理工大学计算机科学与技术学院"/>
                        <div className="foot-info">
                             <span>武汉理工大学</span>
                             <span>计算机科学与技术学院</span>
                        </div>   
                    </Col>
-                   <Divider type="vertical" />
-                   <Col span={11} className='footer-info'>
+                   {/* <Divider type="vertical" /> */}
+                   <Col span={12} className='footer-info'>
                      {this.getNode(footerList)}
                    </Col>
                 </Row>
