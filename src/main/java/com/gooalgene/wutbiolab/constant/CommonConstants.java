@@ -56,4 +56,13 @@ public interface CommonConstants {
     String DB_CONFIG_CACHE="db_config_cache";
     String TOKEN_CACHE="token_cache";
 
+    /**
+     * 所有一级分类名称
+     */
+    String CATEGORY_LAB="lab";
+    String CATEGORY_SCIENTIFICRESEARCH="scientificResearch";
+    String CATEGORY_NEWS="news";
+    String CATEGORY_RESOURCE="resource";
+    String CATEGORY_NOTICE="notice";
+
 }

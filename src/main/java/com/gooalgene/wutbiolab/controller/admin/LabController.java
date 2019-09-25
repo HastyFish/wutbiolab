@@ -68,8 +68,8 @@ public class LabController {
     @ApiOperation(value="通过id查询单条数据", notes="通过id查询单条数据")
     @GetMapping("/{id}")
     public CommonResponse<LabDetail> getById(@PathVariable("id")Long id){
-        LabDetail byId = labService.getById(id);
-        return ResponseUtil.success(byId);
+        LabDetail labdetail = labService.getById(id);
+        return ResponseUtil.success(labdetail);
     }
 
     @ApiOperation(value="获取研究团队所有数据", notes="获取研究团队所有数据")

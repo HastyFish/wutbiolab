@@ -25,7 +25,7 @@ public interface ResourceService {
 
 
     /******************************************前端使用************************************************/
-    Map<String,ResourceDetail> getPublishedById(Long id);
+    Map<String,Object> getPublishedById(Long id);
     /**
      * 通过状态查询分页列表
      * @param publishStatus

@@ -64,6 +64,7 @@ public class ApiLabController {
                 labDetail = content.get(0);
                 LabCategory category = labService.getCategoryById(labCategoryId);
                 labDetail.setCategory(category!=null?category.getCategory():null);
+                labDetail.setFirstCategory(CommonConstants.CATEGORY_LAB);
             }
         }
         return ResponseUtil.success(labDetail);
@@ -72,8 +73,8 @@ public class ApiLabController {
     @ApiOperation(value="通过id查询一条已发布数据", notes="通过id查询一条已发布数据")
     //通过id查询一条数据(已发布)
     @GetMapping("/{id}")
-    public CommonResponse<Map<String, LabDetail>> getPublishedById(@PathVariable("id")Long id){
-        Map<String, LabDetail> publishedById = labService.getPublishedById(id);
+    public CommonResponse<Map<String, Object>> getPublishedById(@PathVariable("id")Long id){
+        Map<String, Object> publishedById = labService.getPublishedById(id);
         return ResponseUtil.success(publishedById);
     }
 

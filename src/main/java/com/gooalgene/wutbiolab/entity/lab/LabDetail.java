@@ -81,6 +81,9 @@ public class LabDetail implements Serializable {
     @Transient
     private Boolean isEmpty;
 
+    @Transient
+    private String firstCategory;
+
     public LabDetail(Long id,String title, Long publishDate) {
         this.id=id;
         this.title = title;

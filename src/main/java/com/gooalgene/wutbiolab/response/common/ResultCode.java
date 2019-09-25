@@ -16,7 +16,7 @@ public enum ResultCode {
     USERNAME_EXIST(-6, "用户名已存在"),
     EMAIL_EXIST(-7, "邮箱已存在"),
     USER_NOT_EXIST(-8, "用户不存在"),
-    ARGS_MUST_NEED(-9, "参数不能为空"),
+    ARGS_MUST_NEED(-9, "参数必须要有"),
     CREATE_FILE_FAIL(-10,"生成临时文件失败"),
     ADMIN_NOT_EXIST(-11,"管理员不存在"),
     POSITION_DETAIL_NOT_EXIST(-12,"职位不存在"),
