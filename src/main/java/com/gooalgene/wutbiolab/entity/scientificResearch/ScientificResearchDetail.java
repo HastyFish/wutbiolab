@@ -77,4 +77,8 @@ public class ScientificResearchDetail implements Serializable {
         this.author = author;
         this.publishYear = publishYear;
     }
+    public ScientificResearchDetail(Long id,String title){
+        this.id=id;
+        this.title = title;
+    }
 }

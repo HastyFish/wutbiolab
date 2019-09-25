@@ -92,7 +92,7 @@ class TablePage extends React.PureComponent {
                     )
                 }else{
                     return(
-                        <td key={index}><span onClick={this.jump.bind(this, item)}>{item.mentorName}</span></td>
+                        <td key={index}><span onClick={this.jump.bind(this, item)} className="curp">{item.mentorName}</span></td>
                     )
                 }
             })
