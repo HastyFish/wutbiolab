@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Typography, Col, Row } from 'antd';
 import { withRouter  } from 'react-router-dom';
-
+import  {NavTitle,NewsTitle,NoticeTitle} from "@utils/titleConfig"
 import './index.less'
 import {getNewsDay} from '../../utils/dateUtils'
 
@@ -10,7 +10,7 @@ class MoreTitle extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: props.type, //用于区分首页的more样式 现有1~5种
+            type: props.type, //用于区分Home的more样式 现有1~5种
             titleinfo: props.titleinfo,
             dataList:  [],
             imgList:""
@@ -18,22 +18,22 @@ class MoreTitle extends Component {
     }
     jumpAll(){
         switch(this.state.titleinfo){
-            case "新闻动态": 
-            this.props.history.push("news/31");
-            break;
-            case "学术活动": 
-            this.props.history.push("news/33");
-            break;
-            case "通知公告": 
-            this.props.history.push("notices/34");
-            break;
-            case "招聘招生": 
-            this.props.history.push("notices/36");
-            break;
-            case "科研动态": 
+            case NewsTitle[2].en: 
             this.props.history.push("news/32");
             break;
-            case "资源发布": 
+            case NavTitle[2].en: 
+            this.props.history.push("news/31");
+            break;
+            case NewsTitle[3].en: 
+            this.props.history.push("news/33");
+            break;
+            case NavTitle[3].en: 
+            this.props.history.push("notices/34");
+            break;
+            case NoticeTitle[2].en: 
+            this.props.history.push("notices/36");
+            break;
+            case NavTitle[5].en: 
             this.props.history.push("resources/37");
             break;
             default:;
@@ -43,18 +43,18 @@ class MoreTitle extends Component {
     jump=(data)=>{
         let url = "";
         switch(this.state.titleinfo){
-            case "新闻动态": 
+            case NavTitle[2].en: 
             url = `/news/${data.categoryId}/info`
             break;
-            case "学术活动": url = "/news/33/info"
+            case NewsTitle[3].en: url = "/news/33/info"
             break;
-            case "通知公告": url = `/notices/${data.categoryId}/info`
+            case NoticeTitle[2].en: url = `/notices/${data.categoryId}/info`
             break;
-            case "招聘招生": url = "/notices/36/info"
+            case NavTitle[3].en: url = "/notices/36/info"
             break;
-            case "科研动态": url = "/news/32/info"
+            case NewsTitle[2].en: url = "/news/32/info"
             break;
-            case "资源发布": url = `/resources/${data.categoryId}/info`
+            case NavTitle[5].en: url = `/resources/${data.categoryId}/info`
             break;
             default:;
         }
@@ -66,7 +66,7 @@ class MoreTitle extends Component {
             window.scroll({ top: 0 })
         }
     /**
-     * 获取首页more数据 type 1，2，3的情况
+     * 获取Homemore数据 type 1，2，3的情况
      */
     nodeList = (data) =>
         data.map((item,index) => {
@@ -82,7 +82,7 @@ class MoreTitle extends Component {
             )
         })
     /**
-     * 获取首页more数据 type 4的情况
+     * 获取Homemore数据 type 4的情况
      */
     nodeList2 = (data) =>
         data.map((item, index) => {
@@ -105,12 +105,12 @@ class MoreTitle extends Component {
         }
         return (
             <div className="more-info">
-                <Row type="flex" className="more-header" style={{ marginBottom: (["4", "5"].includes(type)) ? "32px" : "32px" }}>
-                    <Col span={12} className="more-header-left">
-                        <span style={{ marginTop: (["1"].includes(type)) ? "0px" : "38px" }}>{titleinfo}</span>
+                <Row type="flex" className="more-header" style={{ marginTop: (["1"].includes(type)) ? "0" : "32px" }}>
+                    <Col span={18} className="more-header-left">
+                        <span>{titleinfo}</span>
                     </Col>
                     {
-                        type !== "5" && <Col span={12} className="more-header-right">
+                        type !== "5" && <Col span={6} className="more-header-right">
                             <span className="curp"  onClick={this.jumpAll.bind(this)}>more...</span>
                         </Col>
                     }
@@ -142,7 +142,7 @@ class MoreTitle extends Component {
                             {
                                dataList.map((item,index) => {
                                     return (
-                                            <Col key={index} span={6}> <a href={JSON.parse(item.context).url} target="_blank" rel="noopener noreferrer">{JSON.parse(item.context).name}</a></Col>
+                                            <Col key={index} span={8}> <a href={JSON.parse(item.context).url} target="_blank" rel="noopener noreferrer">{JSON.parse(item.context).name}</a></Col>
                                     )
                                 })
                             }

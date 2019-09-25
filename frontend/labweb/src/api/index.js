@@ -2,9 +2,9 @@ import ajax from './ajax';
 
 
 
-//首页
+//Home
 export const getFooter = () => ajax('/api/footer', {}) //footer
-export const getHome = () => ajax('/api/home', {}) //首页数据
+export const getHome = () => ajax('/api/home', {}) //Home数据
 export const getSlideshow = () => ajax('/api/home/slideshow', {}) //轮播图
 
 

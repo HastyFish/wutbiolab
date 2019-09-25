@@ -5,6 +5,7 @@ import { Row, Col } from 'antd';
 import { Switch, Route } from 'react-router-dom';
 import ListInfo from '@components/rightSide/listInfo';
 import ListPage from '@components/rightSide/listPage';
+import  {NavTitle} from "@utils/titleConfig"
 
 
 import {getResourceAll} from '@/api'
@@ -14,7 +15,7 @@ class Resources extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleinfo : "资源发布",
+            titleinfo : NavTitle[4].en,
             navList : [],
             dataList:[],
             navId:37,

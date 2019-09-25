@@ -4,6 +4,7 @@ import { Row, Col } from 'antd';
 import { Switch, Route } from 'react-router-dom';
 import ListInfo from '@components/rightSide/listInfo';
 import ListPage from '@components/rightSide/listPage';
+import  {NavTitle} from "@utils/titleConfig"
 
 
 import {getNoticeAll} from '@/api'
@@ -14,7 +15,7 @@ class Notices extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleinfo : "通知公告",
+            titleinfo : NavTitle[3].en,
             navList : [],
             dataList:[],
             navId:34,

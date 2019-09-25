@@ -8,6 +8,7 @@ import ListPage from '@components/rightSide/listPage';
 import SciTable from '@components/rightSide/sciTable';
 // import TableInfo from '@components/rightSide/tableInfo';
 
+import  {NavTitle} from "@utils/titleConfig"
 
 import {getSciAll} from '@/api'
 
@@ -16,7 +17,7 @@ class Scientific extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleinfo : "科研工作",
+            titleinfo : NavTitle[4].en,
             navList : [],
             dataList:[],
             navId:10,
