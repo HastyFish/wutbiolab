@@ -9,7 +9,7 @@ import {
   message
 } from 'antd';
 
-import {reqNewsList, reqDeleteNew} from '@/api';
+import {reqNewTypeList, reqNewsList, reqDeleteNew} from '@/api';
 import {formateDate} from '@/utils/dateUtils';
 import './news.less';
 
@@ -25,7 +25,8 @@ export default class News extends Component{
     pageSize:10,  //每页条数
     dataSource:[
     ],  //新闻数据数组
-    loading: false,  //表格数据加载时显示loading效果
+    loading: false,  //表格数据加载时显示loading效果,
+    categoryList:[]
   }
 
   //当前页码变化的回调函数
@@ -74,8 +75,18 @@ export default class News extends Component{
 
   }
 
+  //生成表格中类型筛选所需数组
+  getCategoryList = (contrName) => {
+    const name = contrName.map(item => [item.category, item.id]);
+    return Array.from(
+      name.map(item => {
+          const dataItem = {};
+          [dataItem.text, dataItem.value] = item; 
+          return dataItem;
+    }),);
+  };
 
-  initColumns = () => {
+  initColumns = (categoryList) => {
     this.columns = [
       {
         title: '发布时间',
@@ -104,7 +115,8 @@ export default class News extends Component{
         title: '类型',
         dataIndex: 'category',
         key: 'category',
-        filters: [{value: 30, text: "头条新闻"},{value: 31, text: "综合新闻"},{value: 32, text: "科研动态"},{value: 33, text: "学术活动"}],
+        //filters: [{value: 30, text: "头条新闻"},{value: 31, text: "综合新闻"},{value: 32, text: "科研动态"},{value: 33, text: "学术活动"}],
+        filters:categoryList.length >0 ? this.getCategoryList(categoryList) : null,
         filterMultiple: false,
       },
       {
@@ -189,23 +201,37 @@ export default class News extends Component{
   };
 
   //初始化表格显示的列的格式
-  componentWillMount(){
-    this.initColumns();
-  }
+  // componentWillMount(){
+  //   this.initColumns();
+  // }
 
   async componentDidMount(){
-    //初始化
-    const result = await reqNewsList({pageNum:1,pageSize:10});
-    if(result.code === 0){
-      //更新state
-      this.setState({
-        total:result.result.total,
-        dataSource:result.result.list
-      })
-    }else{
-      //message.error('获取新闻列表失败，请稍后再试!');
-      message.error(result.msg);
-    }
+     //获取新闻类型下拉列表
+     const list = await reqNewTypeList();
+     if(list.code === 0){
+      const categoryList = list.result;
+        this.setState({
+          categoryList
+        })
+        //初始化表格格式
+        this.initColumns(categoryList);
+        //获取新闻数据
+        const result = await reqNewsList({pageNum:1,pageSize:10});
+        if(result.code === 0){
+          //更新state
+          debugger
+          this.setState({
+            total:result.result.total,
+            dataSource:result.result.list
+          })
+        }else{
+          //message.error('获取新闻列表失败，请稍后再试!');
+          message.error(result.msg);
+        }
+     }else{
+        message.error(list.msg);
+     }
+    
   }
 
   render(){

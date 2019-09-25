@@ -9,7 +9,7 @@ import {
   message
 } from 'antd';
 
-import {reqSourceList, reqDeleteSource} from '@/api';
+import {reqSourceTypeList, reqSourceList, reqDeleteSource} from '@/api';
 import {formateDate} from '@/utils/dateUtils';
 import './source.less';
 
@@ -26,6 +26,7 @@ export default class Source extends Component{
     dataSource:[
     ],  //资源数据数组
     loading: false,  //表格数据加载时显示loading效果
+    categoryList:[],
   }
 
   //当前页码变化的回调函数
@@ -75,7 +76,19 @@ export default class Source extends Component{
   }
 
 
-  initColumns = () => {
+  //生成表格中类型筛选所需数组
+  getCategoryList = (contrName) => {
+    const name = contrName.map(item => [item.category, item.id]);
+    return Array.from(
+      name.map(item => {
+          const dataItem = {};
+          [dataItem.text, dataItem.value] = item; 
+          return dataItem;
+    }),);
+  };
+
+
+  initColumns = (categoryList) => {
     this.columns = [
       {
         title: '发布时间',
@@ -104,7 +117,8 @@ export default class Source extends Component{
         title: '类型',
         dataIndex: 'category',
         key: 'category',
-        filters: [{value: 37, text: "在线数据库"},{value: 38, text: "公共数据集"},{value: 39, text: "软件下载"}],
+        //filters: [{value: 37, text: "在线数据库"},{value: 38, text: "公共数据集"},{value: 39, text: "软件下载"}],
+        filters:categoryList.length >0 ? this.getCategoryList(categoryList) : null,
         filterMultiple: false,
       },
       {
@@ -189,23 +203,35 @@ export default class Source extends Component{
   };
 
   //初始化表格显示的列的格式
-  componentWillMount(){
-    this.initColumns();
-  }
+  // componentWillMount(){
+  //   this.initColumns();
+  // }
 
   async componentDidMount(){
-    //初始化
-    const result = await reqSourceList({pageNum:1,pageSize:10});
-    if(result.code === 0){
-      //更新state
-      this.setState({
-        total:result.result.total,
-        dataSource:result.result.list
-      })
+    //获取资源类型下拉列表
+    const list = await reqSourceTypeList();
+    if(list.code === 0){
+     const categoryList = list.result;
+      this.setState({categoryList})
+
+      //初始化表格格式
+      this.initColumns(categoryList);
+      //获取资源数据
+      const result = await reqSourceList({pageNum:1,pageSize:10});
+      if(result.code === 0){
+        //更新state
+        this.setState({
+          total:result.result.total,
+          dataSource:result.result.list
+        })
+      }else{
+        //message.error('获取资源列表失败，请稍后再试!');
+        message.error(result.msg);
+      }
     }else{
-      //message.error('获取资源列表失败，请稍后再试!');
-      message.error(result.msg);
+      message.error(list.msg);
     }
+    
   }
 
   render(){
