@@ -73,7 +73,15 @@ class EditNews extends Component{
         let image;
         const {categoryType} = this.state;
         if(categoryType === 30){
-          image = JSON.stringify(this.pw.current.getImgs());
+          let imgList = this.pw.current.getImgs();
+          if(imgList.length > 0 && imgList[0].url !== ''){
+            //判定是否上传图片
+            image = JSON.stringify(imgList);
+          }else{
+            message.error('必须上传封面图片');
+            return;
+          }
+
         }else{
           image = JSON.stringify([]);
         }
@@ -124,7 +132,7 @@ class EditNews extends Component{
         message.error('表单验证不通过，请检查!');
         //如果富文本及照片墙已经填写则保留
          //获取封面图片及富文本
-         const image = this.pw.current.getImgs();
+         const image = JSON.stringify(this.pw.current.getImgs());
          const context = this.editor.current.getContext();
          const newItem = this.state.newItem
          newItem.context = context;
@@ -248,8 +256,8 @@ class EditNews extends Component{
             {
               categoryType === 30 ? (
               <Item label="封面上传">
-                {image ? <PicturesWall ref={this.pw} option={{width:660,height:400}} image = {JSON.parse(image)} /> : null}
-                {!image ? <PicturesWall ref={this.pw} option={{width:660,height:400}} image = {[]} /> : null}
+                {image ? <PicturesWall ref={this.pw} option={{width:430,height:280}} image = {JSON.parse(image)} /> : null}
+                {!image ? <PicturesWall ref={this.pw} option={{width:430,height:280}} image = {[]} /> : null}
               </Item>
               ):null
             }

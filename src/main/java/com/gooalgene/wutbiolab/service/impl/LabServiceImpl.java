@@ -332,12 +332,15 @@ public class LabServiceImpl implements LabService {
             Long mentorCategoryId = ((BigInteger) objects[1]).longValue();
             String mentorCategoryName = (String) objects[4];
             Integer publishStatus = (Integer) objects[5];
-            BigInteger bigIntegerContextLength = (BigInteger) objects[6];
             Boolean isEmpty=false;
-            if(bigIntegerContextLength==null){
-                isEmpty=true;
-            }else if(bigIntegerContextLength.longValue()==0) {
-                isEmpty=true;
+            try {
+                BigInteger bigIntegerContextLength = (BigInteger) objects[6];
+                if(bigIntegerContextLength==null){
+                    isEmpty=true;
+                }else if(bigIntegerContextLength.longValue()==0) {
+                    isEmpty=true;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
             }
 
             Object idObject = objects[0];
