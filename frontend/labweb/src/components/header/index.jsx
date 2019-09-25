@@ -23,8 +23,9 @@ class Header extends Component {
     return (
       <div className="publicHeader">
         <div className = "header-top">
-            <img src={LogoPic} alt="logo" />
+            <img src={LogoPic} alt="logo" className="logo" />
             <img src={LogoInfo} className="logo-info" alt="武汉理工大学智能生物信息实验室" />
+            <p>武汉理工大学智能生物信息实验室</p>
         </div>
             
         <Row className='header-nav'>

@@ -36,17 +36,16 @@ class Home extends Component {
     return (
       <div className="home">
         <div className="home-more">
-          <Row type="flex" style={{ height: "400px" }}>
+          <Row type="flex" style={{ height: "300px" }}>
             <Col className="home-left">
-              <Carousel  autoplay>
-               
+              <Carousel  >
                 {
                     slideList.map((item,index)=>{
                        return(
                         <div key={index}>
-                          <img src={item.imageurl} width="660px" alt="轮播图"  onClick={this.jump.bind(this,item)} className="curp"/>
+                          <img src={item.imageurl} alt="轮播图" width="430px" onClick={this.jump.bind(this,item)} className="curp"/>
                           <div className="silde-title" >
-                            <Paragraph ellipsis style={{width:"500px"}}>{item.title}</Paragraph>
+                            <Paragraph ellipsis style={{width:"400px"}}>{item.title}</Paragraph>
                           </div>
                     </div>
                        )
@@ -59,18 +58,18 @@ class Home extends Component {
             </Col>
           </Row>
           <Row type="flex">
-            <Col className="home-left">
+            <Col className="home-left1">
               <MoreTitle titleinfo="新闻动态"  datalist={list2} imglist={list3}  type="2"/>
             </Col>
-            <Col className="home-right">
+            <Col className="home-right1">
               <MoreTitle titleinfo="通知公告" datalist={list4}  type="3"/>
             </Col>
           </Row>
           <Row type="flex">
-            <Col className="home-left">
+            <Col className="home-left1">
               <MoreTitle titleinfo="学术活动" datalist={list5} imglist={list6}  type="2"/>
             </Col>
-            <Col className="home-right">
+            <Col className="home-right1">
               <MoreTitle titleinfo="招聘招生" datalist={list7}   type="3"/>
             </Col>
           </Row>
