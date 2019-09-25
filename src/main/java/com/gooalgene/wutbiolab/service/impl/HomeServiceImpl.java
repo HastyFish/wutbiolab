@@ -166,37 +166,32 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public CommonResponse<List<OverviewWithImageResponse>> displayNewsSlideShow() {
-        if (newsCategoryDAO.findById(CommonConstants.TOUTIAO).isPresent()) {
-            NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO).get();
-            List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryAndPublishStatus(
-                    headline.getCategory(), CommonConstants.PUBLISHED, PageRequest.of(0, 5,
-                            Sort.by(new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
-                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD))));
-            List<OverviewWithImageResponse> overviewList = new ArrayList<>();
-            newsDetailList.forEach(one -> {
-                try {
-                    String pictureListImage = pictureService.formImageUrl(one.getImage());
-                    List<Picture> pictureList = objectMapper.readValue(
-                            pictureListImage,
-                            objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
-                    if (pictureList.size() > 0) {
-                        pictureList.forEach(onePicture -> overviewList.add(new OverviewWithImageResponse(
-                                one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(),
-                                onePicture.getUrl())));
-                    } else {
-                        overviewList.add(new OverviewWithImageResponse(one.getId(), one.getCategoryId(),
-                                one.getCategory(), one.getTitle(), ""));
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
+        List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryIdAndPublishStatus(
+                CommonConstants.TOUTIAO, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                        Sort.by(new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD))));
+        List<OverviewWithImageResponse> overviewList = new ArrayList<>();
+        newsDetailList.forEach(one -> {
+            try {
+                String pictureListImage = pictureService.formImageUrl(one.getImage());
+                List<Picture> pictureList = objectMapper.readValue(
+                        pictureListImage,
+                        objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+                if (pictureList.size() > 0) {
+                    pictureList.forEach(onePicture -> overviewList.add(new OverviewWithImageResponse(
+                            one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(),
+                            onePicture.getUrl())));
+                } else {
+                    overviewList.add(new OverviewWithImageResponse(one.getId(), one.getCategoryId(),
+                            one.getCategory(), one.getTitle(), ""));
                 }
-            });
-            return ResponseUtil.success(overviewList);
-        } else {
-            return ResponseUtil.error("No category like headline");
-        }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
+            }
+        });
+        return ResponseUtil.success(overviewList);
     }
 
     @Override
@@ -278,11 +273,11 @@ public class HomeServiceImpl implements HomeService {
         result.add(noticeList);
 
         /*资源发布*/
-        Sort.Order orderPublishDate=new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
-        Sort.Order orderId=new Sort.Order(Sort.Direction.DESC, CommonConstants.ID);
+        Sort.Order orderPublishDate = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order orderId = new Sort.Order(Sort.Direction.DESC, CommonConstants.ID);
         List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
                 CommonConstants.PUBLISHED, PageRequest.of(0, 4,
-                        Sort.by(orderPublishDate,orderId)));
+                        Sort.by(orderPublishDate, orderId)));
         List<OverviewWithImageResponse> resourceImageUrlList = new ArrayList<>();
         resourceOverviewList.forEach(one -> {
             try {

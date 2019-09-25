@@ -9,7 +9,7 @@ import {
   message
 } from 'antd';
 
-import {reqNoticeList, reqDeleteNotice} from '@/api';
+import {reqNoticeTypeList, reqNoticeList, reqDeleteNotice} from '@/api';
 import {formateDate} from '@/utils/dateUtils';
 import './notice.less';
 
@@ -26,6 +26,7 @@ export default class Notice extends Component{
     dataSource:[
     ],  //新闻数据数组
     loading: false,  //表格数据加载时显示loading效果
+    categoryList:[],
   }
 
   //当前页码变化的回调函数
@@ -75,7 +76,19 @@ export default class Notice extends Component{
   }
 
 
-  initColumns = () => {
+  //生成表格中类型筛选所需数组
+  getCategoryList = (contrName) => {
+    const name = contrName.map(item => [item.category, item.id]);
+    return Array.from(
+      name.map(item => {
+          const dataItem = {};
+          [dataItem.text, dataItem.value] = item; 
+          return dataItem;
+    }),);
+  };
+
+  //初始化表格格式
+  initColumns = (categoryList) => {
     this.columns = [
       {
         title: '发布时间',
@@ -104,7 +117,8 @@ export default class Notice extends Component{
         title: '类型',
         dataIndex: 'category',
         key: 'category',
-        filters: [{value: 34, text: "规章制度"},{value: 35, text: "教育培养"},{value: 36, text: "招聘招生"}],
+        //filters: [{value: 34, text: "规章制度"},{value: 35, text: "教育培养"},{value: 36, text: "招聘招生"}],
+        filters:categoryList.length >0 ? this.getCategoryList(categoryList) : null,
         filterMultiple: false,
       },
       {
@@ -190,22 +204,33 @@ export default class Notice extends Component{
   };
 
   //初始化表格显示的列的格式
-  componentWillMount(){
-    this.initColumns();
-  }
+  // componentWillMount(){
+  //   this.initColumns();
+  // }
 
   async componentDidMount(){
-    //初始化
-    const result = await reqNoticeList({pageNum:1,pageSize:10});
-    if(result.code === 0){
-      //更新state
-      this.setState({
-        total:result.result.total,
-        dataSource:result.result.list
-      })
+    //获取通知类型下拉列表
+    const list = await reqNoticeTypeList();
+    if(list.code === 0){
+      //携带通知的参数跳入通知编辑页面
+      const categoryList = list.result;
+      this.setState({categoryList})
+
+      //初始化表格格式
+      this.initColumns(categoryList);
+      const result = await reqNoticeList({pageNum:1,pageSize:10});
+      if(result.code === 0){
+        //更新state
+        this.setState({
+          total:result.result.total,
+          dataSource:result.result.list
+        })
+      }else{
+        //message.error('获取通知列表失败，请稍后再试!');
+        message.error(result.msg);
+      }
     }else{
-      //message.error('获取通知列表失败，请稍后再试!');
-      message.error(result.msg);
+      message.error(list.msg);
     }
   }
 
