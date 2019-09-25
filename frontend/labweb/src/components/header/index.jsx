@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Row, Col, Menu } from 'antd';
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 import './index.less'
 import LogoPic from './image/logo-pic.png'

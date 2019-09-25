@@ -148,7 +148,7 @@ class ListPage extends React.PureComponent {
         return ( 
             <div className="right-container">
                 <Breadcrumb separator=">">
-                                <Breadcrumb.Item>首页</Breadcrumb.Item>
+                                <Breadcrumb.Item>Home</Breadcrumb.Item>
                                 <Breadcrumb.Item>{titleinfo}</Breadcrumb.Item>
                                 <Breadcrumb.Item >{navName}</Breadcrumb.Item>
                 </Breadcrumb>

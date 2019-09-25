@@ -3,7 +3,7 @@ import MoreTitle from "@components/home/moreTitle";
 import './home.less';
 import { Row, Col,Carousel ,Typography } from "antd";
 import {getHome,getSlideshow} from '@/api'
-import  {NavTitle,AboutTitle,NewsTitle,NoticeTitle,ResearchTitle,ResourcesTitle,LinksTitle} from "@utils/titleConfig"
+import  {NavTitle,NewsTitle,NoticeTitle,LinksTitle} from "@utils/titleConfig"
 
 const { Paragraph } = Typography;
 

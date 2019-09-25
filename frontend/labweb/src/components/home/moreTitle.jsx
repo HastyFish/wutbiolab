@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Typography, Col, Row } from 'antd';
 import { withRouter  } from 'react-router-dom';
-import  {NavTitle,AboutTitle,NewsTitle,NoticeTitle,ResearchTitle,ResourcesTitle,LinksTitle} from "@utils/titleConfig"
+import  {NavTitle,NewsTitle,NoticeTitle} from "@utils/titleConfig"
 import './index.less'
 import {getNewsDay} from '../../utils/dateUtils'
 
@@ -10,7 +10,7 @@ class MoreTitle extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: props.type, //用于区分首页的more样式 现有1~5种
+            type: props.type, //用于区分Home的more样式 现有1~5种
             titleinfo: props.titleinfo,
             dataList:  [],
             imgList:""
@@ -66,7 +66,7 @@ class MoreTitle extends Component {
             window.scroll({ top: 0 })
         }
     /**
-     * 获取首页more数据 type 1，2，3的情况
+     * 获取Homemore数据 type 1，2，3的情况
      */
     nodeList = (data) =>
         data.map((item,index) => {
@@ -82,7 +82,7 @@ class MoreTitle extends Component {
             )
         })
     /**
-     * 获取首页more数据 type 4的情况
+     * 获取Homemore数据 type 4的情况
      */
     nodeList2 = (data) =>
         data.map((item, index) => {

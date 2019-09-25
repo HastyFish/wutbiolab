@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { getFooter } from '@api'
-import {Divider, Row, Col } from 'antd'
+import {Row, Col } from 'antd'
 import './index.less'
 import Logo from './image/logo.png'
 class Footer extends Component {

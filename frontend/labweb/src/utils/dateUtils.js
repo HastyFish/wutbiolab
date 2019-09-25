@@ -12,7 +12,7 @@ export function formateDate(time) {
     + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
 }
 /*
-  获取首页新闻需要的时间格式
+  获取Home新闻需要的时间格式
 */
 export function getSampleDay(time) {
   if (!time) return ''

@@ -8,6 +8,7 @@ import ListInfo from '@components/rightSide/listInfo';
 import TablePage from '@components/rightSide/tablePage';
 import TableInfo from '@components/rightSide/tableInfo';
 
+import  {NavTitle} from "@utils/titleConfig"
 
 import {getLabAll} from '@/api'
 import { Number } from 'core-js';
@@ -17,7 +18,7 @@ class Introduction extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleinfo : "实验室简介",
+            titleinfo : NavTitle[1].en,
             navList : [],
             dataList:[],
             navId:1,
