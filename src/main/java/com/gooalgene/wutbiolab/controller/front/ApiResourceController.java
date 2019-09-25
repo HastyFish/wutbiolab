@@ -30,8 +30,8 @@ public class ApiResourceController {
     }
 
     @GetMapping("/published/{id}")
-    public CommonResponse<Map<String,ResourceDetail>> getPublishedById(@PathVariable("id")Long id){
-        Map<String, ResourceDetail> publishedById = resourceService.getPublishedById(id);
+    public CommonResponse<Map<String,Object>> getPublishedById(@PathVariable("id")Long id){
+        Map<String, Object> publishedById = resourceService.getPublishedById(id);
         return ResponseUtil.success(publishedById);
     }
 

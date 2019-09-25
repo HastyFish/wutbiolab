@@ -165,8 +165,8 @@ public class ResourceServiceImpl implements ResourceService {
 
 
     @Override
-    public Map<String,ResourceDetail> getPublishedById(Long id){
-        Map<String,ResourceDetail> map=new HashMap<>();
+    public Map<String,Object> getPublishedById(Long id){
+        Map<String,Object> map=new HashMap<>();
         ResourceDetail resourceDetail = resourceDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         if(resourceDetail!=null){
             Long categoryId = resourceDetail.getCategoryId();
@@ -187,6 +187,7 @@ public class ResourceServiceImpl implements ResourceService {
             map.put("detail",resourceDetail);
             map.put("previous",pre);
             map.put("next",next);
+            map.put("firstCategory",CommonConstants.CATEGORY_RESOURCE);
         }
         return map;
     }

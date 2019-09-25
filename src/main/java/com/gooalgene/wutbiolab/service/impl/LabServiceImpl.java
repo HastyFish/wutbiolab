@@ -204,8 +204,8 @@ public class LabServiceImpl implements LabService {
     /*********************************************** 前端使用 ***************************************************/
 
     @Override
-    public Map<String,LabDetail> getPublishedById(Long id) {
-        Map<String,LabDetail> map=new HashMap<>();
+    public Map<String,Object> getPublishedById(Long id) {
+        Map<String,Object> map=new HashMap<>();
         List<Object[]> objects = labDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         LabDetail labDetail =null;
         if(objects!=null&&!objects.isEmpty()){
@@ -228,6 +228,7 @@ public class LabServiceImpl implements LabService {
             map.put("detail",labDetail);
             map.put("previous",pre);
             map.put("next",next);
+            map.put("firstCategory",CommonConstants.CATEGORY_LAB);
         }
         return map;
     }
