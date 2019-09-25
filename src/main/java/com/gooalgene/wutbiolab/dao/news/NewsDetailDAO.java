@@ -20,8 +20,8 @@ public interface NewsDetailDAO extends JpaRepository<NewsDetail, Long> {
     Page<NewsOverview> findNewsDetailByCategoryId(long categoryId, Pageable pageable);
 
     @Query("select a.id as id, a.image as image, a.publishStatus, a.title as title, a.category as category," +
-            "a.categoryId as categoryId from NewsDetail a where a.category = ?1 and a.publishStatus = ?2")
-    List<NewsOverview> findByCategoryAndPublishStatus(String category, Integer publishStatus, Pageable pageable);
+            "a.categoryId as categoryId from NewsDetail a where a.categoryId = ?1 and a.publishStatus = ?2")
+    List<NewsOverview> findByCategoryIdAndPublishStatus(long categoryId, Integer publishStatus, Pageable pageable);
 
     @Query("select a.id as id, a.title as title, a.category as category, a.categoryId as categoryId," +
             "a.publishDate as publishDate from NewsDetail a where a.categoryId = ?1 and a.publishStatus = ?2")

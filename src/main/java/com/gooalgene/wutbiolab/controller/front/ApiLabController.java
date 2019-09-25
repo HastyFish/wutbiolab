@@ -57,16 +57,17 @@ public class ApiLabController {
         PageResponse<LabDetail> labDetails =
                 labService.getLabDetailByLabCategoryIdAndPublishStatus(labCategoryId,
                         null, null, CommonConstants.PUBLISHED,false);
-        LabDetail labDetail=null;
+        LabDetail labDetail=new LabDetail();
+        LabCategory category = labService.getCategoryById(labCategoryId);
+        String categoryName = category != null ? category.getCategory() : null;
         if(labDetails!=null){
             List<LabDetail> content = labDetails.getList();
             if(content!=null&&!content.isEmpty()){
                 labDetail = content.get(0);
-                LabCategory category = labService.getCategoryById(labCategoryId);
-                labDetail.setCategory(category!=null?category.getCategory():null);
                 labDetail.setFirstCategory(CommonConstants.CATEGORY_LAB);
             }
         }
+        labDetail.setCategory(categoryName);
         return ResponseUtil.success(labDetail);
     }
 
