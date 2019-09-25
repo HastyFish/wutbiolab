@@ -86,6 +86,9 @@ export const reqPublishResearchTeam = () => ajax('/lab/publish/3',{},'POST')
 //研究研究团队数据排序
 export const reqSortTeam = (data) => ajax('/lab/researchTeam/sort',data,'POST')
 
+//删除研究团队人员
+export const reqDeleteTeam = (id) => ajax('/lab/' + id, {}, 'DELETE')
+
 //获取研究团队一级分类
 export const reqAllTeamClassifi = () => ajax('/lab/mentorCategorys',{},'GET')
 

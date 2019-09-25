@@ -12,7 +12,7 @@ export function formateDate(time) {
     + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
 }
 /*
-  获取首页新闻需要的时间格式
+  获取Home新闻需要的时间格式
 */
 export function getSampleDay(time) {
   if (!time) return ''
@@ -24,6 +24,9 @@ export function getSampleDay(time) {
 */
 export function getNewsDay(time) {
   if (!time) return ''
-  let date = new Date(time)
-  return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+  let date = new Date(time);
+  let years = date.getFullYear();
+  let months = String(date.getMonth() + 1);
+  let days = String(date.getDate());
+  return `${years}-${months.padStart(2, '0')}-${days.padStart(2, '0')}`
 }

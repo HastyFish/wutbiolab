@@ -88,11 +88,11 @@ class TablePage extends React.PureComponent {
             data.map((item,index)=>{
                 if(item.isEmpty){
                     return(
-                        <td key={index}><span style={{color: "#333"}} >{item.mentorName}</span></td>
+                        <td key={index}><span style={{color: "#666"}} >{item.mentorName}</span></td>
                     )
                 }else{
                     return(
-                        <td key={index}><span onClick={this.jump.bind(this, item)}>{item.mentorName}</span></td>
+                        <td key={index}><span onClick={this.jump.bind(this, item)} className="curp">{item.mentorName}</span></td>
                     )
                 }
             })
@@ -124,7 +124,7 @@ class TablePage extends React.PureComponent {
         return (
             <div className="right-container">
                 <Breadcrumb separator=">">
-                    <Breadcrumb.Item>首页</Breadcrumb.Item>
+                    <Breadcrumb.Item>Home</Breadcrumb.Item>
                     <Breadcrumb.Item>{titleinfo}</Breadcrumb.Item>
                     <Breadcrumb.Item >{navName}</Breadcrumb.Item>
                 </Breadcrumb>

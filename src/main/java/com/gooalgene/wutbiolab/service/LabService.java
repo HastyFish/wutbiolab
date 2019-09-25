@@ -123,7 +123,7 @@ public interface LabService {
      * 通过id和发布状态查询一行数据
      * @return
      */
-    Map<String,LabDetail> getPublishedById(Long id);
+    Map<String,Object> getPublishedById(Long id);
 
     /**
      * 获取已发布的研究团队的数据

@@ -9,12 +9,11 @@ import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
-import com.gooalgene.wutbiolab.exception.WutbiolabException;
 import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
-import com.gooalgene.wutbiolab.response.common.ResultCode;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
+import com.gooalgene.wutbiolab.service.CommonService;
 import com.gooalgene.wutbiolab.service.LabService;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -27,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -53,6 +53,8 @@ public class LabServiceImpl implements LabService {
     private LabCategoryDAO labCategoryDAO;
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    private CommonService commonService;
 
     @Override
     public PageResponse<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize, Boolean isList) {
@@ -202,8 +204,8 @@ public class LabServiceImpl implements LabService {
     /*********************************************** 前端使用 ***************************************************/
 
     @Override
-    public Map<String,LabDetail> getPublishedById(Long id) {
-        Map<String,LabDetail> map=new HashMap<>();
+    public Map<String,Object> getPublishedById(Long id) {
+        Map<String,Object> map=new HashMap<>();
         List<Object[]> objects = labDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         LabDetail labDetail =null;
         if(objects!=null&&!objects.isEmpty()){
@@ -219,11 +221,14 @@ public class LabServiceImpl implements LabService {
             BigInteger bigInteger = (BigInteger) singleResult;
             long count = bigInteger == null ? 0 : bigInteger.longValue();
 
-            LabDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
-            LabDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
+//            LabDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
+//            LabDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
+            LabDetail pre = commonService.getOneByPublishDateAndId(LabDetail.class,count,id,categoryId,publishDate, ">","asc");
+            LabDetail next = commonService.getOneByPublishDateAndId(LabDetail.class,count,id,categoryId,publishDate, "<","desc");
             map.put("detail",labDetail);
             map.put("previous",pre);
             map.put("next",next);
+            map.put("firstCategory",CommonConstants.CATEGORY_LAB);
         }
         return map;
     }
@@ -262,24 +267,43 @@ public class LabServiceImpl implements LabService {
         labDetail.setTitle(title);
         return labDetail;
     }
-    private LabDetail getOneByPublishDate2(Long count,Long id,Long categoryId,Long publishDate,String operation,String sort){
+    private <T> T getOneByPublishDateAndId(Class<T> tClass,Long count,Long id,Long categoryId,Long publishDate,String operation,String sort){
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<LabDetail> query = criteriaBuilder.createQuery(LabDetail.class);
-        Root<LabDetail> root = query.from(LabDetail.class);
-        Predicate predicate1 = criteriaBuilder.equal(root.get("publishDate"), publishDate);
+        CriteriaQuery<T> query = criteriaBuilder.createQuery(tClass);
+        Root<T> root = query.from(tClass);
+        Predicate predicate1=null;
+        Predicate predicate4=null;
         Predicate predicate2 = criteriaBuilder.equal(root.get("publishStatus"), CommonConstants.PUBLISHED);
         Predicate predicate3 = criteriaBuilder.equal(root.get("categoryId"), categoryId);
-
-
-
-        query.multiselect(root.get("id"),root.get("title"));
-        query.orderBy(criteriaBuilder.desc(root.get("publishDate")));
         if(count>1){
-
+            if(StringUtils.equals(operation,">")){
+                predicate1 = criteriaBuilder.ge(root.get("publishDate"), publishDate);
+                predicate4=criteriaBuilder.gt(root.get("id"),id);
+            }else if (StringUtils.equals(operation,"<")){
+                predicate1 = criteriaBuilder.le(root.get("publishDate"), publishDate);
+                predicate4=criteriaBuilder.lt(root.get("id"),id);
+            }
+            Predicate and = criteriaBuilder.and(predicate1, predicate2,predicate3,predicate4);
+            query.where(and);
         }else {
-
+            if(StringUtils.equals(operation,">")){
+                predicate1 = criteriaBuilder.gt(root.get("publishDate"), publishDate);
+            }else if (StringUtils.equals(operation,"<")){
+                predicate1 = criteriaBuilder.lt(root.get("publishDate"), publishDate);
+            }
+            Predicate and = criteriaBuilder.and(predicate1, predicate2,predicate3);
+            query.where(and);
         }
-
+        query.multiselect(root.get("id"),root.get("title"));
+        if(StringUtils.equals(sort,"asc")){
+            query.orderBy(criteriaBuilder.asc(root.get("publishDate")),criteriaBuilder.asc(root.get("id")));
+        }else if(StringUtils.equals(sort,"desc")){
+            query.orderBy(criteriaBuilder.desc(root.get("publishDate")),criteriaBuilder.desc(root.get("id")));
+        }
+        List<T> details = entityManager.createQuery(query).setFirstResult(0).setMaxResults(1).getResultList();
+        if(!CollectionUtils.isEmpty(details)){
+            return details.get(0);
+        }
         return null;
     }
 

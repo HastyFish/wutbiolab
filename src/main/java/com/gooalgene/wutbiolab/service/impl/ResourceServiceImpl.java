@@ -16,6 +16,7 @@ import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.common.ResultCode;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
+import com.gooalgene.wutbiolab.service.CommonService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import com.gooalgene.wutbiolab.service.ResourceService;
 import org.apache.commons.lang3.StringUtils;
@@ -51,14 +52,17 @@ public class ResourceServiceImpl implements ResourceService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private CommonService commonService;
+
     private Logger logger = LoggerFactory.getLogger(ResourceServiceImpl.class);
 
     public ResourceServiceImpl(ResourceDetailDAO resourceDetailDAO, ResourceCategoryDAO resourceCategoryDAO,
-                               PictureService pictureService, ObjectMapper objectMapper) {
+                               PictureService pictureService, ObjectMapper objectMapper,CommonService commonService) {
         this.objectMapper = objectMapper;
         this.pictureService = pictureService;
         this.resourceCategoryDAO = resourceCategoryDAO;
         this.resourceDetailDAO = resourceDetailDAO;
+        this.commonService=commonService;
 
     }
 
@@ -161,8 +165,8 @@ public class ResourceServiceImpl implements ResourceService {
 
 
     @Override
-    public Map<String,ResourceDetail> getPublishedById(Long id){
-        Map<String,ResourceDetail> map=new HashMap<>();
+    public Map<String,Object> getPublishedById(Long id){
+        Map<String,Object> map=new HashMap<>();
         ResourceDetail resourceDetail = resourceDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
         if(resourceDetail!=null){
             Long categoryId = resourceDetail.getCategoryId();
@@ -176,35 +180,21 @@ public class ResourceServiceImpl implements ResourceService {
 
 
 
-            ResourceDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
-            ResourceDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
+//            ResourceDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
+//            ResourceDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
+            ResourceDetail pre = commonService.getOneByPublishDateAndId(ResourceDetail.class,count,id,categoryId,publishDate, ">","asc");
+            ResourceDetail next = commonService.getOneByPublishDateAndId(ResourceDetail.class,count,id,categoryId,publishDate, "<","desc");
             map.put("detail",resourceDetail);
             map.put("previous",pre);
             map.put("next",next);
+            map.put("firstCategory",CommonConstants.CATEGORY_RESOURCE);
         }
         return map;
     }
 
     private ResourceDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String  sort) {
         Query nativeQuery=null;
-//        String negationSort=null;
-//        if(StringUtils.equals(sort,"desc")){
-//            negationSort="asc";
-//        }else if(StringUtils.equals(sort,"asc")){
-//            negationSort="desc";
-//        }else {
-//            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-//        }
         if(count>1){
-//            String negationOperation=null;
-//            if(StringUtils.equals(operation,">")){
-//                negationOperation="<";
-//            }else if(StringUtils.equals(operation,"<")){
-//                negationOperation=">";
-//            }else {
-//                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-//            }
-
             String operationAndEq = operation.concat("=");
             String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operationAndEq+
                     " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId and rd.id"+operation+":id " +

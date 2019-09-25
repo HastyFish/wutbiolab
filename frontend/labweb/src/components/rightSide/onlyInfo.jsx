@@ -2,6 +2,7 @@ import React from 'react';
 import { Breadcrumb } from 'antd';
 import './index.less'
 import {getLabOneById} from '@/api'
+import  {NavTitle} from "@utils/titleConfig"
 
 class OnlyInfo extends React.PureComponent {
     constructor(props) {
@@ -54,8 +55,8 @@ class OnlyInfo extends React.PureComponent {
         return ( 
             <div className="right-container">
                 <Breadcrumb separator=">">
-                    <Breadcrumb.Item>首页</Breadcrumb.Item>
-                    <Breadcrumb.Item>{titleinfo||"实验室简介"}</Breadcrumb.Item>
+                    <Breadcrumb.Item>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item>{titleinfo||NavTitle[1].en}</Breadcrumb.Item>
                     <Breadcrumb.Item >{navName}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="title-name">

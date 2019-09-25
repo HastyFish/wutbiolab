@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,8 +34,11 @@ public class SRTests {
 
     @Test
     public void testService2(){
-//        Page<ScientificResearchDetail> srDetialByCategoryId = scientificResearchService.getSRDetialByCategoryId(1l, 0, 2);
-        List<ScientificResearchCategory> allCategory = scientificResearchService.getAllCategory();
+//        Map<String, ScientificResearchDetail> publishedById62 = scientificResearchService.getPublishedById(62l);
+//        Map<String, ScientificResearchDetail> publishedById61 = scientificResearchService.getPublishedById(61l);
+//        Map<String, ScientificResearchDetail> publishedById60 = scientificResearchService.getPublishedById(60l);
+//        Map<String, ScientificResearchDetail> publishedById59 = scientificResearchService.getPublishedById(59l);
+//        Map<String, ScientificResearchDetail> publishedById58 = scientificResearchService.getPublishedById(58l);
         System.out.println(1);
     }
 

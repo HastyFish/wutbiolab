@@ -1,12 +1,29 @@
 import React, { Component } from 'react'
 import { Row, Col, Menu } from 'antd';
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 import './index.less'
 import LogoPic from './image/logo-pic.png'
 import LogoInfo from './image/logo-info.png'
+import  {NavTitle} from "@utils/titleConfig"
 
 class Header extends Component {
+  jump=(val,type)=>{
+    let url = this.props.location.pathname;
+    switch(type){
+      case 2:
+          if(!url.includes("/introduction")){
+            this.props.history.push(val)
+          }
+      break;
+      case 5:
+          if(!url.includes("/scientific")){
+            this.props.history.push(val)
+          }
+      break;
+      default:this.props.history.push(val);
+    }
+  }
   render() {
     let path = this.props.location.pathname;
     if(path.indexOf('/introduction')===0 ){
@@ -35,35 +52,23 @@ class Header extends Component {
               defaultSelectedKeys={['/']}
               selectedKeys={[path]}
             >
-              <Menu.Item key="/">
-                <Link to="/">
-                  <span>首页</span>
-                </Link>
+              <Menu.Item key="/"  onClick={this.jump.bind(this,"/",1)}>
+                  <span className="nav-url">{NavTitle[0].en}</span>
               </Menu.Item>
-              <Menu.Item key="/introduction">
-                <Link to="/introduction/1">
-                  <span>实验室简介</span>
-                </Link>
+              <Menu.Item key="/introduction" onClick={this.jump.bind(this,"/introduction/1",2)}>
+                  <span className="nav-url">{NavTitle[1].en}</span>
               </Menu.Item>
-              <Menu.Item key="/news">
-                <Link to="/news/30">
-                  <span>新闻动态</span>
-                </Link>
+              <Menu.Item key="/news" onClick={this.jump.bind(this,"/news/30",3)}>
+                  <span className="nav-url">{NavTitle[2].en}</span>
               </Menu.Item>
-              <Menu.Item key="/notices">
-                <Link to="/notices/34">
-                  <span>通知公告</span>
-                </Link>
+              <Menu.Item key="/notices" onClick={this.jump.bind(this,"/notices/34",4)}>
+                  <span className="nav-url">{NavTitle[3].en}</span>
               </Menu.Item>
-              <Menu.Item key="/scientific">
-                <Link to="/scientific/10">
-                  <span>科研工作</span>
-                </Link>
+              <Menu.Item key="/scientific" onClick={this.jump.bind(this,"/scientific/10",5)}>
+                  <span className="nav-url">{NavTitle[4].en}</span>
               </Menu.Item>
-              <Menu.Item key="/resources">
-                <Link to="/resources/37">
-                  <span>资源发布</span>
-                </Link>
+              <Menu.Item key="/resources" onClick={this.jump.bind(this,"/resources/37",6)}>
+                  <span className="nav-url">{NavTitle[5].en}</span>
               </Menu.Item>
             </Menu>
           </Col>
