@@ -62,15 +62,15 @@ class PictureUpload extends Component {
           <Col span={12}>
             <p className="subtitle">新闻动态配图</p>
             <div className="subcontent">
-              {newsImage ? <PicturesWall ref={this.newp} image = {newsImage} /> : null}
-              {!newsImage ? <PicturesWall ref={this.newp} image = {[]} /> : null}
+              {newsImage ? <PicturesWall ref={this.newp} option={{width:280,height:200}} image = {newsImage} /> : null}
+              {!newsImage ? <PicturesWall ref={this.newp} option={{width:280,height:200}} image = {[]} /> : null}
             </div> 
           </Col>
           <Col span={12}>
             <p className="subtitle">学术活动配图</p>
             <div className="subcontent">
-              {academicImage ? <PicturesWall ref={this.scip} image = {academicImage} /> : null}
-              {!academicImage ? <PicturesWall ref={this.scip} image = {[]} /> : null}
+              {academicImage ? <PicturesWall ref={this.scip} option={{width:280,height:200}} image = {academicImage} /> : null}
+              {!academicImage ? <PicturesWall ref={this.scip} option={{width:280,height:200}} image = {[]} /> : null}
             </div>
           </Col>
         </Row>

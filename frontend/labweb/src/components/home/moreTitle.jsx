@@ -19,7 +19,7 @@ class MoreTitle extends Component {
     jumpAll(){
         switch(this.state.titleinfo){
             case "新闻动态": 
-            this.props.history.push("news/30");
+            this.props.history.push("news/31");
             break;
             case "学术活动": 
             this.props.history.push("news/33");
@@ -107,11 +107,11 @@ class MoreTitle extends Component {
             <div className="more-info">
                 <Row type="flex" className="more-header" style={{ marginBottom: (["4", "5"].includes(type)) ? "32px" : "32px" }}>
                     <Col span={12} className="more-header-left">
-                        <span>{titleinfo}</span>
+                        <span style={{ marginTop: (["1"].includes(type)) ? "0px" : "38px" }}>{titleinfo}</span>
                     </Col>
                     {
                         type !== "5" && <Col span={12} className="more-header-right">
-                            <span className="curp"  onClick={this.jumpAll.bind(this)}>more →</span>
+                            <span className="curp"  onClick={this.jumpAll.bind(this)}>more...</span>
                         </Col>
                     }
                 </Row>
@@ -138,18 +138,16 @@ class MoreTitle extends Component {
 
                     }
                     {
-                        type === "5" && <ul className="FriendLink">
+                        type === "5" && <Row className="FriendLink">
                             {
                                dataList.map((item,index) => {
                                     return (
-                                        <li key={index}>
-                                            <a href={JSON.parse(item.context).url} target="_blank" rel="noopener noreferrer">{JSON.parse(item.context).name}</a>
-                                        </li>
+                                            <Col key={index} span={6}> <a href={JSON.parse(item.context).url} target="_blank" rel="noopener noreferrer">{JSON.parse(item.context).name}</a></Col>
                                     )
                                 })
                             }
 
-                        </ul>
+                        </Row>
                     }
                 </div>
             </div>

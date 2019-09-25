@@ -31,7 +31,10 @@ class Footer extends Component {
                 <Row type="flex" justify="space-between" className="footer-content">
                    <Col span={11} className='footer-logo'>
                        <img src={Logo} alt="武汉理工大学计算机科学与技术学院"/>
-                       <span>武汉理工大学计算机科学与技术学院</span>
+                       <div className="foot-info">
+                            <span>武汉理工大学</span>
+                            <span>计算机科学与技术学院</span>
+                       </div>   
                    </Col>
                    <Divider type="vertical" />
                    <Col span={11} className='footer-info'>

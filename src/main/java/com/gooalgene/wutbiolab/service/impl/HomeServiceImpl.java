@@ -210,7 +210,8 @@ public class HomeServiceImpl implements HomeService {
         List<Object> result = new ArrayList<>();
 
         /*按发布时间降序排序*/
-        Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD));
 
         /*科研动态*/
         List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
@@ -219,8 +220,9 @@ public class HomeServiceImpl implements HomeService {
         result.add(scientificNewsList);
 
         /*新闻动态*/
-        List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByPublishStatusEquals(
-                CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
+        List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.ZONGHE, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 5, sort)).getContent();
 //        result.put(CommonConstants.TOUTIAOFIELD, latestNewsOverviewList);
         result.add(latestNewsOverviewList);
 
@@ -248,7 +250,7 @@ public class HomeServiceImpl implements HomeService {
 
         /*学术活动*/
         List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
-                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                CommonConstants.XUESHU, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
                         sort)).getContent();
         result.add(acadeimcNewsList);
 
