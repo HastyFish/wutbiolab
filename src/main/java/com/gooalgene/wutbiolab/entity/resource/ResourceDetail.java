@@ -1,10 +1,12 @@
 package com.gooalgene.wutbiolab.entity.resource;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -38,4 +40,9 @@ public class ResourceDetail {
 
     @Column(columnDefinition = "LONGTEXT")
     private String context;
+
+    public ResourceDetail(Long id,String title) {
+        this.title = title;
+        this.id=id;
+    }
 }

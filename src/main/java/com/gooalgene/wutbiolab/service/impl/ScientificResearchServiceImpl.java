@@ -4,18 +4,15 @@ import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.scientific.AcademicCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
-import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
-import com.gooalgene.wutbiolab.exception.WutbiolabException;
 import com.gooalgene.wutbiolab.response.AcademicResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
-import com.gooalgene.wutbiolab.response.common.ResultCode;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
+import com.gooalgene.wutbiolab.service.CommonService;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +38,8 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     private AcademicCategoryDAO academicCategoryDAO;
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    private CommonService commonService;
 
     @Override
     public PageResponse<ScientificResearchDetail> getSRDetialByCategoryId(Long scientificResearchCategoryId, Integer pageNum, Integer pageSize) {
@@ -153,8 +152,10 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
 
 
 
-            ScientificResearchDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
-            ScientificResearchDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
+//            ScientificResearchDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
+//            ScientificResearchDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
+            ScientificResearchDetail pre = commonService.getOneByPublishDateAndId(ScientificResearchDetail.class,count,id,categoryId,publishDate, ">","asc");
+            ScientificResearchDetail next = commonService.getOneByPublishDateAndId(ScientificResearchDetail.class,count,id,categoryId,publishDate, "<","desc");
             map.put("detail",scientificResearchDetail);
             map.put("previous",pre);
             map.put("next",next);
@@ -166,23 +167,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
 
     private ScientificResearchDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String sort){
         Query nativeQuery=null;
-//        String negationSort=null;
-//        if(StringUtils.equals(sort,"desc")){
-//            negationSort="asc";
-//        }else  if(StringUtils.equals(sort,"asc")){
-//            negationSort="desc";
-//        }else {
-//            throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-//        }
         if(count>1){
-//            String negationOperation=null;
-//            if(StringUtils.equals(operation,">")){
-//                negationOperation="<";
-//            }else if(StringUtils.equals(operation,"<")){
-//                negationOperation=">";
-//            }else {
-//                throw new WutbiolabException(ResultCode.ARGS_MUST_NEED);
-//            }
             String operationAndEq = operation.concat("=");
             String sql="select srd.id,srd.title from scientific_research_detail srd where  srd.publishDate "+operationAndEq+
                     " :publishDate  and srd.publishStatus=1  and srd.categoryId=:categoryId and srd.id"+operation+":id " +
