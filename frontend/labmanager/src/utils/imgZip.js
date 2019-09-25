@@ -73,8 +73,8 @@ function canvasDataURLScale(path, options,imgType, callback) {
       var scaleX = w / options.width;
       var scaleY = h / options.height;
       var newScale = scaleX > scaleY ? scaleX:scaleY;
-      //图片框的尺寸大于图片原始尺寸(newScale<1)则不缩放，只留白
-      if(newScale < 1){
+      //图片框的尺寸小于大于图片原始尺寸(newScale<1)则不缩放，只留白
+      if(newScale <= 1){
         var dx = (options.width - w)/2;
         var dy = (options.height - h)/2;
         ctx.drawImage(that, 0, 0, w, h, dx, dy, w, h);

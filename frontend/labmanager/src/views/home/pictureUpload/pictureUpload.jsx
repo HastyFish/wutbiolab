@@ -59,12 +59,13 @@ class PictureUpload extends Component {
     return (
       <div>
         <Row>
-          <Col span={12}>
+          <Col span={10}>
             <p className="subtitle">新闻动态配图</p>
             <div className="subcontent">
               {newsImage ? <PicturesWall ref={this.newp} option={{width:280,height:200}} image = {newsImage} /> : null}
               {!newsImage ? <PicturesWall ref={this.newp} option={{width:280,height:200}} image = {[]} /> : null}
-            </div> 
+              
+            </div>
           </Col>
           <Col span={12}>
             <p className="subtitle">学术活动配图</p>
