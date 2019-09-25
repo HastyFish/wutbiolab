@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
-import { Modal, Button, Menu, Dropdown, } from 'antd';
-import {Link,withRouter} from 'react-router-dom';
+import { Modal, Button, } from 'antd';
+import {withRouter} from 'react-router-dom';
 
 import storageUtils from '@/utils/storageUtils.js';
 //import Logo from '@/assets/images/logo.png';
@@ -46,15 +46,15 @@ class MyHeader extends Component{
 
   render(){
     const {username,visible} = this.state;
-    const menu = (
-      <Menu>
-        <Menu.Item>
-          <Link to="/forget">
-           修改密码
-          </Link>
-        </Menu.Item>
-      </Menu>
-    );
+    // const menu = (
+    //   <Menu>
+    //     <Menu.Item>
+    //       <Link to="/forget">
+    //        修改密码
+    //       </Link>
+    //     </Menu.Item>
+    //   </Menu>
+    // );
     return (
       <div className='headerBox'>
         {/* <img src={Logo} alt='logo' /> */}
@@ -62,9 +62,10 @@ class MyHeader extends Component{
         武汉理工大学生物信息实验室后台管理中心
         </div>
         <span className='usermes'>
-        <Dropdown overlay={menu}>
+        {/* <Dropdown overlay={menu}>
            <span>用户, {username}&nbsp;&nbsp;&nbsp;</span> 
-        </Dropdown>
+        </Dropdown> */}
+           <span>用户, {username}&nbsp;&nbsp;&nbsp;</span> 
           [<span className='linktext' onClick={this.logout}>退出</span>]
         </span>
         <Modal
