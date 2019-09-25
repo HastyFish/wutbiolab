@@ -50,7 +50,7 @@ insert into wutbiolab.all_category(discriminator, id, category) values ('notice'
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 37, 'Online Database');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 38, 'Data set');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 39, 'Software');
-insert into wutbiolab.all_category(discriminator, id, category) values ('graduate', 40, '毕业生');		
+insert into wutbiolab.all_category(discriminator, id, category) values ('graduate', 40, 'Former Members');		
 insert into wutbiolab.all_category(discriminator, id, category) values ('mentor', 41, '博士生导师');		
 insert into wutbiolab.all_category(discriminator, id, category) values ('academic', 42, '学术会议');	
 truncate wutbiolab.home_info;
