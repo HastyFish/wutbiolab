@@ -250,7 +250,7 @@ public class HomeServiceImpl implements HomeService {
 
         /*学术活动*/
         List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
-                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                CommonConstants.XUESHU, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
                         sort)).getContent();
         result.add(acadeimcNewsList);
 
