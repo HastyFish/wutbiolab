@@ -71,7 +71,6 @@ class EditSource extends Component{
         //判断是否有图片,获取封面图片
         //判断是否有图片,获取封面图片
         let image;
-        const {categoryType} = this.state;
         let imgList = this.pw.current.getImgs();
         if(imgList.length > 0 && imgList[0].url !== ''){
           //判定是否上传图片
