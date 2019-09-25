@@ -19,7 +19,7 @@ class MoreTitle extends Component {
     jumpAll(){
         switch(this.state.titleinfo){
             case "新闻动态": 
-            this.props.history.push("news/30");
+            this.props.history.push("news/31");
             break;
             case "学术活动": 
             this.props.history.push("news/33");
