@@ -41,11 +41,16 @@ public class LabTests {
 
 	@Test
 	public void testService(){
-		Map<Long,Integer> map=new HashMap<>();
-		map.put(3l,3);
-		map.put(6l,6);
-		map.put(7l,7);
-		labService.updateMentorOrderById(map);
+//		Map<Long,Integer> map=new HashMap<>();
+//		map.put(3l,3);
+//		map.put(6l,6);
+//		map.put(7l,7);
+//		labService.updateMentorOrderById(map);
+		Map<String, LabDetail> publishedById = labService.getPublishedById(49l);
+		Map<String, LabDetail> publishedById1 = labService.getPublishedById(50l);
+		Map<String, LabDetail> publishedById2 = labService.getPublishedById(51l);
+		Map<String, LabDetail> publishedById3 = labService.getPublishedById(52l);
+		Map<String, LabDetail> publishedById4 = labService.getPublishedById(53l);
 		System.out.println(1);
 
 	}

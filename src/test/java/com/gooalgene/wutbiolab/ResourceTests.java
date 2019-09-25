@@ -7,6 +7,7 @@ import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceDetail;
 import com.gooalgene.wutbiolab.entity.resource.ResourceOverview;
 import com.gooalgene.wutbiolab.service.LabService;
+import com.gooalgene.wutbiolab.service.ResourceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class ResourceTests {
 	@Autowired
 	private ResourceDetailDAO resourceDetailDAO;
 
+	@Autowired
+	private ResourceService resourceService;
 	@Test
 	public void testDAO() {
 //		Page<ResourceOverview> newsDetailByPublishStatus = resourceDetailDAO.findNewsDetailByPublishStatus(37l,1, PageRequest.of(0, 11));
@@ -43,6 +46,16 @@ public class ResourceTests {
 		});
 		System.out.println(1);
 
+	}
+
+	@Test
+	public void testService(){
+		Map<String, ResourceDetail> publishedById5 = resourceService.getPublishedById(5l);
+		Map<String, ResourceDetail> publishedById4 = resourceService.getPublishedById(4l);
+		Map<String, ResourceDetail> publishedById3 = resourceService.getPublishedById(3l);
+		Map<String, ResourceDetail> publishedById2 = resourceService.getPublishedById(2l);
+		Map<String, ResourceDetail> publishedById1 = resourceService.getPublishedById(1l);
+		System.out.println(1);
 	}
 
 
