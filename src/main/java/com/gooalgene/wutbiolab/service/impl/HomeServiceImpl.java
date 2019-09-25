@@ -170,7 +170,8 @@ public class HomeServiceImpl implements HomeService {
             NewsCategory headline = newsCategoryDAO.findById(CommonConstants.TOUTIAO).get();
             List<NewsOverview> newsDetailList = newsDetailDAO.findByCategoryAndPublishStatus(
                     headline.getCategory(), CommonConstants.PUBLISHED, PageRequest.of(0, 5,
-                            new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD)));
+                            Sort.by(new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                                    new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD))));
             List<OverviewWithImageResponse> overviewList = new ArrayList<>();
             newsDetailList.forEach(one -> {
                 try {
@@ -209,7 +210,8 @@ public class HomeServiceImpl implements HomeService {
         List<Object> result = new ArrayList<>();
 
         /*按发布时间降序排序*/
-        Sort sort = new Sort(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
+                new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD));
 
         /*科研动态*/
         List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
@@ -218,8 +220,9 @@ public class HomeServiceImpl implements HomeService {
         result.add(scientificNewsList);
 
         /*新闻动态*/
-        List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByPublishStatusEquals(
-                CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
+        List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.ZONGHE, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 5, sort)).getContent();
 //        result.put(CommonConstants.TOUTIAOFIELD, latestNewsOverviewList);
         result.add(latestNewsOverviewList);
 
