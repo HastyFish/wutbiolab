@@ -173,10 +173,11 @@ public class ResourceServiceImpl implements ResourceService {
             Long categoryId = resourceDetail.getCategoryId();
             Long publishDate = resourceDetail.getPublishDate();
             String countSql="select count(1) from  resource_detail rd  where rd.publishDate =:publishDate " +
-                    " and rd.categoryId=:categoryId and rd.publishStatus="+CommonConstants.PUBLISHED;
+                    " and rd.categoryId=:categoryId  and rd.publishStatus="+CommonConstants.PUBLISHED;
             Object singleResult = entityManager.createNativeQuery(countSql)
                     .setParameter("publishDate",publishDate)
-                    .setParameter("categoryId",categoryId).getSingleResult();
+                    .setParameter("categoryId",categoryId)
+                    .getSingleResult();
             BigInteger bigInteger = (BigInteger) singleResult;
             long count = bigInteger == null ? 0 : bigInteger.longValue();
 
