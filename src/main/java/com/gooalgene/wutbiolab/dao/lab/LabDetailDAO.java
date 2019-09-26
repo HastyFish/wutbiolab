@@ -17,9 +17,9 @@ public interface LabDetailDAO extends JpaRepository<LabDetail,Long> {
 
     @Query(value = "SELECT ld.id,gc.category,ld.title,ld.publishDate,ld.publishStatus " +
             " FROM lab_detail ld JOIN all_category gc ON ld.graduateCategoryId=gc.id " +
-            " where gc.discriminator='graduate' LIMIT :pageNum,:pageSize",
+            " where gc.discriminator='graduate' LIMIT :offset,:pageSize",
             nativeQuery = true)
-    List<Object[]> getGraduates(@Param("pageNum")Integer pageNum,@Param("pageSize")Integer pageSize);
+    List<Object[]> getGraduates(@Param("offset")Integer offset,@Param("pageSize")Integer pageSize);
 
     @Query(value = "SELECT count(1) FROM lab_detail ld JOIN all_category gc ON ld.graduateCategoryId=gc.id " +
             " where gc.discriminator='graduate'",nativeQuery = true)

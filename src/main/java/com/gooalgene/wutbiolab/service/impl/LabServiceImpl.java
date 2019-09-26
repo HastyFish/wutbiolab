@@ -72,8 +72,9 @@ public class LabServiceImpl implements LabService {
 
     @Override
     public PageResponse<GraduateResponse> getGraduates(Integer pageNum, Integer pageSize){
+        Integer offset=(pageNum-1)*pageSize;
         List<GraduateResponse> graduateResponses=new ArrayList<>();
-        List<Object[]> objectsList = labDetailDAO.getGraduates(pageNum - 1, pageSize);
+        List<Object[]> objectsList = labDetailDAO.getGraduates(offset, pageSize);
         objectsList.forEach(objects -> {
             Long id = ((BigInteger) objects[0]).longValue();
             String graduateCategoryName=(String)objects[1];
