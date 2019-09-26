@@ -1,8 +1,9 @@
 import React from 'react';
 import './index.less'
-import { Breadcrumb,Table  } from 'antd';
+import { Breadcrumb,Table ,ConfigProvider } from 'antd';
 import {getLabLabCategoryId} from '@/api'
 import {getTitleinfo} from '@utils/tools'
+import zhCN from 'antd/es/locale/zh_CN';
 
 
 
@@ -19,7 +20,8 @@ class SciTable extends React.PureComponent {
             navName:"",
             pageNum:1,
             pageSize:30,
-            total:0
+            total:0,
+            locale: zhCN,
          }
     }
 
@@ -55,7 +57,8 @@ class SciTable extends React.PureComponent {
         if(data.result){
             this.setState({
                 dataList : data.result.list,
-                navName:data.result.category
+                navName:data.result.category,
+                total:data.result.total
             })
         }else{ 
             this.setState({
@@ -88,7 +91,7 @@ class SciTable extends React.PureComponent {
 
 
     render() { 
-        let {dataList,titleinfo,navName,pageNum,pageSize,total,navId} = this.state;
+        let {dataList,titleinfo,navName,pageNum,pageSize,total,navId,locale} = this.state;
         const columns = [
             {
               title: '论文题目',
@@ -136,13 +139,16 @@ class SciTable extends React.PureComponent {
                     <div className="title-name">
                         {/* {navName} */}
                     </div>
+                    <ConfigProvider locale={locale}>
                     <Table columns={columns} 
                     className='sci-table'
                         dataSource={dataList} 
                         bordered
-                        pagination={total>0 ? page : false}
+                        pagination={total >0 ? page : false}
                         rowKey="id"
                         />
+                                </ConfigProvider>
+                    
                 </div>
             </div>
          );
