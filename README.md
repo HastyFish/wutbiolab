@@ -46,7 +46,7 @@ insert into wutbiolab.all_category(discriminator, id, category) values ('news', 
 insert into wutbiolab.all_category(discriminator, id, category) values ('news', 33, 'Academic Lecture');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 34, 'Lab Regulations');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 35, 'Education');	
-insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 36, 'Admissions & Recruitment');	
+insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 36, 'Recruitment');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 37, 'Online Database');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 38, 'Data set');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 39, 'Software');
