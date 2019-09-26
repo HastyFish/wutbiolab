@@ -37,6 +37,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -236,6 +237,11 @@ public class ResourceServiceImpl implements ResourceService {
         String category=null;
         if(content!=null&&!content.isEmpty()){
             category=content.get(0).getCategory();
+        }else {
+            Optional<ResourceCategory> optionalResourceCategory = resourceCategoryDAO.findById(categoryId);
+            if(optionalResourceCategory.isPresent()){
+                category=optionalResourceCategory.get().getCategory();
+            }
         }
         return new DetailPageResponse<>(content,pageNum,pageSize,resourceOverviewPage.getTotalElements(),category);
     }
