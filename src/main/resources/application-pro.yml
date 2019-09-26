@@ -37,7 +37,7 @@ mybatis:
 gooal:
   application:
     image-path: /data/images
-    image-nginx-url: https://wut.gooalgene.com:93/images/
+    image-nginx-url: http://wut.gooalgene.com:93/images/
     #    export-temp-path: D:\
     #    export-nginx-url: http://192.168.0.110:83/tempFile
 #    export-temp-path: /tmp/data/
