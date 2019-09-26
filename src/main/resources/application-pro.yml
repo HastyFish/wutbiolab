@@ -7,9 +7,9 @@ spring:
       write-dates-as-timestamps: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://172.168.1.209:33073/wutbiolab?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://172.16.121.90:33068/wutbiolab?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     username: root
-    password: gooalgene@123
+    password: Gooalgene@wutbiolab123
     type: com.zaxxer.hikari.HikariDataSource
   http:
     encoding:
@@ -36,8 +36,8 @@ mybatis:
 ## 图片存放路径
 gooal:
   application:
-    image-path: D:\tempFile
-    image-nginx-url: http://192.168.0.110:83/tempFile/
+    image-path: /data/images
+    image-nginx-url: http://wut.gooalgene.com:93/images/
     #    export-temp-path: D:\
     #    export-nginx-url: http://192.168.0.110:83/tempFile
 #    export-temp-path: /tmp/data/
