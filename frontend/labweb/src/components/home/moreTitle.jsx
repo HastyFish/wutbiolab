@@ -4,7 +4,7 @@ import { withRouter  } from 'react-router-dom';
 import  {NavTitle,NewsTitle,NoticeTitle} from "@utils/titleConfig"
 import './index.less'
 import {getNewsDay} from '../../utils/dateUtils'
-
+import Jian from '@/assets/images/jian.png'
 const { Paragraph } = Typography;
 class MoreTitle extends Component {
     constructor(props) {
@@ -142,7 +142,7 @@ class MoreTitle extends Component {
                             {
                                dataList.map((item,index) => {
                                     return (
-                                            <Col key={index} span={8}> <a href={JSON.parse(item.context).url} target="_blank" rel="noopener noreferrer">{JSON.parse(item.context).name}</a></Col>
+                                            <Col key={index} span={8}><img src={Jian} width="16px" style={{marginRight:"10px"}} alt=""/> <a href={JSON.parse(item.context).url} target="_blank" rel="noopener noreferrer">{JSON.parse(item.context).name}</a></Col>
                                     )
                                 })
                             }
