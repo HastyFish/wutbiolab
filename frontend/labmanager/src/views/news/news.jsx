@@ -37,7 +37,8 @@ export default class News extends Component{
     this.setState({
       loading:true
     })
-    const result =  await reqNewsList({pageNum:page,pageSize:this.state.pageSize});
+    const categoryId = this.categoryId;
+    const result =  await reqNewsList({pageNum:page,pageSize:this.state.pageSize,categoryId});
     //将页码重置为page，每页条数不变
     this.setState({
       pageNum: page,
@@ -58,7 +59,8 @@ export default class News extends Component{
     })
 
     //重新获取数据
-    const result = await reqNewsList({pageNum:1,pageSize:size});
+    const categoryId = this.categoryId;
+    const result = await reqNewsList({pageNum:1,pageSize:size,categoryId});
 
     //将页码重置为1，每页条数为传进来的参数
     this.setState({
@@ -166,7 +168,8 @@ export default class News extends Component{
     if(result.code === 0){
      //this.props.history.push('/news');  //刷新页面
       //重新获取新闻列表数据
-      const result = await reqNewsList({pageNum:1,pageSize:10});
+      const categoryId = this.categoryId;
+      const result = await reqNewsList({pageNum:1,pageSize:10,categoryId});
       if(result.code === 0){
         //更新state
         this.setState({
@@ -181,10 +184,12 @@ export default class News extends Component{
       }
     }
   }
+
   //表格中类型筛选
   handleTableFilterChange = async (pagination, filters, sorter) => {
     //console.log(pagination,filters,sorter)
     let categoryId = filters.category[0];
+    this.categoryId = categoryId;
     const result = await reqNewsList({pageNum:1,pageSize:10,categoryId});
     if(result.code === 0){
       //更新state
@@ -219,7 +224,6 @@ export default class News extends Component{
         const result = await reqNewsList({pageNum:1,pageSize:10});
         if(result.code === 0){
           //更新state
-          debugger
           this.setState({
             total:result.result.total,
             dataSource:result.result.list

@@ -37,7 +37,8 @@ export default class Source extends Component{
     this.setState({
       loading:true
     })
-    const result =  await reqSourceList({pageNum:page,pageSize:this.state.pageSize});
+    const categoryId = this.categoryId;
+    const result =  await reqSourceList({pageNum:page,pageSize:this.state.pageSize,categoryId});
     //将页码重置为page，每页条数不变
     this.setState({
       pageNum: page,
@@ -58,7 +59,8 @@ export default class Source extends Component{
     })
 
     //重新获取数据
-    const result = await reqSourceList({pageNum:1,pageSize:size});
+    const categoryId = this.categoryId;
+    const result = await reqSourceList({pageNum:1,pageSize:size,categoryId});
 
     //将页码重置为1，每页条数为传进来的参数
     this.setState({
@@ -168,7 +170,8 @@ export default class Source extends Component{
     if(result.code === 0){
      //this.props.history.push('/source');  //刷新页面
       //重新获取资源列表数据
-      const result = await reqSourceList({pageNum:1,pageSize:10});
+      const categoryId = this.categoryId;
+      const result = await reqSourceList({pageNum:1,pageSize:10,categoryId});
       if(result.code === 0){
         //更新state
         this.setState({
@@ -187,6 +190,7 @@ export default class Source extends Component{
   handleTableFilterChange = async (pagination, filters, sorter) => {
     //console.log(pagination,filters,sorter)
     let categoryId = filters.category[0];
+    this.categoryId = categoryId;
     const result = await reqSourceList({pageNum:1,pageSize:10,categoryId});
       if(result.code === 0){
         //更新state
