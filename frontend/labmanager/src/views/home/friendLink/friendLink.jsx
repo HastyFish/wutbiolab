@@ -48,7 +48,7 @@ changeText = (index, type, e) => {
     }else{
       const result = await reqDeleteCooplink(id);
       if(result.code === 0){
-        message.error('删除友情链接成功');
+        message.success('删除友情链接成功');
         friendLinks.splice(index, 1);
         this.setState(state => (
           {friendLinks}

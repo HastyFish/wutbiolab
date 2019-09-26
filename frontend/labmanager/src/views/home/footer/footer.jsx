@@ -39,7 +39,7 @@ class Footer extends Component{
     }else{
       const result = await reqDeleteFooter(id);
       if(result.code === 0){
-        message.error('删除页脚成功');
+        message.success('删除页脚成功');
         footerlist.splice(index, 1);
         this.setState(state => (
           {footerlist}
