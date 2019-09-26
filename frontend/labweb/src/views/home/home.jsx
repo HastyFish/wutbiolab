@@ -39,7 +39,7 @@ class Home extends Component {
         <div className="home-more">
           <Row type="flex" style={{ height: "300px" }}>
             <Col className="home-left">
-              <Carousel  >
+              <Carousel  autoplay>
                 {
                     slideList.map((item,index)=>{
                        return(

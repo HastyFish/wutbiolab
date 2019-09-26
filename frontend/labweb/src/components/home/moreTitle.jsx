@@ -48,9 +48,9 @@ class MoreTitle extends Component {
             break;
             case NewsTitle[3].en: url = "/news/33/info"
             break;
-            case NoticeTitle[2].en: url = `/notices/${data.categoryId}/info`
+            case NoticeTitle[2].en: url = `/notices/36/info`
             break;
-            case NavTitle[3].en: url = "/notices/36/info"
+            case NavTitle[3].en: url = `/notices/${data.categoryId}/info`
             break;
             case NewsTitle[2].en: url = "/news/32/info"
             break;
