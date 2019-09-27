@@ -15,8 +15,8 @@
 -- insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 34, '规章制度');	
 -- insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 35, '教育培养');	
 -- insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 36, '招聘招生');	
--- insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 37, '在线数据库');	
--- insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 38, '公共数据集');	
+-- insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 37, '公共数据集');	
+-- insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 38, '在线数据库');	
 -- insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 39, '软件下载');
 -- insert into wutbiolab.all_category(discriminator, id, category) values ('graduate', 40, '毕业生');		
 -- insert into wutbiolab.all_category(discriminator, id, category) values ('mentor', 41, '博士生导师');		
@@ -47,8 +47,8 @@ insert into wutbiolab.all_category(discriminator, id, category) values ('news', 
 insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 34, 'Lab Regulations');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 35, 'Education');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('notice', 36, 'Recruitment');	
-insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 37, 'Online Database');	
-insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 38, 'Data set');	
+insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 37, 'Data set');	
+insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 38, 'Online Database');	
 insert into wutbiolab.all_category(discriminator, id, category) values ('resource', 39, 'Software');
 insert into wutbiolab.all_category(discriminator, id, category) values ('graduate', 40, 'Former Members');		
 insert into wutbiolab.all_category(discriminator, id, category) values ('mentor', 41, '博士生导师');		
