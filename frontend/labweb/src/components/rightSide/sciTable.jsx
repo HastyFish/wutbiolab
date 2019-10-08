@@ -19,7 +19,7 @@ class SciTable extends React.PureComponent {
             titleinfo:"",
             navName:"",
             pageNum:1,
-            pageSize:30,
+            pageSize:10,
             total:0,
             locale: zhCN,
          }
