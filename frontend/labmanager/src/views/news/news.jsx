@@ -92,12 +92,14 @@ export default class News extends Component{
     this.columns = [
       {
         title: '发布时间',
+        width:200,
         dataIndex: 'publishDate',
         key: 'publishDate',
         render:(publishDate) => formateDate(publishDate)
       },
       {
         title: '发布状态',
+        width:200,
         dataIndex: 'publishStatus',
         key: 'publishStatus',
         render:(publishStatus) => {
@@ -115,6 +117,7 @@ export default class News extends Component{
       },
       {
         title: '类型',
+        width:250,
         dataIndex: 'category',
         key: 'category',
         //filters: [{value: 30, text: "头条新闻"},{value: 31, text: "综合新闻"},{value: 32, text: "科研动态"},{value: 33, text: "学术活动"}],
@@ -123,6 +126,7 @@ export default class News extends Component{
       },
       {
         title: '操作',
+        width:250,
         render: (newItem) => {
           return (
             <span className='icotr'>
@@ -262,7 +266,7 @@ export default class News extends Component{
               onChange={this.handleTableFilterChange}
             />
           </LocaleProvider>
-          <div style={{marginTop:'20px',float:'right'}}>
+          <div style={{margin:'20px 0 40px 0',float:'right'}}>
             <LocaleProvider locale={zhCN} >
               <Pagination 
                 defaultCurrent={pageNum}
