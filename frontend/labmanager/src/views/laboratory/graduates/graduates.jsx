@@ -79,12 +79,14 @@ class Team extends Component {
     this.columns = [
       {
         title: '发表时间',
+        width:200,
         dataIndex: 'publishDate',
         key: 'publishDate',
         render:(publishDate) => formateDate(publishDate)
       },
       {
         title: '发布状态',
+        width:200,
         dataIndex: 'publishStatus',
         key: 'publishStatus',
         render:(publishStatus) => {
@@ -102,11 +104,13 @@ class Team extends Component {
       },
       {
         title: '类型',
+        width:250,
         dataIndex: 'graduateCategoryName',
         key: 'graduateCategoryName',
       },
       {
         title: '操作',
+        width:250,
         render: (newItem) => {
           return (
             <span className='icotr'>
@@ -218,7 +222,7 @@ class Team extends Component {
               columns={columns}
               pagination = {false}
           />
-            <div style={{marginTop:'20px',float:'right'}}>
+            <div style={{margin:'20px 0 40px 0',float:'right'}}>
               <LocaleProvider locale={zhCN} >
                 <Pagination 
                   defaultCurrent={pageNum}

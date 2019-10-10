@@ -94,12 +94,14 @@ export default class Notice extends Component{
     this.columns = [
       {
         title: '发布时间',
+        width:200,
         dataIndex: 'publishDate',
         key: 'publishDate',
         render:(publishDate) => formateDate(publishDate)
       },
       {
         title: '发布状态',
+        width:200,
         dataIndex: 'publishStatus',
         key: 'publishStatus',
         render:(publishStatus) => {
@@ -117,6 +119,7 @@ export default class Notice extends Component{
       },
       {
         title: '类型',
+        width:250,
         dataIndex: 'category',
         key: 'category',
         //filters: [{value: 34, text: "规章制度"},{value: 35, text: "教育培养"},{value: 36, text: "招聘招生"}],
@@ -125,6 +128,7 @@ export default class Notice extends Component{
       },
       {
         title: '操作',
+        width:250,
         render: (noticeItem) => {
           return (
             <span className='icotr'>
@@ -262,7 +266,7 @@ export default class Notice extends Component{
               onChange={this.handleTableFilterChange}
             />
           </LocaleProvider>
-          <div style={{marginTop:'20px',float:'right'}}>
+          <div style={{margin:'20px 0 40px 0',float:'right'}}>
             <LocaleProvider locale={zhCN} >
               <Pagination 
                 defaultCurrent={pageNum}
