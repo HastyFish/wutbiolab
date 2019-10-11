@@ -39,7 +39,8 @@ class ListInfo extends Component {
         //获取表格数据
         getLab = async()=>{
             let pathnameList = this.props.location.pathname.split("/");
-            let order = Number(pathnameList[pathnameList.length-2]);
+            let order = Number(pathnameList[pathnameList.length-3]);
+            let newId = Number(pathnameList[pathnameList.length-1]);
             let type = "";
             if([1,2,3,4].includes(order)){
                 type="lab"
@@ -52,7 +53,7 @@ class ListInfo extends Component {
             }else if([37,38,39].includes(order)){
                 type="resource/published"
             }
-            let data = await getLabId(this.state.infoId,type);
+            let data = await getLabId(newId,type);
             if(data.result){
                 this.setState({
                     dataList : data.result.detail,
@@ -64,7 +65,8 @@ class ListInfo extends Component {
         }
         nextEvent = (data)=>{
             let pathnameList = this.props.location.pathname.split("/");
-            let order = Number(pathnameList[pathnameList.length-2]);
+            let order = Number(pathnameList[pathnameList.length-3]);
+            let newId = Number(pathnameList[pathnameList.length-1]);
             let url = "";
 
             if([1,2,3,4].includes(order)){
@@ -84,13 +86,13 @@ class ListInfo extends Component {
                 titleinfo:this.state.titleinfo
             }
             window.scroll({ top: 0 });
-            this.props.history.push(`${url}/${order}/info`,childList);
+            this.props.history.push(`${url}/${order}/info/${data.id}`,childList);
            
         }
     render() { 
         let {dataList={},next,previous,titleinfo,navName} = this.state;
         let pathnameList = this.props.location.pathname.split("/");
-        let order = Number(pathnameList[pathnameList.length-2]);
+        let order = Number(pathnameList[pathnameList.length-3]);
         titleinfo = getTitleinfo(order);
         return ( 
             <div className="right-container">

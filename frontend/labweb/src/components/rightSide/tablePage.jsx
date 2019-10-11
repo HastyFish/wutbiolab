@@ -57,7 +57,7 @@ class TablePage extends React.PureComponent {
             titleinfo:this.state.titleinfo,
             infoName:data.mentorName
         }
-        this.props.history.push(`/introduction/3/info`,childList);
+        this.props.history.push(`/introduction/3/info/${data.id}`,childList);
     }
 
     tableTr=(data)=>{

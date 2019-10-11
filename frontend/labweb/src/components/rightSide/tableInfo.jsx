@@ -26,7 +26,8 @@ class TableInfo extends Component {
         //获取表格数据
         getLab = async()=>{
             let pathnameList = this.props.location.pathname.split("/");
-            let order = Number(pathnameList[pathnameList.length-2]);
+            let order = Number(pathnameList[pathnameList.length-3]);
+            let newId = Number(pathnameList[pathnameList.length-1]);
             let type = "";
             if([1,2,3,4].includes(order)){
                 type="lab"
@@ -39,7 +40,7 @@ class TableInfo extends Component {
             }else if([37,38,39].includes(order)){
                 type="news"
             }
-            let data = await getLabId(this.state.infoId,type);
+            let data = await getLabId(newId,type);
             if(data.result){
                 this.setState({
                     dataList : data.result.detail,

@@ -24,7 +24,7 @@ class Home extends Component {
     })
   }
   jump=(data)=>{
-    let url = `/news/30/info`
+    let url = `/news/30/info/${data.id}`
     let childList = {
         navId:data.id,
         titleinfo:data.title

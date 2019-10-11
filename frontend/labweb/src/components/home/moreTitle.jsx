@@ -62,7 +62,7 @@ class MoreTitle extends Component {
             navId:data.id,
             titleinfo:this.state.titleinfo
         }
-            this.props.history.push(`${url}`,childList);
+            this.props.history.push(`${url}/${data.id}`,childList);
             window.scroll({ top: 0 })
         }
     /**

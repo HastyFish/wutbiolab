@@ -40,8 +40,8 @@ class Introduction extends Component {
     componentWillMount(){
         let pathnameList = this.props.location.pathname.split("/");
         let navId = 0 ;
-        if(pathnameList[pathnameList.length-1] === "info"){
-            navId = Number(pathnameList[pathnameList.length-2])
+        if(pathnameList[pathnameList.length-2] === "info"){
+            navId = Number(pathnameList[pathnameList.length-3])
         }else{
             navId = Number(pathnameList[pathnameList.length-1])
         }

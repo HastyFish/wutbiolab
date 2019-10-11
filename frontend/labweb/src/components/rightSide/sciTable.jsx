@@ -84,7 +84,7 @@ class SciTable extends React.PureComponent {
             titleinfo:this.state.titleinfo
         }
         let navId = this.state.navId;
-        this.props.history.push(`/scientific/${navId}/info`,childList);
+        this.props.history.push(`/scientific/${navId}/info/${data.id}`,childList);
     }
 
 

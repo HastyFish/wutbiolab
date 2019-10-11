@@ -107,7 +107,7 @@ class ListPage extends React.PureComponent {
         }else if([37,38,39].includes(navId)){
             url = "/resources"
         }
-        this.props.history.push(`${url}/${navId}/info`,childList);
+        this.props.history.push(`${url}/${navId}/info/${data.id}`,childList);
     }
     tableChild = (data)=>data.map((item,index)=>{
         return(
