@@ -67,7 +67,7 @@ export default class News extends Component{
       pageNum: 1,
       pageSize:size,
       total:result.result.total,
-      dataSource:result.result.content
+      dataSource:result.result.list
     })
     this.setState({
       pageNum: 1,
@@ -86,12 +86,14 @@ export default class News extends Component{
     this.columns = [
       {
         title: '发表时间',
+        width:200,
         dataIndex: 'publishDate',
         key: 'publishDate',
         render:(publishDate) => formateDate(publishDate)
       },
       {
         title: '发布状态',
+        width:200,
         dataIndex: 'publishStatus',
         key: 'publishStatus',
         render:(publishStatus) => {
@@ -114,16 +116,19 @@ export default class News extends Component{
       },
       {
         title: '第一作者',
+        width:100,
         dataIndex: 'author',
         key: 'author',
       },
       {
         title: '发表年度',
+        width:100,
         dataIndex: 'publishYear',
         key: 'publishYear',
       },
       {
         title: '操作',
+        width:250,
         render: (newItem) => {
           return (
             <span className='icotr'>
@@ -227,7 +232,7 @@ export default class News extends Component{
             columns={columns}
             pagination = {false}
           />
-          <div style={{marginTop:'20px',float:'right'}}>
+          <div style={{margin:'20px 0 40px 0',float:'right'}}>
             <LocaleProvider locale={zhCN} >
               <Pagination 
                 defaultCurrent={pageNum}

@@ -94,12 +94,14 @@ export default class Source extends Component{
     this.columns = [
       {
         title: '发布时间',
+        width:200,
         dataIndex: 'publishDate',
         key: 'publishDate',
         render:(publishDate) => formateDate(publishDate)
       },
       {
         title: '发布状态',
+        width:200,
         dataIndex: 'publishStatus',
         key: 'publishStatus',
         render:(publishStatus) => {
@@ -117,6 +119,7 @@ export default class Source extends Component{
       },
       {
         title: '类型',
+        width:250,
         dataIndex: 'category',
         key: 'category',
         //filters: [{value: 37, text: "在线数据库"},{value: 38, text: "公共数据集"},{value: 39, text: "软件下载"}],
@@ -125,6 +128,7 @@ export default class Source extends Component{
       },
       {
         title: '操作',
+        width:250,
         render: (sourceItem) => {
           return (
             <span className='icotr'>
@@ -263,7 +267,7 @@ export default class Source extends Component{
             />
           </LocaleProvider>
           
-          <div style={{marginTop:'20px',float:'right'}}>
+          <div style={{margin:'20px 0 40px 0',float:'right'}}>
             <LocaleProvider locale={zhCN} >
               <Pagination 
                 defaultCurrent={pageNum}
