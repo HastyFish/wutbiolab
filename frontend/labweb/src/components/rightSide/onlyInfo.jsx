@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
 import './index.less'
-import {getLabOneById} from '@/api'
+import {getLabOneById,getSciOneById,getConOneById} from '@/api'
 import  {NavTitle} from "@utils/titleConfig"
 
 class OnlyInfo extends React.PureComponent {
@@ -38,7 +38,24 @@ class OnlyInfo extends React.PureComponent {
                 titleinfo :this.props.location.state.titleinfo,
             })
         }
-        let data = await getLabOneById(this.state.navId);
+        if(this.props.location.pathname.includes('scientific')){
+            this.setState({
+                titleinfo :NavTitle[2].en,
+            })
+        }
+        if(this.props.location.pathname.includes('contact')){
+            this.setState({
+                titleinfo :NavTitle[5].en,
+            })
+        }
+        let data;
+        if(this.props.location.pathname.includes('scientific')){
+            data = await getSciOneById(this.state.navId);
+        }else if(this.props.location.pathname.includes('contact')){
+            data = await getConOneById(this.state.navId);
+        }else{
+            data = await getLabOneById(this.state.navId);
+        }
         if(data.result){
             this.setState({
                 dataList : data.result,

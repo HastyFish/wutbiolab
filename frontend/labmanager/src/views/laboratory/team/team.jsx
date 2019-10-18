@@ -38,7 +38,7 @@ export default class Team extends Component {
 
   //获取所有分类的函数
   getAllTeamData = async () => {
-    //获取研究团队分类数据
+    //获取团队介绍分类数据
     const result = await reqResearchTeam();
     if(result.code === 0){
       const teamList = result.result;
@@ -46,7 +46,7 @@ export default class Team extends Component {
         teamList
       })
     }else{
-      message.error('获取研究团队信息失败，请稍后再试!')
+      message.error('获取团队介绍信息失败，请稍后再试!')
     }
   }
 
@@ -181,7 +181,7 @@ export default class Team extends Component {
 
 
   async componentDidMount(){
-    //获取研究团队分类数据
+    //获取团队介绍分类数据
     const result = await reqResearchTeam();
     if(result.code === 0){
       const teamList = result.result;
@@ -189,7 +189,7 @@ export default class Team extends Component {
         teamList
       })
     }else{
-      message.error('获取研究团队信息失败，请稍后再试!')
+      message.error('获取团队介绍信息失败，请稍后再试!')
     }
   }
 
@@ -201,13 +201,13 @@ export default class Team extends Component {
       <div className="team">
         <div className="team-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
-            <TabPane tab="机构概况" key="/laboratory">
+            <TabPane tab="实验室介绍" key="/laboratory">
             </TabPane>
-            <TabPane tab="研究方向" key="/laboratory/derection">
+            {/* <TabPane tab="研究方向" key="/laboratory/derection">
+            </TabPane> */}
+            <TabPane tab="团队介绍" key="/laboratory/team">
             </TabPane>
-            <TabPane tab="研究团队" key="/laboratory/team">
-            </TabPane>
-            <TabPane tab="毕业生" key="/laboratory/graduates">
+            <TabPane tab="实验室风采" key="/laboratory/graduates">
             </TabPane>
           </Tabs>
         </div>

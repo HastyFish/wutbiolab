@@ -13,7 +13,7 @@ class Footer extends Component {
     getNode = (data)=>
         data.map((item,index) => {
             return(
-                <p  key={index}>{item.context ? JSON.parse(item.context).context : ""} </p>
+                <p  key={index} dangerouslySetInnerHTML={{ __html: item.context ? JSON.parse(item.context).context : ""}}></p>
             )
         })
     async componentDidMount(){

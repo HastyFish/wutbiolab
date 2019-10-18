@@ -14,9 +14,14 @@ const menuList = [
     key: '/news',
     icon: 'profile',
   },
+  // {
+  //   title: '通知公告',
+  //   key: '/notice',
+  //   icon: 'windows',
+  // },
   {
-    title: '通知公告',
-    key: '/notice',
+    title: '联系我们',
+    key: '/contact',
     icon: 'windows',
   },
   {

@@ -20,17 +20,17 @@ class PictureUpload extends Component {
 
     //设置state
     this.state = {
-      newsImage : null,  //新闻配图列表
+      // newsImage : null,  //新闻配图列表
       academicImage : null,   //学术活动配图
     }
   }
 
   uploadImg = async () => {
     //获取图片
-    const newsImage = JSON.stringify(this.newp.current.getImgs());
+    // const newsImage = JSON.stringify(this.newp.current.getImgs());
     const academicImage = JSON.stringify(this.scip.current.getImgs());
     //发送请求
-    const result = await reqPublishImg({newsImage, academicImage});
+    const result = await reqPublishImg({ academicImage});
     if(result.code === 0){
       message.success('发布图片成功')
     }else{
@@ -42,11 +42,11 @@ class PictureUpload extends Component {
     //发送请求获取配图
     const result = await reqImageList();
     if(result.code === 0){
-      let {newsImage,academicImage} = result.result;
-      newsImage && (newsImage = JSON.parse(newsImage));
+      let {academicImage} = result.result;
+      // newsImage && (newsImage = JSON.parse(newsImage));
       academicImage && (academicImage = JSON.parse(academicImage));
       this.setState({
-        newsImage,academicImage
+        academicImage
       })
     }else{
       message.error('获取图片失败, 请稍后再试')
@@ -54,19 +54,19 @@ class PictureUpload extends Component {
   }
 
   render(){
-    const {newsImage,academicImage} = this.state;
+    const {academicImage} = this.state;
 
     return (
       <div>
         <Row>
-          <Col span={10}>
+          {/* <Col span={10}>
             <p className="subtitle">新闻动态配图</p>
             <div className="subcontent">
               {newsImage ? <PicturesWall ref={this.newp} option={{width:280,height:200}} image = {newsImage} /> : null}
               {!newsImage ? <PicturesWall ref={this.newp} option={{width:280,height:200}} image = {[]} /> : null}
               
             </div>
-          </Col>
+          </Col> */}
           <Col span={12}>
             <p className="subtitle">学术活动配图</p>
             <div className="subcontent">

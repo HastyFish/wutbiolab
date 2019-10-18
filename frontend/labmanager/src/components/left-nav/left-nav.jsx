@@ -161,9 +161,12 @@ class LeftNav extends Component{
     }else if(path.indexOf('/news')===0){
       //当前请求的是新闻编辑或其子路由界面,侧边显示的还是news
       path = '/news';
-    }else if(path.indexOf('/notice')===0){
-      //当前请求的是通知总览或其子路由界面,侧边显示的还是notice
-      path = '/notice';
+    // }else if(path.indexOf('/notice')===0){
+    //   //当前请求的是通知总览或其子路由界面,侧边显示的还是notice
+    //   path = '/notice';
+    }else if(path.indexOf('/contact')===0){
+      //当前请求的是联系我们或其子路由界面,侧边显示的还是notice
+      path = '/contact';
     }else if(path.indexOf('/source')===0){
       //当前请求的是资源发布总览或其子路由界面,侧边显示的还是source
       path = '/source';

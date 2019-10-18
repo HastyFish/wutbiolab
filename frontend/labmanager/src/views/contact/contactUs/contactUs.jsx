@@ -9,12 +9,12 @@ import {
 } from 'antd'
 
 import BraftEditor from '@/components/rich-text-editor/rich-text-editor';
-import {reqlabDes,reqSavelabDes, reqPublishlabDes} from '@/api';
+import {reqConDes,reqSaveConDes, reqPublishConDes} from '@/api';
 
 const {TabPane} = Tabs
 const {Item} = Form;
 
-class LabDescription extends Component {
+class ContactUs extends Component {
   constructor(props){
     super(props);
     // 创建用来保存ref标识的标签对象的容器
@@ -26,10 +26,10 @@ class LabDescription extends Component {
   }
   
 
-  //保存或发布实验室介绍
+  //保存或发布联系我们
   saveOrPublishData = async (type) => {
     const id = this.id || null;
-        const categoryId = 1;
+        const categoryId = 13;
         const context = this.editor.current.getContext();
         const param = {id,categoryId, context}
         //判断是保存还是发布
@@ -37,52 +37,27 @@ class LabDescription extends Component {
         if(type==='save'){
           //编辑状态下的保存
           param.publishStatus = 0;
-          result = await reqSavelabDes(param);
+          result = await reqSaveConDes(param);
         }else{
           //编辑状态下的发布
           param.publishStatus = 1;
-          result = await reqPublishlabDes(param);
+          result = await reqPublishConDes(param);
         }
         if(result.code === 0){
           message.success(`${type === 'save'?'保存':'发布'}成功`);
         }else{
           message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
         }
-    // this.props.form.validateFields(async (err, values) => {
-    //   if(!err){
-    //     const id = this.id || null;
-    //     const categoryId = 1;
-    //     const {title} = values;
-    //     const context = this.editor.current.getContext();
-    //     const param = {id,categoryId,title, context}
-    //     //判断是保存还是发布
-    //     let result;
-    //     if(type==='save'){
-    //       //编辑状态下的保存
-    //       param.publishStatus = 0;
-    //       result = await reqSavelabDes(param);
-    //     }else{
-    //       //编辑状态下的发布
-    //       param.publishStatus = 1;
-    //       result = await reqPublishlabDes(param);
-    //     }
-    //     if(result.code === 0){
-    //       message.success(`${type === 'save'?'保存':'发布'}成功`);
-    //     }else{
-    //       message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
-    //     }
-    //   }
-    // })
   }
 
-  //取消编辑实验室介绍，重新获取原来的储存数据
+  //取消编辑联系我们，重新获取原来的储存数据
   handleCancel = async () => {
 
   }
 
   async componentDidMount(){
-    //获取实验室介绍
-    const result = await reqlabDes();
+    //获取联系我们
+    const result = await reqConDes();
     if(result.code === 0){
       let id = null,title = null ,context = null;
       result.result && ({id,title,context} = result.result)
@@ -92,7 +67,7 @@ class LabDescription extends Component {
         context
       })
     }else{
-      message.error('获取实验室介绍失败，请稍后再试')
+      message.error('获取联系我们失败，请稍后再试')
     }
   }
 
@@ -104,33 +79,14 @@ class LabDescription extends Component {
       <div className="lab">
         <div className="lab-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
-              <TabPane tab="实验室介绍" key="/laboratory" >
-              </TabPane>
-              {/* <TabPane tab="研究方向" key="/laboratory/derection">
-              </TabPane> */}
-              <TabPane tab="团队介绍" key="/laboratory/team">
-              </TabPane>
-              <TabPane tab="实验室风采" key="/laboratory/graduates">
+              <TabPane tab="加入我们" key="/contact" >
               </TabPane>
             </Tabs>
         </div>
         <div className='lab-body'>
           <div className='lab-content'>
               <Form className="form-lable-info">
-                {/* <Item label='标题'>
-                  {
-                    getFieldDecorator('title', {
-                      initialValue: title,
-                      rules: [
-                        {required: true, message: '必须指定标题'},
-                      ]
-                    })(
-                      <Input placeholder='请输入标题' />
-                    )
-                  }
-                </Item> */}
                 <Item label='内容'>
-                  {/* <RichTextEdit ref={this.editor} context={description} changeRichText = {(description) => this.setState({description})}/> */}
                   {
                     context?<BraftEditor  ref={this.editor} context={context}></BraftEditor>:null
                   }
@@ -156,4 +112,4 @@ class LabDescription extends Component {
   }
 }
 
-export default Form.create()(LabDescription)
+export default Form.create()(ContactUs)

@@ -26,7 +26,7 @@ class Deriection extends Component {
   }
 
 
- //保存或发布机构概况
+ //保存或发布研究方向
  saveOrPublishData = async (type) => {
 
   const id = this.id || null;
@@ -51,6 +51,19 @@ class Deriection extends Component {
         message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
       }
 
+      //获取研究方向
+      const result1 = await reqDeriection();
+      if(result1.code === 0){
+        let id = null,title = null ,context = null;
+        result1.result && ({id,title,context} = result1.result);
+        this.id = id;
+        this.setState({
+          title,
+          context
+        })
+      }else{
+        message.error('获取研究方向失败，请稍后再试')
+      }
   // this.props.form.validateFields(async (err, values) => {
   //   if(!err){
   //     const id = this.id || null;
@@ -85,7 +98,7 @@ handleCancel = async () => {
 }
 
 async componentDidMount(){
-  //获取机构概况
+  //获取研究方向
   const result = await reqDeriection();
   if(result.code === 0){
     let id = null,title = null ,context = null;
@@ -96,7 +109,7 @@ async componentDidMount(){
       context
     })
   }else{
-    message.error('获取机构概况失败，请稍后再试')
+    message.error('获取研究方向失败，请稍后再试')
   }
 }
 
@@ -108,13 +121,11 @@ async componentDidMount(){
       <div className="lab">
         <div className="lab-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
-            <TabPane tab="机构概况" key="/laboratory">
+          <TabPane tab="研究方向" key="/science">
             </TabPane>
-            <TabPane tab="研究方向" key="/laboratory/derection">
+            <TabPane tab="论文发表" key="/science/article">
             </TabPane>
-            <TabPane tab="研究团队" key="/laboratory/team">
-            </TabPane>
-            <TabPane tab="毕业生" key="/laboratory/graduates">
+            <TabPane tab="专利发表" key="/science/academic">
             </TabPane>
           </Tabs>
         </div>

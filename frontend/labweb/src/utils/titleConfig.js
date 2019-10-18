@@ -1,10 +1,11 @@
 const  NavTitle = [
     {en:"Home",zh:"首页"},
-    {en:"About",zh:"实验室简介"},
-    {en:"News & Events",zh:"新闻动态"},
-    {en:"Notice",zh:"通知公告"},
+    {en:"About us",zh:"实验室简介"},
     {en:"Research",zh:"科研工作"},
-    {en:"Resources",zh:"资源发布"}
+    {en:"Resources",zh:"资源发布"},
+    {en:"News & Events",zh:"新闻动态"},
+    {en:"Contact us",zh:"通知公告"},
+    // {en:"Notice",zh:"通知公告"}
 ]
 const  AboutTitle = [
     {en:"Lab Introduction",zh:"机构概况"},
@@ -28,9 +29,10 @@ const  ResearchTitle = [
     {en:"Conference Deadlines",zh:"学术会议"},
 ]
 const  ResourcesTitle = [
-    {en:"Data set",zh:"公共数据集"},
-    {en:"Online Database",zh:"在线数据库"},
     {en:"Software",zh:"软件下载"},
+    {en:"Data set",zh:"数据集"},
+    {en:"Database",zh:"数据库"},
+    {en:"Lectures",zh:"学术资源"}
 ]
 const  LinksTitle = [
     {en:"Links",zh:"友情链接"},

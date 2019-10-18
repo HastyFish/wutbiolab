@@ -87,12 +87,11 @@ class Introduction extends Component {
                     <Col span={18}>
                         <Switch>
                             <Route path='/introduction/1' component={OnlyInfo} />
-                            <Route path='/introduction/2' component={OnlyInfo} />
+                            {/* <Route path='/introduction/2' component={OnlyInfo} /> */}
                             <Route path='/introduction/3' exact component={TablePage} />
                             <Route path='/introduction/3/info'  component={TableInfo} />
                             <Route path='/introduction/4' exact component={ListPage} />
-                            <Route path='/introduction/4/info' exact component={ListInfo} />
-                            <Route path='/' component={OnlyInfo} />
+                            <Route path='/introduction/4/info' component={ListInfo} />
                         </Switch>
                     </Col>
                 </Row>

@@ -200,13 +200,13 @@ class Team extends Component {
       <div className="graduate">
         <div className="graduate-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
-            <TabPane tab="机构概况" key="/laboratory">
+            <TabPane tab="实验室介绍" key="/laboratory">
             </TabPane>
-            <TabPane tab="研究方向" key="/laboratory/derection">
+            {/* <TabPane tab="研究方向" key="/laboratory/derection">
+            </TabPane> */}
+            <TabPane tab="团队介绍" key="/laboratory/team">
             </TabPane>
-            <TabPane tab="研究团队" key="/laboratory/team">
-            </TabPane>
-            <TabPane tab="毕业生" key="/laboratory/graduates">
+            <TabPane tab="实验室风采" key="/laboratory/graduates">
             </TabPane>
           </Tabs>
         </div>

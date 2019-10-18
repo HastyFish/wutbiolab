@@ -48,10 +48,12 @@ class ListInfo extends Component {
                 type="news"
             }else if([34,35,36].includes(order)){
                 type="notice"
-            }else if([10,11].includes(order)){
+            }else if([10,12].includes(order)){
                 type="scientificResearch"
-            }else if([37,38,39].includes(order)){
+            }else if([37,38,39,11].includes(order)){
                 type="resource/published"
+            }else if([13].includes(order)){
+                type = "/contact"
             }
             let data = await getLabId(newId,type);
             if(data.result){
@@ -75,10 +77,12 @@ class ListInfo extends Component {
                 url = "/news"
             }else if([34,35,36].includes(order)){
                 url = "/notices"
-            }else if([10,11].includes(order)){
+            }else if([10,12].includes(order)){
                 url = "/scientific"
-            }else if([37,38,39].includes(order)){
+            }else if([37,38,39,11].includes(order)){
                 url = "/resources"
+            }else if([13].includes(order)){
+                url = "/contact"
             }
             let childList = {
                 navId:data.id,

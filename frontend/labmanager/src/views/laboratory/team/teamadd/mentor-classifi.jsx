@@ -83,7 +83,7 @@ class MentorClasifi extends Component{
     })
   }
 
-  //删除研究团队一级分类
+  //删除团队介绍一级分类
   deleteMentorClass = async (mentor) => {
     //获取当前的id
     const {mentorCategoryId} = mentor;

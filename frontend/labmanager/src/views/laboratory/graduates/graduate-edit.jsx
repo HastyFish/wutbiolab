@@ -115,7 +115,7 @@ class GraduatesEdit extends Component{
   }
 
   async componentDidMount(){
-    //获取毕业生类型列表
+    //获取实验室风采类型列表
     const result = await reqGraduatesTypes();
     if(result.code === 0){
       const categoryList = result.result;
@@ -134,14 +134,14 @@ class GraduatesEdit extends Component{
           const {graduateCategoryId} = newItem;
           graduateCategoryId && this.props.form.setFieldsValue({'graduateCategoryId':graduateCategoryId})
         }else{
-          message.error('获取毕业生信息失败，请稍后再试!');
+          message.error('获取实验室风采信息失败，请稍后再试!');
         }
       }else{
         //select框赋值
         this.props.form.setFieldsValue({'graduateCategoryId':categoryList[0].id})
       }
     }else {
-      message.error('获取毕业生类型失败, 请稍后重试')
+      message.error('获取实验室风采类型失败, 请稍后重试')
     }
   }
 
@@ -162,7 +162,7 @@ class GraduatesEdit extends Component{
     return (
       <div className='graduate'>
         <div className="graduate-edit-title" >
-          毕业生编辑
+          实验室风采编辑
         </div>
         <div className="graduate-body">
           <div className="graduate-content">

@@ -98,16 +98,28 @@ export default class Academic extends Component{
         }
       },
       {
-        title: '标题',
+        title: '专利名称',
         dataIndex: 'title',
         key: 'title',
       },
       {
-        title: '类型',
-        width:250,
-        dataIndex: 'academicCategoryName',
-        key: 'academicCategoryName',
+        title: '作者',
+        width:100,
+        dataIndex: 'author',
+        key: 'author',
       },
+      {
+        title: '发表时间',
+        width:100,
+        dataIndex: 'publishYear',
+        key: 'publishYear',
+      },
+      // {
+      //   title: '类型',
+      //   width:250,
+      //   dataIndex: 'academicCategoryName',
+      //   key: 'academicCategoryName',
+      // },
       {
         title: '操作',
         width:250,
@@ -197,9 +209,11 @@ export default class Academic extends Component{
       <div className="academic">
         <div className="academic-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
-            <TabPane tab="论文总览" key="/science">
+          <TabPane tab="研究方向" key="/science">
             </TabPane>
-            <TabPane tab="学术总览" key="/science/academic">
+            <TabPane tab="论文发表" key="/science/article">
+            </TabPane>
+            <TabPane tab="专利发表" key="/science/academic">
             </TabPane>
           </Tabs>
         </div>
