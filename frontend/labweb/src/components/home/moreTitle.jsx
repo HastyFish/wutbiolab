@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Typography, Col, Row } from 'antd';
 import { withRouter  } from 'react-router-dom';
-import  {NavTitle,NewsTitle,NoticeTitle} from "@utils/titleConfig"
+import  {NavTitle,NewsTitle,ResourcesTitle} from "@utils/titleConfig"
 import './index.less'
 import {getNewsDay} from '../../utils/dateUtils'
 import Jian from '@/assets/images/jian.png'
@@ -18,23 +18,17 @@ class MoreTitle extends Component {
     }
     jumpAll(){
         switch(this.state.titleinfo){
-            case NewsTitle[2].en: 
-            this.props.history.push("news/32");
-            break;
-            case NavTitle[2].en: 
+            case NavTitle[4].en: 
             this.props.history.push("news/31");
             break;
-            case NewsTitle[3].en: 
+            case NewsTitle[1].en: 
             this.props.history.push("news/33");
             break;
+            case ResourcesTitle[3].en: 
+            this.props.history.push("resources/11");
+            break;
             case NavTitle[3].en: 
-            this.props.history.push("notices/34");
-            break;
-            case NoticeTitle[2].en: 
-            this.props.history.push("notices/36");
-            break;
-            case NavTitle[5].en: 
-            this.props.history.push("resources/37");
+            this.props.history.push("resources/39");
             break;
             default:;
         }
@@ -43,18 +37,14 @@ class MoreTitle extends Component {
     jump=(data)=>{
         let url = "";
         switch(this.state.titleinfo){
-            case NavTitle[2].en: 
+            case NavTitle[4].en: 
             url = `/news/${data.categoryId}/info`
             break;
-            case NewsTitle[3].en: url = "/news/33/info"
+            case NewsTitle[1].en: url = "/news/33/info"
             break;
-            case NoticeTitle[2].en: url = `/notices/36/info`
+            case ResourcesTitle[3].en: url = "/resources/11/info"
             break;
-            case NavTitle[3].en: url = `/notices/${data.categoryId}/info`
-            break;
-            case NewsTitle[2].en: url = "/news/32/info"
-            break;
-            case NavTitle[5].en: url = `/resources/${data.categoryId}/info`
+            case NavTitle[3].en: url = `/resources/${data.categoryId}/info`
             break;
             default:;
         }

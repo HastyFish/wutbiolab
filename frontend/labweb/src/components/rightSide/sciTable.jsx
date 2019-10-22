@@ -105,7 +105,7 @@ class SciTable extends React.PureComponent {
                 }
                 },
                 {
-                  title: '第一作者',
+                  title: '作者',
                   dataIndex: 'author',
                 },
                 {

@@ -8,7 +8,7 @@ export function getTitleinfo(val) {
         titleinfo =  NavTitle[2].en
     }else if([39,37,38,11].includes(val)){
         titleinfo =  NavTitle[3].en
-    }else if([30,32,31].includes(val)){
+    }else if([30,31,32,33].includes(val)){
         titleinfo =  NavTitle[4].en
     }else if([13].includes(val)){
         titleinfo =  NavTitle[5].en
