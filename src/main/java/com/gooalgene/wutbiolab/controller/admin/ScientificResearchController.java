@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.controller.admin;
 
 import com.gooalgene.wutbiolab.constant.CommonConstants;
+import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
@@ -8,6 +9,7 @@ import com.gooalgene.wutbiolab.response.AcademicResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
+import com.gooalgene.wutbiolab.service.LabService;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -82,6 +84,21 @@ public class ScientificResearchController {
     public CommonResponse deleteById(@PathVariable("id") Long id){
         scientificResearchService.deleteById(id);
         return ResponseUtil.success();
+    }
+
+
+    @ApiOperation(value="通过一级分类的id查询一条数据（只包含一条数据的子模块）", notes="通过一级分类的id查询一条数据（目前针对实验室、科研工作和加入我们）")
+    @GetMapping("/one/{categoryId}")
+    public CommonResponse<ScientificResearchDetail> getOneLabDetail(@PathVariable("categoryId")Long labCategoryId){
+        PageResponse<ScientificResearchDetail> labDetails = scientificResearchService.getScientificResearchDetailByLabCategoryId(labCategoryId, null, null);
+        ScientificResearchDetail labDetail=null;
+        if(labDetails!=null){
+            List<ScientificResearchDetail> content = labDetails.getList();
+            if(content!=null&&!content.isEmpty()){
+                labDetail = content.get(0);
+            }
+        }
+        return ResponseUtil.success(labDetail);
     }
 
 }

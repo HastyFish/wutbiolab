@@ -4,6 +4,7 @@ import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.dao.scientific.AcademicCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchCategoryDAO;
 import com.gooalgene.wutbiolab.dao.scientific.ScientificResearchDetailDAO;
+import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,13 +93,13 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
 
     @Override
     public List<ScientificResearchCategory> getAllCategory() {
-        return scientificResearchCategoryDAO.findAll();
+        return scientificResearchCategoryDAO.findAll(Sort.by(CommonConstants.ORDER_CATEGORY));
     }
 
 
     @Override
     public List<AcademicCategory> getAllAcademicCategory(){
-        return academicCategoryDAO.findAll();
+        return academicCategoryDAO.findAll(Sort.by(CommonConstants.ORDER_CATEGORY));
     }
 
     @Override
@@ -112,8 +114,44 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         scientificResearchDetailDAO.deleteById(id);
     }
 
+    @Override
+    public ScientificResearchCategory getScientificResearchCategoryById(Long id){
+        Optional<ScientificResearchCategory> optional = scientificResearchCategoryDAO.findById(id);
+        return optional.orElse(null);
+    }
+
+    @Override
+    public PageResponse<ScientificResearchDetail> getScientificResearchDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize) {
+        if (pageNum == null && pageSize == null) {
+            List<ScientificResearchDetail> scientificResearchDetails = scientificResearchDetailDAO.findByCategoryId(labCategoryId);
+            return new PageResponse<ScientificResearchDetail>(scientificResearchDetails);
+        }
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        Page<ScientificResearchDetail> labDetailPage = scientificResearchDetailDAO.findByCategoryId(labCategoryId, pageable);
+        long totalElements = labDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = labDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);
+        return pageResponse;
+    }
+
+
+
 
     /*********************************************** 前端使用 ***************************************************/
+
+    @Override
+    public PageResponse<ScientificResearchDetail> getScientificResearchDetailByLabCategoryIdAndPublishStatus(Long labCategoryId, Integer pageNum, Integer pageSize, Integer publishStatus) {
+        if (pageNum == null && pageSize == null) {
+            List<ScientificResearchDetail> scientificResearchDetails = scientificResearchDetailDAO.findByCategoryIdAndPublishStatus(labCategoryId,publishStatus);
+            return new PageResponse<ScientificResearchDetail>(scientificResearchDetails);
+        }
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        Page<ScientificResearchDetail> labDetailPage = scientificResearchDetailDAO.findByCategoryIdAndPublishStatus(labCategoryId,publishStatus, pageable);
+        long totalElements = labDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = labDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse=new PageResponse<>(content,pageNum,pageSize,totalElements);
+        return pageResponse;
+    }
 
     @Override
     public PageResponse<ScientificResearchDetail> getPublishedByCategoryId(Long categoryId, Integer pageNum, Integer pageSize){
@@ -126,6 +164,7 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         PageResponse<ScientificResearchDetail> pageResponse=new DetailPageResponse<>(content,pageNum,pageSize,totalElements,category.getCategory());
         return pageResponse;
     }
+
     @Override
     public ScientificResearchCategory getCategoryById(Long categoryId) {
         return scientificResearchCategoryDAO.findById(categoryId).orElse(null);

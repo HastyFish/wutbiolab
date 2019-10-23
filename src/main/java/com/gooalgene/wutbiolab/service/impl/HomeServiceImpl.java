@@ -30,6 +30,7 @@ import com.gooalgene.wutbiolab.service.HomeService;
 import com.gooalgene.wutbiolab.service.PictureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -207,21 +208,7 @@ public class HomeServiceImpl implements HomeService {
         /*按发布时间降序排序*/
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD),
                 new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD));
-
-        /*科研动态*/
-        List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
-                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
-                        sort)).getContent();
-        result.add(scientificNewsList);
-
-        /*新闻动态*/
-        List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
-                CommonConstants.ZONGHE, CommonConstants.PUBLISHED,
-                PageRequest.of(0, 5, sort)).getContent();
-//        result.put(CommonConstants.TOUTIAOFIELD, latestNewsOverviewList);
-        result.add(latestNewsOverviewList);
-
-        /*新闻动态图片*/
+        /* *//*新闻动态图片*//*
         try {
             NewsImage newsImage = newsImageDAO.findAll().get(0);
             List<Picture> pictureList = objectMapper.readValue((pictureService.formImageUrl(newsImage.getContext())),
@@ -236,19 +223,13 @@ public class HomeServiceImpl implements HomeService {
         } catch (IOException e) {
             e.printStackTrace();
             result.add("");
-        }
-
-        /*通知公告*/
-        List<NoticeOverview> noticeDetailList = noticeDetailDAO.findByPublishStatusEquals(
-                CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
-        result.add(noticeDetailList);
-
-        /*学术活动*/
-        List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
-                CommonConstants.XUESHU, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
-                        sort)).getContent();
-        result.add(acadeimcNewsList);
-
+        }*/
+        /*新闻动态*/
+        List<NewsOverview> latestNewsOverviewList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.ZONGHE, CommonConstants.PUBLISHED,
+                PageRequest.of(0, 5, sort)).getContent();
+//        result.put(CommonConstants.TOUTIAOFIELD, latestNewsOverviewList);
+        result.add(latestNewsOverviewList);
         /*学术活动图片*/
         try {
             AcademicImage academicImage = academicImageDAO.findAll().get(0);
@@ -265,21 +246,25 @@ public class HomeServiceImpl implements HomeService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        /*学术活动*/
+        List<NewsOverview> acadeimcNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+                CommonConstants.XUESHU, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                        sort)).getContent();
+        result.add(acadeimcNewsList);
 
-        /*招聘招生*/
-        List<NoticeOverview> noticeList = noticeDetailDAO.findByCategoryIdAndPublishStatusPage(
-                CommonConstants.ZHAOPIN, CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort))
-                .getContent();
-        result.add(noticeList);
+        /*学术资源*/
+        List<ResourceOverview> resourceOverviews = resourceDetailDAO.findNewsDetailByPublishStatus(CommonConstants.ZIYUAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+                sort)).getContent();
+        result.add(resourceOverviews);
 
-        /*资源发布*/
+
+        /*软件数据资源发布*/
         Sort.Order orderPublishDate = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
         Sort.Order orderId = new Sort.Order(Sort.Direction.DESC, CommonConstants.ID);
-        List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
-                CommonConstants.PUBLISHED, PageRequest.of(0, 4,
-                        Sort.by(orderPublishDate, orderId)));
+        List<ResourceOverview> resourceOverviews1 = resourceDetailDAO.findResourceOverviewByNotCategoryIdAndPublishStatus(CommonConstants.ZIYUAN2,CommonConstants.ZIYUAN3,CommonConstants.ZIYUAN4, CommonConstants.PUBLISHED, PageRequest.of(0, 4,
+                Sort.by(orderPublishDate, orderId))).getContent();
         List<OverviewWithImageResponse> resourceImageUrlList = new ArrayList<>();
-        resourceOverviewList.forEach(one -> {
+        resourceOverviews1.forEach(one -> {
             try {
                 String pictureListImage = pictureService.formImageUrl(one.getImage());
                 List<Picture> pictureList = objectMapper.readValue(pictureListImage,
@@ -291,12 +276,62 @@ public class HomeServiceImpl implements HomeService {
                     resourceImageUrlList.add(new OverviewWithImageResponse(
                             one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(), new Picture().getUrl()));
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
                 e.printStackTrace();
             }
         });
         result.add(resourceImageUrlList);
+
+
+//        /*科研动态*/
+//        List<NewsOverview> scientificNewsList = newsDetailDAO.findByCategoryIdAndPublishStatusPage(
+//                CommonConstants.KEYAN, CommonConstants.PUBLISHED, PageRequest.of(0, 5,
+//                        sort)).getContent();
+//        result.add(scientificNewsList);
+
+
+//        /*通知公告*/
+//        List<NoticeOverview> noticeDetailList = noticeDetailDAO.findByPublishStatusEquals(
+//                CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort)).getContent();
+//        result.add(noticeDetailList);
+//
+//
+//
+
+//
+//        /*招聘招生*/
+//        List<NoticeOverview> noticeList = noticeDetailDAO.findByCategoryIdAndPublishStatusPage(
+//                CommonConstants.ZHAOPIN, CommonConstants.PUBLISHED, PageRequest.of(0, 5, sort))
+//                .getContent();
+//        result.add(noticeList);
+
+
+//        /*资源发布*/
+//        Sort.Order orderPublishDate = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+//        Sort.Order orderId = new Sort.Order(Sort.Direction.DESC, CommonConstants.ID);
+//        List<ResourceOverview> resourceOverviewList = resourceDetailDAO.findByPublishStatusEquals(
+//                CommonConstants.PUBLISHED, PageRequest.of(0, 4,
+//                        Sort.by(orderPublishDate, orderId)));
+//        List<OverviewWithImageResponse> resourceImageUrlList = new ArrayList<>();
+//        resourceOverviewList.forEach(one -> {
+//            try {
+//                String pictureListImage = pictureService.formImageUrl(one.getImage());
+//                List<Picture> pictureList = objectMapper.readValue(pictureListImage,
+//                        objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
+//                if (pictureList.size() > 0) {
+//                    pictureList.forEach(onePicture -> resourceImageUrlList.add(new OverviewWithImageResponse(
+//                            one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(), onePicture.getUrl())));
+//                } else {
+//                    resourceImageUrlList.add(new OverviewWithImageResponse(
+//                            one.getId(), one.getCategoryId(), one.getCategory(), one.getTitle(), new Picture().getUrl()));
+//                }
+//            } catch (IOException e) {
+//                logger.error("Error type in convert " + one.getId() + "'s image to Picture.class");
+//                e.printStackTrace();
+//            }
+//        });
+//        result.add(resourceImageUrlList);
 
         /*友情链接*/
         List<CooperationLink> cooperationLinkList = cooperationLinkDAO.findByPublishStatusEquals(

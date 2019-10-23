@@ -52,7 +52,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public CommonResponse<List<NoticeCategory>> allNoticeCategory() {
-        return ResponseUtil.success(noticeCategoryDAO.findAll());
+        return ResponseUtil.success(noticeCategoryDAO.findAll(Sort.by(CommonConstants.ORDER_CATEGORY)));
     }
 
     @Override

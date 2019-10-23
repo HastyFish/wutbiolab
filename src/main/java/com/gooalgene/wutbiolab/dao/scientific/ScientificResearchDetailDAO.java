@@ -10,6 +10,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ScientificResearchDetailDAO extends JpaRepository<ScientificResearchDetail,Long> {
+    List<ScientificResearchDetail> findByCategoryId(Long categoryId);
+    Page<ScientificResearchDetail> findByCategoryId(Long categoryId,Pageable pageable);
+
+
+    List<ScientificResearchDetail> findByCategoryIdAndPublishStatus(Long categoryId,Integer publishStatus);
+    Page<ScientificResearchDetail> findByCategoryIdAndPublishStatus(Long categoryId,Integer publishStatus,Pageable pageable);
 
     //针对列表查询，不查context这样的大字段
     @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +

@@ -40,7 +40,7 @@ public class LabController {
 //        return ResponseUtil.success(labDetails);
 //    }
 
-    @ApiOperation(value="通过一级分类的id查询一条数据（只包含一条数据的子模块）", notes="通过一级分类的id查询一条数据（目前针对机构概况和研究方向）")
+    @ApiOperation(value="通过一级分类的id查询一条数据（只包含一条数据的子模块）", notes="通过一级分类的id查询一条数据（目前针对实验室、科研工作和加入我们）")
     @GetMapping("/one/{categoryId}")
     public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("categoryId")Long labCategoryId){
         PageResponse<LabDetail> labDetails =
@@ -100,6 +100,7 @@ public class LabController {
         return ResponseUtil.success();
     }
 
+    @ApiOperation(value="发布消息", notes="发布消息")
     @PostMapping("/publish")
     public CommonResponse publishLabDetail(@RequestBody LabDetail labDetail){
         labService.saveOrPublishLabDetail(labDetail, CommonConstants.PUBLISHED);
