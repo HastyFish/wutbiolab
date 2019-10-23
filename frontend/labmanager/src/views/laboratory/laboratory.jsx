@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 
 import LabDscription from './labDescription/labDescription';
-import Deriection from './deriection/deriection';
+// import Deriection from './deriection/deriection';
 import Team from './team/team';
 import PersonEdit from './team/personedit/person-edit';
 import Graduates from './graduates/graduates';
@@ -18,7 +18,7 @@ class Laboratory extends Component {
       <div className='lab'>
         <Switch>
           <Route path='/laboratory' exact component={LabDscription} />
-          <Route path='/laboratory/derection' component={Deriection} />
+          {/* <Route path='/laboratory/derection' component={Deriection} /> */}
           <Route path='/laboratory/team' exact component={Team} />
           <Route path='/laboratory/team/edit' component={PersonEdit} />
           <Route path='/laboratory/graduates' exact component={Graduates} />

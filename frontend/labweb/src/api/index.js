@@ -27,6 +27,14 @@ export const getNoticeAll = () => ajax('/api/notice/category', {}) //获取所�
 //科研
 
 export const getSciAll = () => ajax('/api/scientificResearch/all/category', {}) //获取所有一级分类
+export const getSciOneById = (id) => ajax(`api/scientificResearch/one/${id}`, {}) 
+
 //资源发布
 
 export const getResourceAll = () => ajax('/api/resource/all/category', {}) //获取所有一级分类
+
+
+//联系我们
+
+export const getConAll = () => ajax('/api/contactus/all/category', {}) //获取所有一级分类
+export const getConOneById = (id) => ajax(`api/contactus/one/${id}`, {}) 

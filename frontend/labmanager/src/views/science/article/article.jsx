@@ -151,13 +151,13 @@ export default class News extends Component{
   //新增新闻
   addArticle = () => {
     //不携带参数跳入新闻编辑页面
-    this.props.history.push('/science/edit');
+    this.props.history.push('/science/article/edit');
   }
 
   //编辑新闻
   editArticle = async (id) => {
     //根据id获取新闻信息
-    this.props.history.push('/science/edit', id);
+    this.props.history.push('/science/article/edit', id);
     // const result = await reqNewItem(id);
     // if(result.code === 0){
     //   //携带新闻的参数跳入新闻编辑页面
@@ -216,9 +216,11 @@ export default class News extends Component{
       <div className="article">
         <div className="article-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
-            <TabPane tab="论文总览" key="/science">
+          <TabPane tab="研究方向" key="/science">
             </TabPane>
-            <TabPane tab="学术总览" key="/science/academic">
+            <TabPane tab="论文发表" key="/science/article">
+            </TabPane>
+            <TabPane tab="专利发表" key="/science/academic">
             </TabPane>
           </Tabs>
         </div>

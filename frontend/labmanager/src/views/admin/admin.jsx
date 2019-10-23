@@ -11,7 +11,8 @@ import Home from '@/views/home/home';
 import Laboratory from '@/views/laboratory/laboratory';
 import News from '@/views/news/news';
 import EditNews from '@/views/news/add-edit-news';
-import Notice from '@/views/notice/notice';
+// import Notice from '@/views/notice/notice';
+import Contact from '@/views/contact/contact';
 import EditNotice from '@/views/notice/add-edit-notice';
 import Source from '@/views/source/source';
 import EditSource from '@/views/source/add-edit-source';
@@ -57,8 +58,9 @@ export default class Admin extends Component {
               <Route path='/laboratory' component={Laboratory} />
               <Route path='/news' exact component={News} />
               <Route path='/news/edit' component={EditNews}/>
-              <Route path='/notice' exact  component={Notice} />
-              <Route path='/notice/edit' component={EditNotice} />
+              <Route path='/contact' component={Contact} />
+              {/* <Route path='/notice' exact  component={Notice} />
+              <Route path='/notice/edit' component={EditNotice} /> */}
               <Route path='/source' exact  component={Source} />
               <Route path='/source/edit'  component={EditSource} />
               <Route path='/science'  component={Science} />

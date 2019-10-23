@@ -1,24 +1,27 @@
-
 import React, { Component } from 'react';
-import './resources.less';
+import './contact.less';
 import { Row, Col } from 'antd';
 import { Switch, Route } from 'react-router-dom';
-import ListInfo from '@components/rightSide/listInfo';
-import ListPage from '@components/rightSide/listPage';
+import OnlyInfo from '@components/rightSide/onlyInfo';
+// import ListPage from '@components/rightSide/listPage';
+// import ListInfo from '@components/rightSide/listInfo';
+// import TablePage from '@components/rightSide/tablePage';
+// import TableInfo from '@components/rightSide/tableInfo';
+
 import  {NavTitle} from "@utils/titleConfig"
 
+import {getConAll} from '@/api'
+import { Number } from 'core-js';
 
-import {getResourceAll} from '@/api'
 
-
-class Resources extends Component {
+class Contact extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleinfo : NavTitle[3].en,
+            titleinfo : NavTitle[5].en,
             navList : [],
             dataList:[],
-            navId:37,
+            navId:1,
         }
     }
     /**
@@ -32,7 +35,7 @@ class Resources extends Component {
             navId:item.id,
             titleinfo:this.state.titleinfo
         }
-        this.props.history.push(`/resources/${item.id}`,childList);
+        this.props.history.push(`/contact/${item.id}`,childList);
     }
     componentWillMount(){
         let pathnameList = this.props.location.pathname.split("/");
@@ -48,17 +51,18 @@ class Resources extends Component {
     }
     //初始页面数据 默认第一条数据
     async componentDidMount(){
-        let list = await getResourceAll();//获取侧边栏
+        let list = await getConAll();//获取侧边栏
         if(list.result.length){
             this.setState({
                 navList : list.result
             })
         }
+        // this.getOne(1);
     }
     render() {
         const {titleinfo,navList,navId} = this.state;
         return (
-            <div className="resources">
+            <div className="contact">
                 <Row type="flex">
                     <Col span={6}>
                         {/* <LeftSide titleinfo="实验室简介"></LeftSide> */}
@@ -72,7 +76,6 @@ class Resources extends Component {
                                     !!navList.length && navList.map((item, index) => {
                                         return (
                                             <li className={`curp ${item.id === navId ? "active" : null}`} key={index} onClick={this.changeNav.bind(this, item, index)}>{item.category}</li>
-
                                             // <li className={item.id === navId ? "active" : null} key={index} onClick={this.changeNav.bind(this, item, index)}>{item.category}</li>
                                         )
                                     })
@@ -83,14 +86,7 @@ class Resources extends Component {
 
                     <Col span={18}>
                         <Switch>
-                            <Route path='/Resources/39' exact component={ListPage} />
-                            <Route path='/Resources/39/info'  component={ListInfo} />
-                            <Route path='/Resources/37' exact component={ListPage} />
-                            <Route path='/Resources/37/info'  component={ListInfo} />
-                            <Route path='/Resources/38' exact component={ListPage} />
-                            <Route path='/Resources/38/info'  component={ListInfo} />
-                            <Route path='/Resources/11' exact component={ListPage} />
-                            <Route path='/Resources/11/info'  component={ListInfo} />
+                            <Route path='/contact/13' component={OnlyInfo} />
                         </Switch>
                     </Col>
                 </Row>
@@ -99,4 +95,4 @@ class Resources extends Component {
     }
 }
 
-export default Resources;
+export default Contact;

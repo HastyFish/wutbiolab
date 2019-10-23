@@ -48,10 +48,12 @@ class ListInfo extends Component {
                 type="news"
             }else if([34,35,36].includes(order)){
                 type="notice"
-            }else if([10,11].includes(order)){
+            }else if([10,12].includes(order)){
                 type="scientificResearch"
-            }else if([37,38,39].includes(order)){
+            }else if([37,38,39,11].includes(order)){
                 type="resource/published"
+            }else if([13].includes(order)){
+                type = "/contact"
             }
             let data = await getLabId(newId,type);
             if(data.result){
@@ -66,7 +68,7 @@ class ListInfo extends Component {
         nextEvent = (data)=>{
             let pathnameList = this.props.location.pathname.split("/");
             let order = Number(pathnameList[pathnameList.length-3]);
-            let newId = Number(pathnameList[pathnameList.length-1]);
+            // let newId = Number(pathnameList[pathnameList.length-1]);
             let url = "";
 
             if([1,2,3,4].includes(order)){
@@ -75,10 +77,12 @@ class ListInfo extends Component {
                 url = "/news"
             }else if([34,35,36].includes(order)){
                 url = "/notices"
-            }else if([10,11].includes(order)){
+            }else if([10,12].includes(order)){
                 url = "/scientific"
-            }else if([37,38,39].includes(order)){
+            }else if([37,38,39,11].includes(order)){
                 url = "/resources"
+            }else if([13].includes(order)){
+                url = "/contact"
             }
             let childList = {
                 navId:data.id,

@@ -4,8 +4,9 @@ import './scientific.less';
 import { Row, Col } from 'antd';
 import { Switch, Route } from 'react-router-dom';
 import ListInfo from '@components/rightSide/listInfo';
-import ListPage from '@components/rightSide/listPage';
+// import ListPage from '@components/rightSide/listPage';
 import SciTable from '@components/rightSide/sciTable';
+import OnlyInfo from '@components/rightSide/onlyInfo';
 // import TableInfo from '@components/rightSide/tableInfo';
 
 import  {NavTitle} from "@utils/titleConfig"
@@ -17,7 +18,7 @@ class Scientific extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleinfo : NavTitle[4].en,
+            titleinfo : NavTitle[2].en,
             navList : [],
             dataList:[],
             navId:10,
@@ -84,10 +85,13 @@ class Scientific extends Component {
 
                     <Col span={18}>
                         <Switch>
+                            <Route path='/scientific/2' exact component={OnlyInfo} />
                             <Route path='/scientific/10' exact component={SciTable} />
                             <Route path='/scientific/10/info'  component={ListInfo} />
-                            <Route path='/scientific/11' exact component={ListPage} />
-                            <Route path='/scientific/11/info'  component={ListInfo} />
+                            <Route path='/scientific/12' exact component={SciTable} />
+                            <Route path='/scientific/12/info'  component={ListInfo} />
+                            {/* <Route path='/scientific/11' exact component={ListPage} />
+                            <Route path='/scientific/11/info'  component={ListInfo} /> */}
                         </Switch>
                     </Col>
                 </Row>

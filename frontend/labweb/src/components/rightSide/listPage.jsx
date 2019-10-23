@@ -57,10 +57,12 @@ class ListPage extends React.PureComponent {
             type="news"
           }else if([34,35,36].includes(navId)){
             type="notice"
-          }else if([10,11].includes(navId)){
+          }else if([10,12].includes(navId)){
             type="scientificResearch"
-          }else if([37,38,39].includes(navId)){
+          }else if([37,38,39,11].includes(navId)){
             type="resource/published"
+          }else if([13].includes(navId)){
+            type="contact"
           }
         let data = await getLabLabCategoryId(navId,pageNum,pageSize,type);
         if(data.result){
@@ -102,10 +104,12 @@ class ListPage extends React.PureComponent {
             url = "/news"
         }else if([34,35,36].includes(navId)){
             url = "/notices"
-        }else if([10,11].includes(navId)){
+        }else if([10,12].includes(navId)){
             url = "/scientific"
-        }else if([37,38,39].includes(navId)){
+        }else if([37,38,39,11].includes(navId)){
             url = "/resources"
+        }else if([13].includes(navId)){
+            url = "/contact"
         }
         this.props.history.push(`${url}/${navId}/info/${data.id}`,childList);
     }

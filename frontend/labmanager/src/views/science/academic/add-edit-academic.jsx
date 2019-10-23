@@ -64,7 +64,7 @@ class EditAcademic extends Component{
     this.props.form.validateFields( async (error, values) => {
       if(!error){
         //1. 收集数据,封装成new对象
-        const {title, academicCategoryId,publishDate} = values;
+        const {title, author, academicCategoryId, publishYear, publishDate} = values;
 
         //获取富文本
         const context = this.editor.current.getContext();
@@ -72,7 +72,7 @@ class EditAcademic extends Component{
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {title, academicCategoryId, context, publishDate:Date.parse( new Date(publishDate._d)),categoryId: 11};
+        let param = {title, author, academicCategoryId, context, publishYear, publishDate:Date.parse( new Date(publishDate._d)),categoryId: 12};
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state.newItem;
@@ -145,7 +145,7 @@ class EditAcademic extends Component{
 
   render(){
     const {newItem,categoryList} = this.state;
-    const {title, context, publishDate} = newItem;
+    const {title, author, context, publishYear, publishDate} = newItem;
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧label的宽度
@@ -159,40 +159,46 @@ class EditAcademic extends Component{
       <div className='article'>
         <div className="article-title">
           <Tabs size='large' activeKey={this.props.history.location.pathname} animated={false} onChange={(key) => this.props.history.push(key)}>
-            <TabPane tab="学术编辑" key="/science/academic/edit">
+            <TabPane tab="专利编辑" key="/science/academic/edit">
             </TabPane>
           </Tabs>
         </div>
         <div className="article-body">
           <Form>
-          <Item label="编辑类型" {...formItemLayout}>
-                  {
-                    getFieldDecorator('academicCategoryId', {
-                      rules: [
-                        {required: true, message: '必须指定分类'},
-                      ]
-                    })(
-                      <Select>
-                        {
-                          categoryList.map(item => {
-                            return (
-                              <Option value={item.id} key={item.id}>{item.category}</Option>
-                            )
-                          })
-                        }
-                      </Select>
-                    )
-                  }
-                </Item>
-            <Item label="新闻标题" {...formItemLayout}>
+        
+            <Item label="专利名称" {...formItemLayout}>
               {
                 getFieldDecorator('title', {
                   initialValue: title,
                   rules: [
-                    {required: true, message: '必须指定新闻标题'},
+                    {required: true, message: '必须指定专利名称'},
                   ]
                 })(
-                  <Input placeholder="请输入新闻标题"/>
+                  <Input placeholder="请输入专利名称"/>
+                )
+              }
+            </Item>
+            <Item label="第一作者" {...formItemLayout}>
+              {
+                getFieldDecorator('author', {
+                  initialValue: author,
+                  rules: [
+                    {required: true, message: '必须指定第一作者'},
+                  ]
+                })(
+                  <Input placeholder="请输入第一作者"/>
+                )
+              }
+            </Item>
+            <Item label="发表年度" {...formItemLayout}>
+              {
+                getFieldDecorator('publishYear', {
+                  initialValue: publishYear,
+                  rules: [
+                    {required: true, message: '必须指定发表年度'},
+                  ]
+                })(
+                  <Input placeholder="请输入发表年度"/>
                 )
               }
             </Item>

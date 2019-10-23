@@ -35,10 +35,12 @@ class TableInfo extends Component {
                 type="news"
             }else if([34,35,36].includes(order)){
                 type="notices"
-            }else if([10,11].includes(order)){
+            }else if([10,12].includes(order)){
                 type="scientificResearch"
-            }else if([37,38,39].includes(order)){
+            }else if([37,38,39,11].includes(order)){
                 type="news"
+            }else if([13].includes(order)){
+                type="contact"
             }
             let data = await getLabId(newId,type);
             if(data.result){

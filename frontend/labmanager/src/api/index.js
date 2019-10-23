@@ -59,79 +59,79 @@ export const reqsavePublishSource = (data) => ajax('/resource', data, 'POST')
 //删除资源
 export const reqDeleteSource = (id) => ajax('/resource/' + id, {}, 'DELETE') 
 
-//获取机构概况
+//获取实验室介绍
 export const reqlabDes = () => ajax('/lab/one/1', {}, 'GET')
 
-//保存机构概况
+//保存实验室介绍
 export const reqSavelabDes = (data) => ajax('/lab', data, 'POST')
 
-//发布机构概况
+//发布实验室介绍
 export const reqPublishlabDes = (data) => ajax('/lab/publish', data, 'POST')
 
 //获取研究方向
-export const reqDeriection = () => ajax('/lab/one/2', {}, 'GET')
+export const reqDeriection = () => ajax('/scientificResearch/one/2', {}, 'GET')
 
 //保存研究方向
-export const reqSaveDeriect = (data) => ajax('/lab', data, 'POST')
+export const reqSaveDeriect = (data) => ajax('/scientificResearch', data, 'POST')
 
 //发布研究方向
-export const reqPublishDeriect = (data) => ajax('/lab/publish', data, 'POST')
+export const reqPublishDeriect = (data) => ajax('/scientificResearch/publish', data, 'POST')
 
-//获取研究团队数据
+//获取团队介绍数据
 export const reqResearchTeam = () => ajax('/lab/researchTeam',{},'GET')
 
-//发布研究团队数据
+//发布团队介绍数据
 export const reqPublishResearchTeam = () => ajax('/lab/publish/3',{},'POST')
 
-//研究研究团队数据排序
+//研究团队介绍数据排序
 export const reqSortTeam = (data) => ajax('/lab/researchTeam/sort',data,'POST')
 
-//删除研究团队人员
+//删除团队介绍人员
 export const reqDeleteTeam = (id) => ajax('/lab/' + id, {}, 'DELETE')
 
-//获取研究团队一级分类
+//获取团队介绍一级分类
 export const reqAllTeamClassifi = () => ajax('/lab/mentorCategorys',{},'GET')
 
-//新增研究团队一级分类
+//新增团队介绍一级分类
 export const reqAddTeamClassifi = (data) => ajax('/lab/mentorCategorys',data, 'POST')
 
-//删除研究团队一级分类
+//删除团队介绍一级分类
 export const reqDeleteTeamClassifi = (id) => ajax('/lab/mentorCategory/' + id, {}, 'DELETE')
 
-//更新研究团队一级分类
+//更新团队介绍一级分类
 export const reqUpdateTeamClassifi = (data) => ajax('/lab/mentorCategorys',data, 'POST')
 
-//新增研究团队一级分类下的所属人员
+//新增团队介绍一级分类下的所属人员
 export const reqAddPerson = (data) => ajax('/lab', data, 'POST')
 
-//获取研究团队一级分类下的所属人员信息
+//获取团队介绍一级分类下的所属人员信息
 export const reqGetPerson = (id) => ajax('/lab/' + id, {}, 'GET')
 
-//保存研究团队一级分类下的所属人员信息
+//保存团队介绍一级分类下的所属人员信息
 export const reqSavePerson = (data) => ajax('/lab', data, 'POST')
 
-//发布研究团队一级分类下的所属人员信息
+//发布团队介绍一级分类下的所属人员信息
 export const reqPublishPerson = (data) => ajax('/lab/publish', data, 'POST')
 
-//获取毕业生列表
+//获取实验室风采列表
 export const reqGraduatesList = (data) => ajax('/lab/graduate', data, 'GET')
 
-//获取所有毕业生类型
+//获取所有实验室风采类型
 export const reqGraduatesTypes = () => ajax('/lab/graduateCategorys', {}, 'GET')
 
-//获取某个毕业生信息
+//获取某个实验室风采信息
 export const reqGraduateData = (id) => ajax('/lab/' + id , {}, 'GET')
 
-//保存某个毕业生信息
+//保存某个实验室风采信息
 export const reqSaveGraduate = (data) => ajax('/lab', data, 'POST')
 
-//发布某个毕业生信息
+//发布某个实验室风采信息
 export const reqPublishGraduate = (data) => ajax('/lab/publish', data, 'POST')
 
-//删除某条毕业生信息
+//删除某条实验室风采信息
 export const reqDeleteGradute = (id) => ajax('/lab/' + id, {}, 'DELETE')
 
-//获取论文总览列表
+//获取论文发表列表
 export const reqArticleList = (data) => ajax('/scientificResearch/list/10', data, 'GET')
 
 //获取某个论文信息
@@ -146,8 +146,8 @@ export const reqPublishArticle = (data) => ajax('/scientificResearch/publish', d
 //删除某个论文信息
 export const reqDeleteArticle = (id) => ajax('/scientificResearch/' + id, {}, 'DELETE')
 
-//获取学术总览列表
-export const reqAcademicList = (data) => ajax('/scientificResearch/list/academic', data, 'GET')
+//获取专利总览列表
+export const reqAcademicList = (data) => ajax('/scientificResearch/list/12', data, 'GET')
 
 //获取学术分类信息
 export const reqAcademicCategory = () => ajax('/scientificResearch/all/academicCategory', {}, 'GET')
@@ -187,3 +187,12 @@ export const reqDeleteFooter = (id) => ajax('/home/footer/' + id, {}, 'DELETE')
 
 //发送页脚
 export const reqSendFooter = (data) => ajax('/home/footer', data, 'POST')
+
+//获取联系我们
+export const reqConDes = () => ajax('/contactus/one/13', {}, 'GET')
+
+//保存联系我们
+export const reqSaveConDes = (data) => ajax('/contactus', data, 'POST')
+
+//发布联系我们
+export const reqPublishConDes = (data) => ajax('/contactus/publish', data, 'POST')

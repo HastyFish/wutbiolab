@@ -15,7 +15,7 @@ class News extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleinfo : NavTitle[2].en,
+            titleinfo : NavTitle[4].en,
             navList : [],
             dataList:[],
             navId:30,

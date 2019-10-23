@@ -6,7 +6,8 @@ import Header from '@components/header'
 import Home from '@views/home/home'
 import Introduction from '@views/introduction/introduction'
 import News from '@views/news/news'
-import Notices from '@views/notices/notices'
+// import Notices from '@views/notices/notices'
+import Contact from '@views/contact/contact'
 import Scientific from '@views/scientific/scientific'
 import Resources from '@views/resources/resources'
 import './admin.less'
@@ -27,7 +28,7 @@ class Admin extends Component {
             <Switch>
                 <Route path='/introduction' component={Introduction} />
                 <Route path='/news' component={News} />
-                <Route path='/notices' component={Notices} />
+                <Route path='/contact' component={Contact} />
                 <Route path='/scientific' component={Scientific} />
                 <Route path='/resources' component={Resources} />
                 <Route path='/' component={Home} />

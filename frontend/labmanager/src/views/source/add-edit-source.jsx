@@ -46,7 +46,7 @@ class EditSource extends Component{
           sourceItem:{
           },
           categoryList:[],  //资源类型下拉列表
-
+          flagId:'',
         }
     }else{
       //说明是新增
@@ -54,6 +54,7 @@ class EditSource extends Component{
         sourceItem:{
         },
         categoryList:[],  //资源类型下拉列表
+        flagId:'',
       }
     }
   }
@@ -71,20 +72,28 @@ class EditSource extends Component{
         //判断是否有图片,获取封面图片
         //判断是否有图片,获取封面图片
         let image;
-        let imgList = this.pw.current.getImgs();
-        if(imgList.length > 0 && imgList[0].url !== ''){
-          //判定是否上传图片
-          image = JSON.stringify(imgList);
-        }else{
-          message.error('必须上传封面图片');
-          return;
+        let imgList
+        if(this.state.flagId !== 11){
+          imgList = this.pw.current.getImgs();
+          if(imgList.length > 0 && imgList[0].url !== ''){
+            //判定是否上传图片
+            image = JSON.stringify(imgList);
+          }else{
+            message.error('必须上传封面图片');
+            return;
+          }
         }
         const context = this.editor.current.getContext();
 
         //判断为新增还是编辑
         const {isUpdate} = this;
         //请求参数对象
-        let param = {title, categoryId, image, context, publishDate:Date.parse( new Date(publishDate._d))};
+        let param
+        if(this.state.flagId !== 11){
+          param = {title, categoryId, image, context, publishDate:Date.parse( new Date(publishDate._d))};
+        }else{
+          param = {title, categoryId, context, publishDate:Date.parse( new Date(publishDate._d))};
+        }
         if(isUpdate){
           //编辑更新,需要获取当前Id
           const {id} = this.state;
@@ -138,6 +147,11 @@ class EditSource extends Component{
     })
   }
 
+  selectChange(e){
+    this.setState({
+      flagId: e
+    })
+  }
 
   async componentDidMount(){
     //获取资源类型下拉列表
@@ -152,10 +166,15 @@ class EditSource extends Component{
           if(result.code === 0){
             //携带资源的参数跳入资源编辑页面
             const sourceItem = result.result;
+            const thisId = result.result.categoryId;
             this.setState({
-              sourceItem
+              sourceItem,
+              flagId: thisId
             })
             const {categoryId} = sourceItem;
+            // this.setState({
+            //   categoryId
+            //  })
             categoryId && this.props.form.setFieldsValue({'categoryId':categoryId})
           }else{
             message.error('获取资源失败，请稍后再试!');
@@ -198,7 +217,7 @@ class EditSource extends Component{
                     {required: true, message: '必须指定分类'},
                   ]
                 })(
-                  <Select>
+                  <Select onChange={this.selectChange.bind(this)}>
                     {
                       categoryList.map(item => {
                         return (
@@ -235,10 +254,12 @@ class EditSource extends Component{
               }
             </Item>
 
-            <Item label="封面上传">
+            {
+              this.state.flagId !==11 ? <Item label="封面上传">
               {image ? <PicturesWall ref={this.pw} option={{width:220,height:80}} image = {JSON.parse(image)} /> : null}
               {!image ? <PicturesWall ref={this.pw} option={{width:220,height:80}} image = {[]} /> : null}
-            </Item>
+              </Item> : null
+            }
 
             
             <Item>

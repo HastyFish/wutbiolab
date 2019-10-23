@@ -92,29 +92,52 @@ class SciTable extends React.PureComponent {
 
     render() { 
         let {dataList,titleinfo,navName,pageNum,pageSize,total,navId,locale} = this.state;
-        const columns = [
-            {
-              title: '论文题目',
-              dataIndex: 'title',
-              render: (path, text, index) => {
-                return (
-                   <span className="curp sci-title" key={index} onClick={this.jump.bind(this,text)}>{path}</span>
-                )
-            }
-            },
-            {
-              title: '刊物名称',  
-              dataIndex: 'periodicalName',
-            },
-            {
-              title: '第一作者',
-              dataIndex: 'author',
-            },
-            {
-              title: '发表年度',
-              dataIndex: 'publishYear',
-            }
-          ];
+        let columns;
+        if(this.props.location.pathname.includes('12')){
+            columns = [
+                {
+                  title: '专利名称',
+                  dataIndex: 'title',
+                  render: (path, text, index) => {
+                    return (
+                       <span className="curp sci-title" key={index} onClick={this.jump.bind(this,text)}>{path}</span>
+                    )
+                }
+                },
+                {
+                  title: '作者',
+                  dataIndex: 'author',
+                },
+                {
+                  title: '发表年度',
+                  dataIndex: 'publishYear',
+                }
+              ];
+        }else{
+            columns = [
+                {
+                  title: '论文题目',
+                  dataIndex: 'title',
+                  render: (path, text, index) => {
+                    return (
+                       <span className="curp sci-title" key={index} onClick={this.jump.bind(this,text)}>{path}</span>
+                    )
+                }
+                },
+                {
+                  title: '刊物名称',  
+                  dataIndex: 'periodicalName',
+                },
+                {
+                  title: '第一作者',
+                  dataIndex: 'author',
+                },
+                {
+                  title: '发表年度',
+                  dataIndex: 'publishYear',
+                }
+              ];
+        }
         const page = {
                 current: pageNum,
                 showSizeChanger:true,
@@ -147,7 +170,7 @@ class SciTable extends React.PureComponent {
                         pagination={total >0 ? page : false}
                         rowKey="id"
                         />
-                                </ConfigProvider>
+                    </ConfigProvider>
                     
                 </div>
             </div>

@@ -30,8 +30,8 @@ class Header extends Component {
       path = '/introduction';
     }else if(path.indexOf('/news')===0){
       path = '/news';
-    }else if(path.indexOf('/notices')===0){
-      path = '/notices';
+    }else if(path.indexOf('/contact')===0){
+      path = '/contact';
     }else if(path.indexOf('/resources')===0){
       path = '/resources';
     }else if(path.indexOf('/scientific')===0){
@@ -58,16 +58,16 @@ class Header extends Component {
               <Menu.Item key="/introduction" onClick={this.jump.bind(this,"/introduction/1",2)}>
                   <span className="nav-url">{NavTitle[1].en}</span>
               </Menu.Item>
-              <Menu.Item key="/news" onClick={this.jump.bind(this,"/news/30",3)}>
+              <Menu.Item key="/scientific" onClick={this.jump.bind(this,"/scientific/2",3)}>
                   <span className="nav-url">{NavTitle[2].en}</span>
               </Menu.Item>
-              <Menu.Item key="/notices" onClick={this.jump.bind(this,"/notices/34",4)}>
+              <Menu.Item key="/resources" onClick={this.jump.bind(this,"/resources/39",4)}>
                   <span className="nav-url">{NavTitle[3].en}</span>
               </Menu.Item>
-              <Menu.Item key="/scientific" onClick={this.jump.bind(this,"/scientific/10",5)}>
+              <Menu.Item key="/news" onClick={this.jump.bind(this,"/news/30",5)}>
                   <span className="nav-url">{NavTitle[4].en}</span>
               </Menu.Item>
-              <Menu.Item key="/resources" onClick={this.jump.bind(this,"/resources/37",6)}>
+              <Menu.Item key="/contact" onClick={this.jump.bind(this,"/contact/13",6)}>
                   <span className="nav-url">{NavTitle[5].en}</span>
               </Menu.Item>
             </Menu>
