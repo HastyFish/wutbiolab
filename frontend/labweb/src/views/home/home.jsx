@@ -3,7 +3,7 @@ import MoreTitle from "@components/home/moreTitle";
 import './home.less';
 import { Row, Col,Carousel ,Typography } from "antd";
 import {getHome,getSlideshow} from '@/api'
-import  {NavTitle,NewsTitle,NoticeTitle,LinksTitle,ResourcesTitle} from "@utils/titleConfig"
+import  {NavTitle,NewsTitle,LinksTitle,ResourcesTitle} from "@utils/titleConfig"
 
 const { Paragraph } = Typography;
 
@@ -33,7 +33,7 @@ class Home extends Component {
     }
   render() {
      const {slideList,homeList} = this.state;
-     let [list1=[],list2=[],list3=[],list4=[],list5=[],list6=[],list7=[],list8=[],list9=[]] = homeList;
+     let [list1=[],list2=[],list3=[],list4=[],list5=[],list6=[]] = homeList;
     return (
       <div className="home">
         <div className="home-more">

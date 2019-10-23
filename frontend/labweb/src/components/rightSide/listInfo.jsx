@@ -68,7 +68,7 @@ class ListInfo extends Component {
         nextEvent = (data)=>{
             let pathnameList = this.props.location.pathname.split("/");
             let order = Number(pathnameList[pathnameList.length-3]);
-            let newId = Number(pathnameList[pathnameList.length-1]);
+            // let newId = Number(pathnameList[pathnameList.length-1]);
             let url = "";
 
             if([1,2,3,4].includes(order)){

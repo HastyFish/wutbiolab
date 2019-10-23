@@ -3,10 +3,10 @@ import './contact.less';
 import { Row, Col } from 'antd';
 import { Switch, Route } from 'react-router-dom';
 import OnlyInfo from '@components/rightSide/onlyInfo';
-import ListPage from '@components/rightSide/listPage';
-import ListInfo from '@components/rightSide/listInfo';
-import TablePage from '@components/rightSide/tablePage';
-import TableInfo from '@components/rightSide/tableInfo';
+// import ListPage from '@components/rightSide/listPage';
+// import ListInfo from '@components/rightSide/listInfo';
+// import TablePage from '@components/rightSide/tablePage';
+// import TableInfo from '@components/rightSide/tableInfo';
 
 import  {NavTitle} from "@utils/titleConfig"
 

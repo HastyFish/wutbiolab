@@ -4,7 +4,7 @@ import './scientific.less';
 import { Row, Col } from 'antd';
 import { Switch, Route } from 'react-router-dom';
 import ListInfo from '@components/rightSide/listInfo';
-import ListPage from '@components/rightSide/listPage';
+// import ListPage from '@components/rightSide/listPage';
 import SciTable from '@components/rightSide/sciTable';
 import OnlyInfo from '@components/rightSide/onlyInfo';
 // import TableInfo from '@components/rightSide/tableInfo';
