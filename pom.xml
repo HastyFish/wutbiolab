@@ -161,7 +161,7 @@
         </profile>
     </profiles>
 	<build>
-		<finalName>wutbiolab</finalName>
+		<!--<finalName>wutbiolab</finalName>-->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
