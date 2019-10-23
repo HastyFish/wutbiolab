@@ -190,7 +190,7 @@ class EditAcademic extends Component{
                 )
               }
             </Item>
-            <Item label="发表年度" {...formItemLayout}>
+            <Item label="发表时间" {...formItemLayout}>
               {
                 getFieldDecorator('publishYear', {
                   initialValue: publishYear,
@@ -198,7 +198,7 @@ class EditAcademic extends Component{
                     {required: true, message: '必须指定发表年度'},
                   ]
                 })(
-                  <Input placeholder="请输入发表年度"/>
+                  <Input placeholder="请输入发表时间"/>
                 )
               }
             </Item>

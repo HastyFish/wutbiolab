@@ -109,7 +109,7 @@ class SciTable extends React.PureComponent {
                   dataIndex: 'author',
                 },
                 {
-                  title: '发表年度',
+                  title: '发表时间',
                   dataIndex: 'publishYear',
                 }
               ];
