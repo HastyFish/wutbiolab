@@ -50,7 +50,7 @@ public class ApiLabController {
         return ResponseUtil.success(labDetailPage);
     }
 
-    @ApiOperation(value="通过一级分类的id查询一条数据", notes="通过一级分类的id查询一条数据（目前针对机构概况和研究方向）")
+    @ApiOperation(value="通过一级分类的id查询一条数据（只包含一条数据的子模块）", notes="通过一级分类的id查询一条数据（目前针对实验室、科研工作和加入我们）")
     //通过分类id查询子模块（只包含一条数据的子模块）
     @GetMapping("/one/{categoryId}")
     public CommonResponse<LabDetail> getOneLabDetail(@PathVariable("categoryId")Long labCategoryId){

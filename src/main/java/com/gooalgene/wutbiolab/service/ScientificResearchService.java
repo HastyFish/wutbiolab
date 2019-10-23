@@ -56,9 +56,14 @@ public interface ScientificResearchService {
 
     void deleteById(Long id);
 
+    ScientificResearchCategory getScientificResearchCategoryById(Long id);
+
+    PageResponse<ScientificResearchDetail> getScientificResearchDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize);
+
     /*********************************************** 前端使用 ***************************************************/
 
 
+    PageResponse<ScientificResearchDetail> getScientificResearchDetailByLabCategoryIdAndPublishStatus(Long labCategoryId, Integer pageNum, Integer pageSize, Integer publishStatus);
     /**
      * 通过子模块类型获取对应已发布的分页数据
      * @param scientificResearchCategoryId

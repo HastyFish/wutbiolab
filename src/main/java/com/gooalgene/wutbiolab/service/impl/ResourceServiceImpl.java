@@ -58,20 +58,19 @@ public class ResourceServiceImpl implements ResourceService {
     private Logger logger = LoggerFactory.getLogger(ResourceServiceImpl.class);
 
     public ResourceServiceImpl(ResourceDetailDAO resourceDetailDAO, ResourceCategoryDAO resourceCategoryDAO,
-                               PictureService pictureService, ObjectMapper objectMapper,CommonService commonService) {
+                               PictureService pictureService, ObjectMapper objectMapper, CommonService commonService) {
         this.objectMapper = objectMapper;
         this.pictureService = pictureService;
         this.resourceCategoryDAO = resourceCategoryDAO;
         this.resourceDetailDAO = resourceDetailDAO;
-        this.commonService=commonService;
+        this.commonService = commonService;
 
     }
 
 
-
     @Override
     public CommonResponse<List<ResourceCategory>> allResourceCategory() {
-        return ResponseUtil.success(resourceCategoryDAO.findAll());
+        return ResponseUtil.success(resourceCategoryDAO.findAll(Sort.by(CommonConstants.ORDER_CATEGORY)));
     }
 
     @Override
@@ -163,88 +162,86 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
 
-
-
     @Override
-    public Map<String,Object> getPublishedById(Long id){
-        Map<String,Object> map=new HashMap<>();
+    public Map<String, Object> getPublishedById(Long id) {
+        Map<String, Object> map = new HashMap<>();
         ResourceDetail resourceDetail = resourceDetailDAO.getByIdAndPublishStatus(id, CommonConstants.PUBLISHED);
-        if(resourceDetail!=null){
+        if (resourceDetail != null) {
             Long categoryId = resourceDetail.getCategoryId();
             Long publishDate = resourceDetail.getPublishDate();
-            String countSql="select count(1) from  resource_detail rd  where rd.publishDate =:publishDate " +
-                    " and rd.categoryId=:categoryId  and rd.publishStatus="+CommonConstants.PUBLISHED;
+            String countSql = "select count(1) from  resource_detail rd  where rd.publishDate =:publishDate " +
+                    " and rd.categoryId=:categoryId  and rd.publishStatus=" + CommonConstants.PUBLISHED;
             Object singleResult = entityManager.createNativeQuery(countSql)
-                    .setParameter("publishDate",publishDate)
-                    .setParameter("categoryId",categoryId)
+                    .setParameter("publishDate", publishDate)
+                    .setParameter("categoryId", categoryId)
                     .getSingleResult();
             BigInteger bigInteger = (BigInteger) singleResult;
             long count = bigInteger == null ? 0 : bigInteger.longValue();
 
 
-
 //            ResourceDetail pre = getOneByPublishDate(count,id,categoryId,publishDate, ">","asc");
 //            ResourceDetail next = getOneByPublishDate(count,id,categoryId,publishDate, "<","desc");
-            ResourceDetail pre = commonService.getOneByPublishDateAndId(ResourceDetail.class,count,id,categoryId,publishDate, ">","asc");
-            ResourceDetail next = commonService.getOneByPublishDateAndId(ResourceDetail.class,count,id,categoryId,publishDate, "<","desc");
-            map.put("detail",resourceDetail);
-            map.put("previous",pre);
-            map.put("next",next);
-            map.put("firstCategory",CommonConstants.CATEGORY_RESOURCE);
+            ResourceDetail pre = commonService.getOneByPublishDateAndId(ResourceDetail.class, count, id, categoryId, publishDate, ">", "asc");
+            ResourceDetail next = commonService.getOneByPublishDateAndId(ResourceDetail.class, count, id, categoryId, publishDate, "<", "desc");
+            map.put("detail", resourceDetail);
+            map.put("previous", pre);
+            map.put("next", next);
+            map.put("firstCategory", CommonConstants.CATEGORY_RESOURCE);
         }
         return map;
     }
 
-    private ResourceDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String  sort) {
-        Query nativeQuery=null;
-        if(count>1){
+    private ResourceDetail getOneByPublishDate(Long count, Long id, Long categoryId, Long publishDate, String operation, String sort) {
+        Query nativeQuery = null;
+        if (count > 1) {
             String operationAndEq = operation.concat("=");
-            String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operationAndEq+
-                    " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId and rd.id"+operation+":id " +
-                    " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
+            String sql = "select rd.id,rd.title from resource_detail rd where  rd.publishDate " + operationAndEq +
+                    " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId and rd.id" + operation + ":id " +
+                    " ORDER BY rd.publishDate " + sort + ",rd.id " + sort + " limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
-            nativeQuery.setParameter("id",id);
-        }else {
-            String sql="select rd.id,rd.title from resource_detail rd where  rd.publishDate "+operation+
+            nativeQuery.setParameter("id", id);
+        } else {
+            String sql = "select rd.id,rd.title from resource_detail rd where  rd.publishDate " + operation +
                     " :publishDate and rd.publishStatus=1 and rd.categoryId=:categoryId " +
-                    " ORDER BY rd.publishDate "+sort+",rd.id "+sort+" limit 1";
+                    " ORDER BY rd.publishDate " + sort + ",rd.id " + sort + " limit 1";
             nativeQuery = entityManager.createNativeQuery(sql);
         }
 
-        nativeQuery.setParameter("publishDate",publishDate);
-        nativeQuery.setParameter("categoryId",categoryId);
+        nativeQuery.setParameter("publishDate", publishDate);
+        nativeQuery.setParameter("categoryId", categoryId);
         Object object = null;
         try {
             object = nativeQuery.getSingleResult();
         } catch (NoResultException e) {
-            logger.info("publishDate为：{}是最后一条数据了",publishDate);
+            logger.info("publishDate为：{}是最后一条数据了", publishDate);
             return null;
         }
-        Object[] objects = (Object[])object;
-        ResourceDetail resourceDetail=new ResourceDetail();
+        Object[] objects = (Object[]) object;
+        ResourceDetail resourceDetail = new ResourceDetail();
         BigInteger idBigInt = (BigInteger) objects[0];
-        if(idBigInt!=null){
+        if (idBigInt != null) {
             resourceDetail.setId(idBigInt.longValue());
         }
         String title = (String) objects[1];
         resourceDetail.setTitle(title);
         return resourceDetail;
     }
+
     @Override
-    public PageResponse<ResourceOverview> getByPublishStatus(Long categoryId,Integer publishStatus,
-                                                             Integer pageNum, Integer pageSize){
+    public PageResponse<ResourceOverview> getByPublishStatus(Long categoryId, Integer publishStatus,
+                                                             Integer pageNum, Integer pageSize) {
         Page<ResourceOverview> resourceOverviewPage =
-                resourceDetailDAO.findNewsDetailByPublishStatus(categoryId,publishStatus, PageRequest.of(pageNum - 1, pageSize));
+                resourceDetailDAO.findNewsDetailByPublishStatus(categoryId, publishStatus, PageRequest.of(pageNum - 1, pageSize));
         List<ResourceOverview> content = resourceOverviewPage.getContent();
-        String category=null;
-        if(content!=null&&!content.isEmpty()){
-            category=content.get(0).getCategory();
-        }else {
+        String category = null;
+        if (content != null && !content.isEmpty()) {
+            category = content.get(0).getCategory();
+        } else {
             Optional<ResourceCategory> optionalResourceCategory = resourceCategoryDAO.findById(categoryId);
-            if(optionalResourceCategory.isPresent()){
-                category=optionalResourceCategory.get().getCategory();
+            if (optionalResourceCategory.isPresent()) {
+                category = optionalResourceCategory.get().getCategory();
             }
         }
-        return new DetailPageResponse<>(content,pageNum,pageSize,resourceOverviewPage.getTotalElements(),category);
+        return new DetailPageResponse<>(content, pageNum, pageSize, resourceOverviewPage.getTotalElements(), category);
     }
 }

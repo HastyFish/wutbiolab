@@ -212,7 +212,7 @@ public class PictureServiceImpl implements PictureService {
                     objectMapper.getTypeFactory().constructParametricType(List.class, Picture.class));
             oldImageList.forEach(one -> one.setUrl(gooalApplicationProperty.getImageNginxUrl() + one.getUrl()));
             return objectMapper.writeValueAsString(oldImageList);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             logger.error("convert failed");
             return "[]";

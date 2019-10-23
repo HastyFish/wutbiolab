@@ -20,10 +20,7 @@ import com.google.common.collect.Table;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -187,7 +184,7 @@ public class LabServiceImpl implements LabService {
 
     @Override
     public List<LabCategory> getAllCategory(){
-        return labCategoryDAO.findAll();
+        return labCategoryDAO.findAll(Sort.by(CommonConstants.ORDER_CATEGORY));
     }
 
     @Override

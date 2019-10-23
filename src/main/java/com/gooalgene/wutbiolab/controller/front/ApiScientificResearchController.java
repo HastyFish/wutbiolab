@@ -2,9 +2,9 @@ package com.gooalgene.wutbiolab.controller.front;
 
 import com.gooalgene.wutbiolab.constant.CommonConstants;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
+import com.gooalgene.wutbiolab.entity.scientificResearch.AcademicCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchCategory;
 import com.gooalgene.wutbiolab.entity.scientificResearch.ScientificResearchDetail;
-import com.gooalgene.wutbiolab.response.MentorResponse;
 import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.common.ResponseUtil;
@@ -13,10 +13,8 @@ import com.gooalgene.wutbiolab.service.ScientificResearchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +45,24 @@ public class ApiScientificResearchController {
     public CommonResponse<List<ScientificResearchCategory>> getAllCategory(){
         List<ScientificResearchCategory> allCategory = scientificResearchService.getAllCategory();
         return ResponseUtil.success(allCategory);
+    }
+
+    @GetMapping("/one/{categoryId}")
+    public CommonResponse<ScientificResearchDetail> getOneLabDetail(@PathVariable("categoryId")Long labCategoryId){
+        PageResponse<ScientificResearchDetail> labDetails = scientificResearchService.getScientificResearchDetailByLabCategoryIdAndPublishStatus(labCategoryId, null, null,CommonConstants.PUBLISHED);
+        ScientificResearchDetail scientificResearchDetail=new ScientificResearchDetail();
+        if(labDetails!=null){
+            List<ScientificResearchDetail> content = labDetails.getList();
+            if(content!=null&&!content.isEmpty()){
+                scientificResearchDetail = content.get(0);
+                scientificResearchDetail.setFirstCategory(CommonConstants.CATEGORY_SCIENTIFICRESEARCH);
+            }
+        }
+        ScientificResearchCategory scientificResearchCategory = scientificResearchService.getScientificResearchCategoryById(labCategoryId);
+        if(scientificResearchCategory!=null){
+            scientificResearchDetail.setCategory(scientificResearchCategory.getCategory());
+        }
+        return ResponseUtil.success(scientificResearchDetail);
     }
 
 

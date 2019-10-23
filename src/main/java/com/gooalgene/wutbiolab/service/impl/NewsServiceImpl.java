@@ -69,7 +69,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public CommonResponse<List<NewsCategory>> allNewsCategory() {
-        return ResponseUtil.success(newsCategoryDAO.findAll());
+        return ResponseUtil.success(newsCategoryDAO.findAll(Sort.by(CommonConstants.ORDER_CATEGORY)));
     }
 
     @Override

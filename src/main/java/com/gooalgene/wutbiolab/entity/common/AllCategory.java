@@ -1,6 +1,7 @@
 package com.gooalgene.wutbiolab.entity.common;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +23,8 @@ public class AllCategory implements Serializable {
 
     @ApiModelProperty(value = "分类名称", example = "分类1")
     private String category;
+
+    @Column(columnDefinition = "double default 0")
+    private Double categoryOrder;
 
 }

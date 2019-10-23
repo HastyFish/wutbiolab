@@ -66,6 +66,9 @@ public class ScientificResearchDetail implements Serializable {
     @Transient
     private String category;
 
+    @Transient
+    private String firstCategory;
+
 
     public ScientificResearchDetail(Long id,String title, Long publishDate, Integer publishStatus, String periodicalName, String author,
                                     String publishYear) {

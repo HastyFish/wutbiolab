@@ -10,6 +10,7 @@ public class WutbiolabApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WutbiolabApplication.class, args);
+        System.out.println("启动成功");
 	}
 
     @Override
