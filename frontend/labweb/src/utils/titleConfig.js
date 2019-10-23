@@ -32,7 +32,7 @@ const  ResearchTitle = [
 ]
 const  ResourcesTitle = [
     {en:"Software",zh:"软件下载"},
-    {en:"Data Set",zh:"数据集"},
+    {en:"Data Sets",zh:"数据集"},
     {en:"Database",zh:"数据库"},
     {en:"Lectures",zh:"学术资源"}
 ]
