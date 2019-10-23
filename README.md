@@ -64,36 +64,36 @@ insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvR
 
 
 
-INSERT INTO `all_category`(discriminator, id, category,`categoryOrder`) VALUES ('scientific', '12', 'Patents', '3');
-INSERT INTO `all_category`(discriminator, id, category,`categoryOrder`) VALUES ('contactus', '13', 'Join us', '0');
-UPDATE `all_category` SET `discriminator`='lab',`categoryOrder`=1 WHERE id = 1;
-UPDATE `all_category` SET `discriminator`='scientific',`category`='Research projects',`categoryOrder`=1 WHERE id = 2;
-UPDATE `all_category` SET `category`='Our team',`categoryOrder`=2 WHERE id = 3;
-UPDATE `all_category` SET `category`='Lab photos',`categoryOrder`=3 WHERE id = 4;
-UPDATE `all_category` SET `categoryOrder`=2 WHERE id = 10;
-UPDATE `all_category` SET `discriminator`='resource',`category`='Lectures',`categoryOrder`=4 WHERE id = 11;
-UPDATE `all_category` SET `categoryOrder`=1 WHERE id = 30;
-UPDATE `all_category` SET `categoryOrder`=3 WHERE id = 31;
-UPDATE `all_category` SET `discriminator`='news22222' WHERE id = 32;
-UPDATE `all_category` SET `category`='Research activities',`categoryOrder`=2 WHERE id = 33;
-UPDATE `all_category` SET `categoryOrder`=2 WHERE id = 37;
-UPDATE `all_category` SET `category`='Database',`categoryOrder`=3 WHERE id = 38;
-UPDATE `all_category` SET `categoryOrder`=1 WHERE id = 39;
-UPDATE `all_category` SET `discriminator`='graduate',`category`='Lab photos',`categoryOrder`=1 WHERE id = 40;
-UPDATE `all_category` SET `discriminator`='mentor',`category`='博士生导师',`categoryOrder`=1 WHERE id = 41;
+INSERT INTO wutbiolab.`all_category`(discriminator, id, category,`categoryOrder`) VALUES ('scientific', '12', 'Patents', '3');
+INSERT INTO wutbiolab.`all_category`(discriminator, id, category,`categoryOrder`) VALUES ('contactus', '13', 'Join us', '0');
+UPDATE wutbiolab.`all_category` SET `discriminator`='lab',`categoryOrder`=1 WHERE id = 1;
+UPDATE wutbiolab.`all_category` SET `discriminator`='scientific',`category`='Research projects',`categoryOrder`=1 WHERE id = 2;
+UPDATE wutbiolab.`all_category` SET `category`='Our team',`categoryOrder`=2 WHERE id = 3;
+UPDATE wutbiolab.`all_category` SET `category`='Lab photos',`categoryOrder`=3 WHERE id = 4;
+UPDATE wutbiolab.`all_category` SET `categoryOrder`=2 WHERE id = 10;
+UPDATE wutbiolab.`all_category` SET `discriminator`='resource',`category`='Lectures',`categoryOrder`=4 WHERE id = 11;
+UPDATE wutbiolab.`all_category` SET `categoryOrder`=1 WHERE id = 30;
+UPDATE wutbiolab.`all_category` SET `categoryOrder`=3 WHERE id = 31;
+UPDATE wutbiolab.`all_category` SET `discriminator`='news22222' WHERE id = 32;
+UPDATE wutbiolab.`all_category` SET `category`='Research activities',`categoryOrder`=2 WHERE id = 33;
+UPDATE wutbiolab.`all_category` SET `categoryOrder`=2 WHERE id = 37;
+UPDATE wutbiolab.`all_category` SET `category`='Database',`categoryOrder`=3 WHERE id = 38;
+UPDATE wutbiolab.`all_category` SET `categoryOrder`=1 WHERE id = 39;
+UPDATE wutbiolab.`all_category` SET `discriminator`='graduate',`category`='Lab photos',`categoryOrder`=1 WHERE id = 40;
+UPDATE wutbiolab.`all_category` SET `categoryOrder`=1 WHERE id = 41;
 
-UPDATE news_detail SET category='Research activities' WHERE categoryId=33;
-UPDATE resource_detail SET category='Database' WHERE categoryId=38;
 
-INSERT INTO scientific_research_detail (categoryId,context,publishStatus)
+INSERT INTO wutbiolab.scientific_research_detail (categoryId,context,publishStatus)
   SELECT categoryId,context,publishStatus
-  FROM lab_detail 
+  FROM wutbiolab.lab_detail 
   WHERE categoryId = 2;
 
-INSERT INTO resource_detail (categoryId,context,publishStatus,publishDate,title)
-  SELECT categoryId,context,publishStatus,publishDate,title
-  FROM scientific_research_detail  
+INSERT INTO wutbiolab.resource_detail (categoryId,context,publishStatus,publishDate,title,category)
+  SELECT categoryId,context,publishStatus,publishDate,title,'Lectures' AS category
+  FROM wutbiolab.scientific_research_detail  
   WHERE categoryId = 11;
 
+UPDATE wutbiolab.news_detail SET category='Research activities' WHERE categoryId=33;
+UPDATE wutbiolab.resource_detail SET category='Database' WHERE categoryId=38;
 
 ```
