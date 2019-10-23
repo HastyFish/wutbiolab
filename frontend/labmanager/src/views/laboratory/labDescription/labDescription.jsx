@@ -28,7 +28,7 @@ class LabDescription extends Component {
 
   //保存或发布实验室介绍
   saveOrPublishData = async (type) => {
-    const id = this.id || null;
+        const id = this.id || null;
         const categoryId = 1;
         const context = this.editor.current.getContext();
         const param = {id,categoryId, context}
@@ -47,6 +47,19 @@ class LabDescription extends Component {
           message.success(`${type === 'save'?'保存':'发布'}成功`);
         }else{
           message.error(`${type === 'save'?'保存':'发布'}失败，请稍后再试！`);
+        }
+        //获取实验室介绍
+        const result1 = await reqlabDes();
+        if(result1.code === 0){
+          let id = null,title = null ,context = null;
+          result1.result && ({id,title,context} = result1.result)
+          this.id = id;
+          this.setState({
+            title,
+            context
+          })
+        }else{
+          message.error('获取实验室介绍失败，请稍后再试')
         }
     // this.props.form.validateFields(async (err, values) => {
     //   if(!err){
