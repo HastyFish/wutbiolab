@@ -63,7 +63,7 @@ insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvR
 insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvRWeWugTrUkAtxw1WkgeFLeff8QozRHiWj.Aa','wjy');
 
 
-
+use wutbiolab;
 INSERT INTO wutbiolab.`all_category`(discriminator, id, category,`categoryOrder`) VALUES ('scientific', '12', 'Patents', '3');
 INSERT INTO wutbiolab.`all_category`(discriminator, id, category,`categoryOrder`) VALUES ('contactus', '13', 'Join us', '0');
 UPDATE wutbiolab.`all_category` SET `discriminator`='lab',`categoryOrder`=1 WHERE id = 1;
@@ -81,7 +81,6 @@ UPDATE wutbiolab.`all_category` SET `category`='Database',`categoryOrder`=3 WHER
 UPDATE wutbiolab.`all_category` SET `categoryOrder`=1 WHERE id = 39;
 UPDATE wutbiolab.`all_category` SET `discriminator`='graduate',`category`='Lab photos',`categoryOrder`=1 WHERE id = 40;
 UPDATE wutbiolab.`all_category` SET `categoryOrder`=1 WHERE id = 41;
-
 
 INSERT INTO wutbiolab.scientific_research_detail (categoryId,context,publishStatus)
   SELECT categoryId,context,publishStatus
