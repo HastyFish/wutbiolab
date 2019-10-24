@@ -116,6 +116,7 @@ class PersonEdit extends Component {
                   initialValue: mentorName || '',
                   rules: [
                     {required: true, message: '必须指定人员名称'},
+                    {whitespace: true, message: '请输入正确文字内容'},
                   ]
                 })(
                   <Input placeholder="请输入人员名称" />

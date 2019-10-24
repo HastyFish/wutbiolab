@@ -52,6 +52,10 @@ class EditArticle extends Component{
     }
   }
 
+  //限制发布时间小于等于今天
+  disabledDate(current) {
+    return current && current > moment().endOf('day');
+  }
 
   //保存或发布新闻
   saveOrPublishNews = (type) => {
@@ -162,10 +166,11 @@ class EditArticle extends Component{
                 getFieldDecorator('title', {
                   initialValue: title,
                   rules: [
-                    {required: true, message: '必须指定新闻标题'},
+                    {required: true, message: '必须指定论文题目'},
+                    {whitespace: true, message: '请输入正确文字内容'},
                   ]
                 })(
-                  <Input placeholder="请输入新闻标题"/>
+                  <Input placeholder="请输入论文题目"/>
                 )
               }
             </Item>
@@ -175,6 +180,7 @@ class EditArticle extends Component{
                   initialValue: periodicalName,
                   rules: [
                     {required: true, message: '必须指定刊物名称'},
+                    {whitespace: true, message: '请输入正确文字内容'},
                   ]
                 })(
                   <Input placeholder="请输入刊物名称"/>
@@ -187,6 +193,7 @@ class EditArticle extends Component{
                   initialValue: author,
                   rules: [
                     {required: true, message: '必须指定第一作者'},
+                    {whitespace: true, message: '请输入正确文字内容'},
                   ]
                 })(
                   <Input placeholder="请输入第一作者"/>
@@ -213,7 +220,7 @@ class EditArticle extends Component{
                     {required: true, message: '必须指定发布时间!'},
                   ]
                 })(
-                  <DatePicker style={{width: '100%'}} locale={locale} showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}/>
+                  <DatePicker disabledDate={this.disabledDate} style={{width: '100%'}} locale={locale} showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}/>
                 )
               }
             </Item>

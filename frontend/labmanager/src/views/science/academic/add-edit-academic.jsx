@@ -56,7 +56,11 @@ class EditAcademic extends Component{
       }
     }
   }
-
+  
+  //限制发布时间小于等于今天
+  disabledDate(current) {
+    return current && current > moment().endOf('day');
+  }
 
   //保存或发布新闻
   saveOrPublishNews = (type) => {
@@ -172,6 +176,7 @@ class EditAcademic extends Component{
                   initialValue: title,
                   rules: [
                     {required: true, message: '必须指定专利名称'},
+                    {whitespace: true, message: '请输入正确文字内容'},
                   ]
                 })(
                   <Input placeholder="请输入专利名称"/>
@@ -184,13 +189,14 @@ class EditAcademic extends Component{
                   initialValue: author,
                   rules: [
                     {required: true, message: '必须指定第一作者'},
+                    {whitespace: true, message: '请输入正确文字内容'},
                   ]
                 })(
                   <Input placeholder="请输入第一作者"/>
                 )
               }
             </Item>
-            <Item label="发表年度" {...formItemLayout}>
+            <Item label="发表时间" {...formItemLayout}>
               {
                 getFieldDecorator('publishYear', {
                   initialValue: publishYear,
@@ -198,7 +204,7 @@ class EditAcademic extends Component{
                     {required: true, message: '必须指定发表年度'},
                   ]
                 })(
-                  <Input placeholder="请输入发表年度"/>
+                  <Input placeholder="请输入发表时间"/>
                 )
               }
             </Item>
@@ -210,7 +216,7 @@ class EditAcademic extends Component{
                     {required: true, message: '必须指定发布时间!'},
                   ]
                 })(
-                  <DatePicker style={{width: '100%'}} locale={locale} showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}/>
+                  <DatePicker disabledDate={this.disabledDate} style={{width: '100%'}} locale={locale} showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}/>
                 )
               }
             </Item>
