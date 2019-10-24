@@ -65,21 +65,22 @@ insert into wutbiolab.user(password,username) values ('$2a$10$.5M5RIXuuE0GWS.IvR
 
 use wutbiolab;
 INSERT INTO wutbiolab.`all_category`(discriminator, id, category,`categoryOrder`) VALUES ('scientific', '12', 'Patents', '3');
-INSERT INTO wutbiolab.`all_category`(discriminator, id, category,`categoryOrder`) VALUES ('contactus', '13', 'Join us', '0');
+INSERT INTO wutbiolab.`all_category`(discriminator, id, category,`categoryOrder`) VALUES ('contactus', '13', 'Join Us', '0');
 UPDATE wutbiolab.`all_category` SET `discriminator`='lab',`categoryOrder`=1 WHERE id = 1;
-UPDATE wutbiolab.`all_category` SET `discriminator`='scientific',`category`='Research projects',`categoryOrder`=1 WHERE id = 2;
-UPDATE wutbiolab.`all_category` SET `category`='Our team',`categoryOrder`=2 WHERE id = 3;
-UPDATE wutbiolab.`all_category` SET `category`='Lab photos',`categoryOrder`=3 WHERE id = 4;
+UPDATE wutbiolab.`all_category` SET `discriminator`='scientific',`category`='Research Projects',`categoryOrder`=1 WHERE id = 2;
+UPDATE wutbiolab.`all_category` SET `category`='Our Team',`categoryOrder`=2 WHERE id = 3;
+UPDATE wutbiolab.`all_category` SET `category`='Lab Photos',`categoryOrder`=3 WHERE id = 4;
 UPDATE wutbiolab.`all_category` SET `categoryOrder`=2 WHERE id = 10;
 UPDATE wutbiolab.`all_category` SET `discriminator`='resource',`category`='Lectures',`categoryOrder`=4 WHERE id = 11;
+UPDATE wutbiolab.`all_category` SET `category`='Join Us' WHERE id = 13;
 UPDATE wutbiolab.`all_category` SET `categoryOrder`=1 WHERE id = 30;
 UPDATE wutbiolab.`all_category` SET `categoryOrder`=3 WHERE id = 31;
 UPDATE wutbiolab.`all_category` SET `discriminator`='news22222' WHERE id = 32;
-UPDATE wutbiolab.`all_category` SET `category`='Research activities',`categoryOrder`=2 WHERE id = 33;
-UPDATE wutbiolab.`all_category` SET `categoryOrder`=2 WHERE id = 37;
+UPDATE wutbiolab.`all_category` SET `category`='Research Activities',`categoryOrder`=2 WHERE id = 33;
+UPDATE wutbiolab.`all_category` SET `category`='Data Sets',`categoryOrder`=2 WHERE id = 37;
 UPDATE wutbiolab.`all_category` SET `category`='Database',`categoryOrder`=3 WHERE id = 38;
 UPDATE wutbiolab.`all_category` SET `categoryOrder`=1 WHERE id = 39;
-UPDATE wutbiolab.`all_category` SET `discriminator`='graduate',`category`='Lab photos',`categoryOrder`=1 WHERE id = 40;
+UPDATE wutbiolab.`all_category` SET `discriminator`='graduate',`category`='Lab Photos',`categoryOrder`=1 WHERE id = 40;
 UPDATE wutbiolab.`all_category` SET `categoryOrder`=1 WHERE id = 41;
 
 INSERT INTO wutbiolab.scientific_research_detail (categoryId,context,publishStatus)
@@ -92,7 +93,8 @@ INSERT INTO wutbiolab.resource_detail (categoryId,context,publishStatus,publishD
   FROM wutbiolab.scientific_research_detail  
   WHERE categoryId = 11;
 
-UPDATE wutbiolab.news_detail SET category='Research activities' WHERE categoryId=33;
+UPDATE wutbiolab.news_detail SET category='Research Activities' WHERE categoryId=33;
 UPDATE wutbiolab.resource_detail SET category='Database' WHERE categoryId=38;
+DELETE FROM wutbiolab.news_detail WHERE categoryId=32;
 
 ```

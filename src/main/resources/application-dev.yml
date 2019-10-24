@@ -39,8 +39,8 @@ gooal:
   application:
 #    image-path: /gooal/data/images/
 #    image-nginx-url: http://172.168.1.209:93/images/
-    image-path: D:/data/images/
-    image-nginx-url: http://192.168.0.117:93/images/
+    image-path: /data/images
+    image-nginx-url: http://172.168.1.40:93/images/
     #    export-temp-path: D:\
     #    export-nginx-url: http://192.168.0.110:83/tempFile
 #    export-temp-path: /tmp/data/
