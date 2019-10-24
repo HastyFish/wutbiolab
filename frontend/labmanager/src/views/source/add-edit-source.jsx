@@ -59,6 +59,10 @@ class EditSource extends Component{
     }
   }
 
+  //限制发布时间小于等于今天
+  disabledDate(current) {
+    return current && current > moment().endOf('day');
+  }
 
   //保存或发布资源
   saveOrPublishSource = (type) => {
@@ -235,6 +239,7 @@ class EditSource extends Component{
                   initialValue: title,
                   rules: [
                     {required: true, message: '必须指定资源标题'},
+                    {whitespace: true, message: '请输入正确文字内容'},
                   ]
                 })(
                   <Input placeholder="请输入资源标题"/>
@@ -249,7 +254,7 @@ class EditSource extends Component{
                     {required: true, message: '必须指定发布时间!'},
                   ]
                 })(
-                  <DatePicker style={{width: '100%'}} locale={locale} showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}/>
+                  <DatePicker disabledDate={this.disabledDate} style={{width: '100%'}} locale={locale} showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}/>
                 )
               }
             </Item>
