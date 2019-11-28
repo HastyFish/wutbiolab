@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -277,5 +278,60 @@ public class NewsServiceImpl implements NewsService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByStatus(Integer pageNum,
+                                                                             Integer pageSize,
+                                                                             Integer publishStatus) {
+
+        Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
+        Page<NewsOverview> page;
+        if (null != publishStatus) {
+            page = newsDetailDAO.findNewsDetailByPublishStatus(publishStatus, PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder, idOrder)));
+        } else {
+            page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder, idOrder)));
+        }
+        return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
+    }
+
+    @Override
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByTitle(Integer pageNum,
+                                                                            Integer pageSize,
+                                                                            String title) {
+        Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
+        Page<NewsOverview> page;
+        if (null != title){
+            page = newsDetailDAO.findNewsDetailByTitle(title, PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder, idOrder)));
+        } else {
+            page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder, idOrder)));
+        }
+        return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
+    }
+
+    @Override
+    public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByDate(Integer pageNum,
+                                                                           Integer pageSize,
+                                                                           Long beginDate,
+                                                                           Long endDate) {
+        Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
+        Page<NewsOverview> page;
+        if (null != beginDate && null != endDate){
+            page = newsDetailDAO.findNewsDetailByDate();
+        } else {
+            page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder, idOrder)));
+        }
+        return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 }
