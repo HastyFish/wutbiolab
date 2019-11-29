@@ -13,6 +13,7 @@ import com.gooalgene.wutbiolab.response.common.PageResponse;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.CommonService;
 import com.gooalgene.wutbiolab.service.ScientificResearchService;
+import com.gooalgene.wutbiolab.util.DateConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,8 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     private ScientificResearchCategoryDAO scientificResearchCategoryDAO;
     @Autowired
     private AcademicCategoryDAO academicCategoryDAO;
+    @Autowired
+    private DateConverter converter;
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired
@@ -135,8 +138,6 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     }
 
 
-
-
     /*********************************************** 前端使用 ***************************************************/
 
     @Override
@@ -171,6 +172,78 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
     }
 
     @Override
+    public PageResponse<ScientificResearchDetail> getSRDetialByDate(Integer pageNum, Integer pageSize, String beginDate, String endDate) {
+        long begin = converter.convert(beginDate).getTime();
+        long end = converter.convert(endDate).getTime();
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByDate(begin, end, pageable);
+        long total = scientificResearchDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse= new PageResponse();
+        pageResponse.setList(content);
+        pageResponse.setTotal(total);
+        pageResponse.setPageSize(pageSize);
+        pageResponse.setPageNum(pageNum);
+        return pageResponse;
+    }
+
+    @Override
+    public PageResponse<ScientificResearchDetail> getSRDetialByStatus(Integer pageNum, Integer pageSize, Integer status) {
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByStatus(status, pageable);
+        long total = scientificResearchDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse= new PageResponse();
+        pageResponse.setList(content);
+        pageResponse.setTotal(total);
+        pageResponse.setPageSize(pageSize);
+        pageResponse.setPageNum(pageNum);
+        return pageResponse;
+    }
+
+    @Override
+    public PageResponse<ScientificResearchDetail> getSRDetialByTitle(Integer pageNum, Integer pageSize, String title) {
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByTitle(title, pageable);
+        long total = scientificResearchDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse= new PageResponse();
+        pageResponse.setList(content);
+        pageResponse.setTotal(total);
+        pageResponse.setPageSize(pageSize);
+        pageResponse.setPageNum(pageNum);
+        return pageResponse;
+    }
+
+    @Override
+    public PageResponse<ScientificResearchDetail> getSRDetialByPeriodicalName(Integer pageNum, Integer pageSize, String periodicalName) {
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByPeriodicalName(periodicalName, pageable);
+        long total = scientificResearchDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse= new PageResponse();
+        pageResponse.setList(content);
+        pageResponse.setTotal(total);
+        pageResponse.setPageSize(pageSize);
+        pageResponse.setPageNum(pageNum);
+        return pageResponse;
+    }
+
+    @Override
+    public PageResponse<ScientificResearchDetail> getSRDetialByAuthor(Integer pageNum, Integer pageSize, String author) {
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        Page<ScientificResearchDetail> scientificResearchDetailPage = scientificResearchDetailDAO.getByAhuthor(author, pageable);
+        long total = scientificResearchDetailPage.getTotalElements();
+        List<ScientificResearchDetail> content = scientificResearchDetailPage.getContent();
+        PageResponse<ScientificResearchDetail> pageResponse= new PageResponse();
+        pageResponse.setList(content);
+        pageResponse.setTotal(total);
+        pageResponse.setPageSize(pageSize);
+        pageResponse.setPageNum(pageNum);
+        return pageResponse;
+    }
+
+    @Override
     public Map<String,Object> getPublishedById(Long id){
         Map<String,Object> map=new HashMap<>();
 //        ScientificResearchDetail one = scientificResearchDetailDAO.getByIdAndPublishStatus(id,CommonConstants.PUBLISHED);
@@ -202,7 +275,6 @@ public class ScientificResearchServiceImpl implements ScientificResearchService 
         }
         return map;
     }
-
 
 
     private ScientificResearchDetail getOneByPublishDate(Long count,Long id,Long categoryId,Long publishDate, String operation,String sort){
