@@ -30,7 +30,6 @@ public class LabController {
     @Autowired
     private LabService labService;
 
-
 //    @ApiOperation(value="通过模块分类id查询分页列表", notes="通过模块分类id查询分页列表，参数为模块分类id，pageNum和pageSize")
 //    @GetMapping("/list/{categoryId}")
 //    public CommonResponse<Page<LabDetail>> getListByCategoryId(@PathVariable("categoryId")Long categoryId,
@@ -161,8 +160,6 @@ public class LabController {
         labService.deleteMentorCategoryById(id);
         return ResponseUtil.success();
     }
-
-
 
 
 }

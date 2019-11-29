@@ -138,6 +138,7 @@ public interface LabService {
      * @return
      */
     LabCategory getCategoryById(Long labCategoryId);
+
     /**
      * 通过模块分类id及发布状态查询数据
      * @param labCategoryId

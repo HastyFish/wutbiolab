@@ -51,5 +51,33 @@ public interface ScientificResearchDetailDAO extends JpaRepository<ScientificRes
         " where srd.id=:id and srd.publishStatus=:publishStatus",nativeQuery = true)
     List<Object[]> getByIdAndPublishStatus(@Param("id") Long id,@Param("publishStatus")Integer publishStatus);
 
+    //根据时间段查询论文
+    @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +
+            "s.author,s.publishYear ) from ScientificResearchDetail s " +
+            " where s.publishDate between ?1 and ?2")
+    Page<ScientificResearchDetail> getByDate(long beginDate, long endDate, Pageable pageable);
 
+    //根据发布状态查询论文
+    @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +
+            "s.author,s.publishYear ) from ScientificResearchDetail s " +
+            " where s.publishStatus = ?1")
+    Page<ScientificResearchDetail> getByStatus(int status, Pageable pageable);
+
+    //根据论文标题模糊查询论文
+    @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +
+            "s.author,s.publishYear ) from ScientificResearchDetail s " +
+            "where s.title like %?1%")
+    Page<ScientificResearchDetail> getByTitle(String title, Pageable pageable);
+
+    //根据刊物名称模糊查询论文
+    @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +
+            "s.author,s.publishYear ) from ScientificResearchDetail s " +
+            "where s.periodicalName like %?1%")
+    Page<ScientificResearchDetail> getByPeriodicalName(String periodicalName, Pageable pageable);
+
+    //根据作者模糊查询论文
+    @Query("select new ScientificResearchDetail(s.id,s.title,s.publishDate,s.publishStatus,s.periodicalName," +
+            "s.author,s.publishYear ) from ScientificResearchDetail s " +
+            "where s.author like %?1%")
+    Page<ScientificResearchDetail> getByAhuthor(String author, Pageable pageable);
 }

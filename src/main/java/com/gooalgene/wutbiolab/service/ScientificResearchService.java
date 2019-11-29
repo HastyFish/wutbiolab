@@ -80,4 +80,50 @@ public interface ScientificResearchService {
     Map<String,Object> getPublishedById(Long id);
 
     ScientificResearchCategory getCategoryById(Long categoryId);
+
+    /**
+     * 通过时间段查询论文
+     * @param pageNum
+     * @param pageSize
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
+    PageResponse<ScientificResearchDetail> getSRDetialByDate(Integer pageNum, Integer pageSize, String beginDate, String endDate);
+
+    /**
+     * 通过发布状态查询论文
+     * @param pageNum
+     * @param pageSize
+     * @param status
+     * @return
+     */
+    PageResponse<ScientificResearchDetail> getSRDetialByStatus(Integer pageNum, Integer pageSize, Integer status);
+
+    /**
+     * 通过标题模糊查询论文
+     * @param pageNum
+     * @param pageSize
+     * @param title
+     * @return
+     */
+    PageResponse<ScientificResearchDetail> getSRDetialByTitle(Integer pageNum, Integer pageSize, String title);
+
+    /**
+     * 通过刊物名称模糊查询论文
+     * @param pageNum
+     * @param pageSize
+     * @param periodicalName
+     * @return
+     */
+    PageResponse<ScientificResearchDetail> getSRDetialByPeriodicalName(Integer pageNum, Integer pageSize, String periodicalName);
+
+    /**
+     * 通过作者模糊查询论文
+     * @param pageNum
+     * @param pageSize
+     * @param author
+     * @return
+     */
+    PageResponse<ScientificResearchDetail> getSRDetialByAuthor(Integer pageNum, Integer pageSize, String author);
 }

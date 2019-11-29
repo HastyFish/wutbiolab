@@ -73,4 +73,25 @@ public interface NewsDetailDAO extends JpaRepository<NewsDetail, Long> {
             "publishDate <= ?1 and a.id < ?4 and a.category = ?2 and a.publishStatus = ?3")
     Page<NewsOverview> findNextNewsDetail(long publishDate, String category, int publishStatus,
                                           long id, Pageable pageable);
+
+    /**
+     * 查询指定状态的新闻
+     */
+    @Query("select a.id as id, a.title as title, a.publishDate as publishDate, a.publishStatus as publishStatus from NewsDetail a where " +
+            "publishStatus = ?1")
+    Page<NewsOverview> findNewsDetailByPublishStatus(int publishStatus, Pageable pageable);
+
+    /**
+     * 根据标题模糊查询
+     */
+    @Query("select a.id as id, a.title as title, a.publishDate as publishDate, a.publishStatus as publishStatus from NewsDetail a where " +
+            "title like %?1% ")
+    Page<NewsOverview> findNewsDetailByTitle(String title, Pageable pageable);
+
+    /**
+     * 根据时间段查询
+     */
+    @Query("select a.id as id, a.title as title, a.publishDate as publishDate, a.publishStatus as publishStatus from NewsDetail a where " +
+            "publishDate between ?1 and ?2")
+    Page<NewsOverview> findNewsDetailByDate(long beginDate, long endDate, Pageable pageable);
 }

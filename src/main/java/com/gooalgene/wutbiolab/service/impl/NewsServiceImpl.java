@@ -15,8 +15,10 @@ import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.response.front.DetailResponse;
 import com.gooalgene.wutbiolab.service.NewsService;
 import com.gooalgene.wutbiolab.service.PictureService;
+import com.gooalgene.wutbiolab.util.DateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,6 +42,9 @@ public class NewsServiceImpl implements NewsService {
     private ObjectMapper objectMapper;
 
     private Logger logger = LoggerFactory.getLogger(NewsServiceImpl.class);
+
+    @Autowired
+    private DateConverter converter;
 
     public NewsServiceImpl(NewsCategoryDAO newsCategoryDAO, NewsDetailDAO newsDetailDAO,
                            PictureService pictureService, ObjectMapper objectMapper) {
@@ -320,14 +325,17 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public CommonResponse<PageResponse<NewsOverview>> newsDetailPageByDate(Integer pageNum,
                                                                            Integer pageSize,
-                                                                           Long beginDate,
-                                                                           Long endDate) {
+                                                                           String beginDate,
+                                                                           String endDate) {
         Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
         Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
         Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
         Page<NewsOverview> page;
+        long begin = converter.convert(beginDate).getTime();
+        long end = converter.convert(endDate).getTime();
         if (null != beginDate && null != endDate){
-            page = newsDetailDAO.findNewsDetailByDate();
+            page = newsDetailDAO.findNewsDetailByDate(begin, end, PageRequest.of(pageNum - 1, pageSize,
+                    Sort.by(daterder, categoryOrder, idOrder)));
         } else {
             page = newsDetailDAO.findNewsDetailBy(PageRequest.of(pageNum - 1, pageSize,
                     Sort.by(daterder, categoryOrder, idOrder)));

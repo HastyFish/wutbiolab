@@ -54,4 +54,5 @@ public class ResourceController {
     public CommonResponse<Boolean> deleteResourceDetail(@PathVariable Integer id) {
         return resourceService.deleteResourceDetail(id);
     }
+
 }

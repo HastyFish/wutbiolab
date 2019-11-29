@@ -101,4 +101,54 @@ public class ScientificResearchController {
         return ResponseUtil.success(labDetail);
     }
 
+    @ApiOperation(value = "pageNum pageSize beginDate endDate", notes = "根据时间段查询论文")
+    @GetMapping("/date")
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getSRDetialByDate(Integer pageNum,
+                                                                      Integer pageSize,
+                                                                      String beginDate,
+                                                                      String endDate){
+        PageResponse<ScientificResearchDetail> scientificResearchDetail =
+                scientificResearchService.getSRDetialByDate(pageNum, pageSize, beginDate, endDate);
+        return ResponseUtil.success(scientificResearchDetail);
+    }
+
+    @ApiOperation(value = "pageNum pageSize status", notes = "根据状态查询论文")
+    @GetMapping("/status")
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getSRDetialByStatus(Integer pageNum,
+                                                                                      Integer pageSize,
+                                                                                      Integer status){
+        PageResponse<ScientificResearchDetail> scientificResearchDetail =
+                scientificResearchService.getSRDetialByStatus(pageNum, pageSize, status);
+        return ResponseUtil.success(scientificResearchDetail);
+    }
+
+    @ApiOperation(value = "pageNum pageSize status", notes = "根据标题模糊查询论文")
+    @GetMapping("/title")
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getSRDetialByTitle(Integer pageNum,
+                                                                                     Integer pageSize,
+                                                                                     String title){
+        PageResponse<ScientificResearchDetail> scientificResearchDetail =
+                scientificResearchService.getSRDetialByTitle(pageNum, pageSize, title);
+        return ResponseUtil.success(scientificResearchDetail);
+    }
+
+    @ApiOperation(value = "pageNum pageSize periodicalName", notes = "根据刊物名称模糊查询论文")
+    @GetMapping("/periodicalName")
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getSRDetialByPeriodicalName(Integer pageNum,
+                                                                                              Integer pageSize,
+                                                                                              String periodicalName){
+        PageResponse<ScientificResearchDetail> scientificResearchDetail =
+                scientificResearchService.getSRDetialByPeriodicalName(pageNum, pageSize, periodicalName);
+        return ResponseUtil.success(scientificResearchDetail);
+    }
+
+    @ApiOperation(value = "pageNum pageSize author", notes = "根据作者模糊查询论文")
+    @GetMapping("/author")
+    public CommonResponse<PageResponse<ScientificResearchDetail>> getSRDetialByAuthor(Integer pageNum,
+                                                                                      Integer pageSize,
+                                                                                      String author){
+        PageResponse<ScientificResearchDetail> scientificResearchDetail =
+                scientificResearchService.getSRDetialByAuthor(pageNum, pageSize, author);
+        return ResponseUtil.success(scientificResearchDetail);
+    }
 }

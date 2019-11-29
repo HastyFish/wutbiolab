@@ -7,7 +7,8 @@ spring:
       write-dates-as-timestamps: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://wut_mysql/wutbiolab?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    #url: jdbc:mysql://wut_mysql/wutbiolab?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://172.168.1.56:3306/wutbiolab?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
     password: Gooalgene@wutbiolab123
     type: com.zaxxer.hikari.HikariDataSource
