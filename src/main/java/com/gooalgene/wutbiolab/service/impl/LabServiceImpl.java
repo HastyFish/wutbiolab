@@ -5,22 +5,27 @@ import com.gooalgene.wutbiolab.dao.lab.GraduateCategoryDAO;
 import com.gooalgene.wutbiolab.dao.lab.LabCategoryDAO;
 import com.gooalgene.wutbiolab.dao.lab.LabDetailDAO;
 import com.gooalgene.wutbiolab.dao.lab.MentorCategoryDAO;
+import com.gooalgene.wutbiolab.entity.common.AllCategory;
 import com.gooalgene.wutbiolab.entity.lab.GraduateCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabCategory;
 import com.gooalgene.wutbiolab.entity.lab.LabDetail;
 import com.gooalgene.wutbiolab.entity.lab.MentorCategory;
 import com.gooalgene.wutbiolab.response.GraduateResponse;
 import com.gooalgene.wutbiolab.response.MentorResponse;
+import com.gooalgene.wutbiolab.response.common.CommonResponse;
 import com.gooalgene.wutbiolab.response.common.PageResponse;
+import com.gooalgene.wutbiolab.response.common.ResponseUtil;
 import com.gooalgene.wutbiolab.response.front.DetailPageResponse;
 import com.gooalgene.wutbiolab.service.CommonService;
 import com.gooalgene.wutbiolab.service.LabService;
+import com.gooalgene.wutbiolab.util.DateConverter;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -29,10 +34,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -52,6 +54,8 @@ public class LabServiceImpl implements LabService {
     private EntityManager entityManager;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private DateConverter converter;
 
     @Override
     public PageResponse<LabDetail> getLabDetailByLabCategoryId(Long labCategoryId, Integer pageNum, Integer pageSize, Boolean isList) {
@@ -342,6 +346,40 @@ public class LabServiceImpl implements LabService {
             return pageResponse;
         }
         return null;
+    }
+
+    @Override
+    public CommonResponse<PageResponse<LabDetail>> labDetailPage(Integer pageNum,
+                                                                 Integer pageSize,
+                                                                 Long categoryId,
+                                                                 Integer publishStatus,
+                                                                 String startDate, String endDate) {
+        Sort.Order daterder = new Sort.Order(Sort.Direction.DESC, CommonConstants.PUBLISHDATEFIELD);
+        Sort.Order categoryOrder = new Sort.Order(Sort.Direction.ASC, CommonConstants.CATEGORYIDFIELD);
+        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, CommonConstants.IDFIELD);
+        Specification<LabDetail> specification = (Specification<LabDetail>) (root, criteriaQuery, cb) -> {
+            List<Predicate> predicatesList = new ArrayList<>();
+            if (publishStatus != null){
+                Predicate publishStatusPre = cb.equal(root.get("publishStatus"), publishStatus);
+                predicatesList.add(publishStatusPre);
+            }
+            if (categoryId != null){
+                Predicate categoryPre= cb.equal(root.get("categoryId"), categoryId);
+                predicatesList.add(categoryPre);
+            }
+            if (!StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate)){
+                Long start = converter.convert(startDate).getTime();
+                Long end = converter.convert(endDate).getTime();
+                Predicate datePre = cb.between(root.get("publishDate"), start, end);
+                predicatesList.add(datePre);
+            }
+            Predicate[] predicates = new Predicate[predicatesList.size()];
+            return cb.and(predicatesList.toArray(predicates));
+        };
+        Page<LabDetail> page = labDetailDAO.findAll(specification, PageRequest.of(pageNum - 1, pageSize,
+                Sort.by(daterder, categoryOrder, idOrder)));
+
+        return ResponseUtil.success(new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements()));
     }
 
     public LabCategory getCategoryById(Long labCategoryId){
