@@ -14,18 +14,16 @@ import com.gooalgene.wutbiolab.service.LabService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Api(value = "后端实验室模块", tags = {"后端实验室模块接口"})
 @RestController
-@RequestMapping("/lab")
+@RequestMapping("/func" +
+        "/lab")
 public class LabController {
     @Autowired
     private LabService labService;
@@ -56,13 +54,34 @@ public class LabController {
     }
 
 
+//    @ApiOperation(value="查询毕业生分页列表", notes="查询毕业生分页列表，参数为pageNum和pageSize")
+//    @GetMapping("/graduate")
+//    public CommonResponse<PageResponse<GraduateResponse>> getListByCategoryId(@RequestParam("pageNum") Integer pageNum,
+//                                                               @RequestParam("pageSize") Integer pageSize) {
+//        PageResponse<GraduateResponse> graduates = labService.getGraduates(pageNum, pageSize);
+//        return ResponseUtil.success(graduates);
+//    }
+
+
     @ApiOperation(value="查询毕业生分页列表", notes="查询毕业生分页列表，参数为pageNum和pageSize")
     @GetMapping("/graduate")
-    public CommonResponse<PageResponse<GraduateResponse>> getListByCategoryId(@RequestParam("pageNum") Integer pageNum,
-                                                               @RequestParam("pageSize") Integer pageSize) {
-        PageResponse<GraduateResponse> graduates = labService.getGraduates(pageNum, pageSize);
+    public CommonResponse<PageResponse<GraduateResponse>> getNewsDetailPage(Integer pageNum,
+                                                                            Integer pageSize,
+                                                                            @RequestParam(required = false) Long categoryId,
+                                                                            @RequestParam(required = false) Integer publishStatus,
+                                                                            @RequestParam(required = false) String startDate,
+                                                                            @RequestParam(required = false) String endDate) {
+        PageResponse<GraduateResponse> graduates;
+        if (null != categoryId || null != publishStatus ||
+                (null != startDate && null != endDate)) {
+            graduates = labService.labDetailPage(pageNum, pageSize, categoryId, publishStatus, startDate, endDate);
+        } else {
+            graduates = labService.getGraduates(pageNum, pageSize);
+        }
         return ResponseUtil.success(graduates);
     }
+
+
 
     @ApiOperation(value="通过id查询单条数据", notes="通过id查询单条数据")
     @GetMapping("/{id}")
